@@ -50,4 +50,8 @@
 		<key>UIViewControllerBasedStatusBarAppearance</key>
 		<false/>
 	</dict>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>$(PRODUCT_NAME) 사진첩 접근을 허용 하시겠습니까?</string>
+	<key>NSCameraUsageDescription</key>
+	<string>$(PRODUCT_NAME) 카메라 접근을 허용 하시겠습니까?</string>
 </plist>
