@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'dart:io'; // Used for File class
+import 'dart:io';
 import 'package:image_picker/image_picker.dart';
-import 'package:jjoin/screen/profile_edit_screen.dart'; // You need to add image_picker to your pubspec.yaml
+import 'package:jjoin/repository/profile_repository.dart';
+import 'package:jjoin/screen/profile_edit_screen.dart';
+
+import '../model/profile_user.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -11,8 +14,16 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  File? _profileImage; // This will hold the uploaded image file
+  File? _profileImage;
   bool _isPushNotificationEnabled = false;
+  late User user;
+
+  @override
+  void initState() {
+    super.initState();
+    _items = _loadItems();
+    user = ProfileRepository.getDummyUser();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,82 +31,168 @@ class _ProfileScreenState extends State<ProfileScreen> {
       appBar: AppBar(
         title: const Text('프로필'),
         backgroundColor: Colors.transparent,
-        elevation: 0, // No shadow
+        elevation: 0,
       ),
-      body: ListView(
+      body: Column(
         children: [
           _buildTopBanner(context),
-          const SizedBox(height: 20),
-          _buildScrollingCards(context),
-          const SizedBox(height: 20),
-          _buildOptions(context),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTopBanner(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      alignment: Alignment.center,
-      child: Column(
-        children: [
-          CircleAvatar(
-            radius: 40,
-            backgroundColor: Colors.grey.shade300,
-            backgroundImage: _profileImage != null
-                ? FileImage(_profileImage!) as ImageProvider // FileImage에 캐스팅하여 에러 해결
-                : AssetImage('assets/icons/icon_profile_24.svg'), // 기본 아이콘 이미지 경로를 확인하세요.
-          ),
-          const SizedBox(height: 8),
-          Text(
-            '홍길동',
-            style: Theme.of(context).textTheme.headline6,
-          ),
-          Text('동국대학교 컴퓨터공학과'),
-        ],
-      ),
-    );
-  }
-
-
-
-
-  Widget _buildOptions(BuildContext context) {
-    return Column(
-      children: [
-        _buildOptionItem(Icons.person, '프로필 편집', () {
-          // '자기소개' 부분을 프로필 편집 화면으로 넘깁니다.
-          // DB에서 가져온다고 가정한 사용자의 '자기소개' 내용입니다.
-          const userDescription = " ";
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ProfileEditScreen(
-                userDescription: userDescription,
+          SizedBox(height: 15),
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white, // Set the background color of the container
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.3),
+                    spreadRadius: 0.5,
+                    blurRadius: 1,
+                    offset: Offset(0, 0), // changes position of shadow
+                  ),
+                ],
+              ),
+              child: ListView(
+                children: [
+                  const SizedBox(height: 5),
+                  _buildScrollingCards(context),
+                  const SizedBox(height: 10),
+                  _buildOptions(context),
+                  SizedBox(height: MediaQuery.of(context).padding.bottom), // To ensure it extends to the bottom of the screen
+                ],
               ),
             ),
-          );
-        }),
-        // 푸시 알림 설정 스위치 추가
-        SwitchListTile(
-          title: const Text('앱 푸시 알림'),
-          value: _isPushNotificationEnabled,
-          onChanged: (bool value) {
-            // 알림 상태를 변경하는 로직 (예: 상태 저장, 서버에 업데이트 등)
-            setState(() {
-              _isPushNotificationEnabled = value;
-            });
-          },
-          secondary: const Icon(Icons.notifications),
+          ),
+        ],
+      ),
+    );
+  }
+
+
+  Widget _buildTopBanner(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white, // Set the background color of the container
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.3),
+              spreadRadius: 0.5,
+              blurRadius: 1,
+              offset: Offset(0, 0), // changes position of shadow
+            ),
+          ],
+          borderRadius: BorderRadius.circular(10), // Round the corners slightly
         ),
-        // 앱 버전 표시 추가
-        ListTile(
-          title: const Text('앱 버전'),
-          subtitle: const Text('v0.0.1'), // 여기서 실제 앱 버전을 표시합니다.
-          // secondary: Icon(Icons.info_outline), // 아이콘을 추가하고 싶다면 주석 해제
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CircleAvatar(
+                    radius: 50,
+                    backgroundImage: AssetImage(user.profileImageUuid),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10),
+                          child: Text('${user.name}',
+                            style: const TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 5),
+                          child: Text('전공: ${user.major}',
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w300,
+                              )
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 5),
+                          child: Text('학번: ${user.studentId.toString()}',
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w300,
+                              )
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Text(
+              user.introduction,
+              textAlign: TextAlign.left,
+            ),
+            const SizedBox(height: 20)
+          ],
         ),
-      ],
+      ),
+    );
+  }
+
+  Widget _buildOptions(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white, // Set the background color of the container
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 0.5,
+              blurRadius: 1,
+              offset: Offset(0, 0), // changes position of shadow
+            ),
+          ],
+          borderRadius: BorderRadius.circular(10), // Round the corners slightly
+        ),
+        child: Column(
+          children: [
+            _buildOptionItem(Icons.person, '프로필 편집', () {
+              const userDescription = " ";
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ProfileEditScreen(
+                    userDescription: userDescription,
+                  ),
+                ),
+              );
+            }),
+            SwitchListTile(
+              title: const Text('앱 푸시 알림',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w300,
+                ),
+              ),
+              value: _isPushNotificationEnabled,
+              onChanged: (bool value) {
+                setState(() {
+                  _isPushNotificationEnabled = value;
+                });
+              },
+              secondary: const Icon(Icons.notifications,
+              size: 20,
+              ),
+            ),
+            _buildVersionListTile(), // Add the version list tile here
+          ],
+        ),
+      ),
     );
   }
 
@@ -108,10 +205,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
   late Future<List<String>> _items; // 여기서는 예시로 String 리스트를 사용
 
-  @override
-  void initState() {
-    super.initState();
-    _items = _loadItems(); // 데이터베이스에서 아이템을 불러오는 함수를 호출
+  Widget _buildVersionListTile() {
+    return const ListTile(
+      leading: Icon(Icons.info_outline), // Replace with your preferred icon
+      title: Text(
+        '앱 버전',
+        style: TextStyle(
+          fontSize: 16.0,
+          fontWeight: FontWeight.w300,
+        ),
+      ),
+      trailing: Text(
+        'v0.0.1',
+        style: TextStyle(
+          fontSize: 16.0,
+          color: Colors.grey,
+        ),
+      ),
+    );
   }
 
   Future<List<String>> _loadItems() async {
@@ -131,27 +242,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
           return Text('데이터를 불러오는데 실패했습니다.');
         } else if (snapshot.hasData) {
           var items = snapshot.data!;
-          return Container(
-            height: 120,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: items.length, // 불러온 데이터의 개수로 설정
-              itemBuilder: (BuildContext context, int index) {
-                return GestureDetector(
-                  onTap: () {
-                    // TODO: 아이템 클릭 시 필요한 동작을 구현
-                    print('${items[index]} 클릭됨');
-                  },
-                  child: Container(
-                    width: 100,
-                    child: Card(
-                      child: Center(
-                        child: Text(items[index]),
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0,),
+            child: Container(
+              height: 120,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: items.length, // 불러온 데이터의 개수로 설정
+                itemBuilder: (BuildContext context, int index) {
+                  return GestureDetector(
+                    onTap: () {
+                      // TODO: 아이템 클릭 시 필요한 동작을 구현
+                      print('${items[index]} 클릭됨');
+                    },
+                    child: Container(
+                      width: 100,
+                      child: Card(
+                        child: Center(
+                          child: Text(items[index]),
+                        ),
                       ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
           );
         } else {

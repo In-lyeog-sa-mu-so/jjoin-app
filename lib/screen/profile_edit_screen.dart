@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
+import '../model/profile_user.dart';
+import '../repository/profile_repository.dart';
+
 class ProfileEditScreen extends StatefulWidget {
   final String userDescription;
 
@@ -18,11 +21,14 @@ class ProfileEditScreen extends StatefulWidget {
 class _ProfileEditScreenState extends State<ProfileEditScreen> {
   late TextEditingController _descriptionController;
   File? _profileImage;
+  late User user;
+  bool _isEditingText = false;
 
   @override
   void initState() {
     super.initState();
-    _descriptionController = TextEditingController(text: widget.userDescription);
+    user = ProfileRepository.getDummyUser() as User;
+    _descriptionController = TextEditingController(text: user.introduction); // Initialize with user introduction
   }
 
   @override
@@ -56,37 +62,65 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             GestureDetector(
-              onTap: _pickImage, // 이미지를 탭했을 때 _pickImage 메소드를 호출합니다.
+              onTap: _pickImage,
               child: CircleAvatar(
-                radius: 40,
+                radius: 80,
                 backgroundColor: Colors.grey.shade300,
-                backgroundImage: _profileImage != null
-                    ? FileImage(_profileImage!) as ImageProvider<Object> // 타입 캐스팅 추가
-                    : const AssetImage('assets/icons/icon_profile_24.svg'), // 'const' 추가하여 이미지 경로 명시
+                backgroundImage: AssetImage(user.profileImageUuid)
               ),
             ),
             const SizedBox(height: 20),
-            const Text(
-              '홍길동',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            Text(
+              user.name,
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
             ),
-            const Text('동국대학교 컴퓨터공학과'),
+            Text(user.major,
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
+            ),
             const SizedBox(height: 20),
             TextField(
               controller: _descriptionController,
               decoration: const InputDecoration(
                 labelText: '자기소개',
+                border: OutlineInputBorder(),
               ),
-              maxLines: null, // 무한 입력 가능
+              maxLines: null,
+              enabled: _isEditingText,
             ),
+
             const SizedBox(height: 20),
-            Center(
-              child: ElevatedButton(
-                onPressed: () {
-                  // TODO: 수정 사항 저장 로직 구현
-                },
-                child: const Text('저장하기'),
-              ),
+            Row( // Add this Row widget
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      _isEditingText = true;
+                    });
+                  },
+                  child: const Text('수정하기'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    if (_isEditingText) {
+                      print('Profile Image: ${_profileImage?.path}');
+                      print('User Introduction: ${_descriptionController.text}');
+                      setState(() {
+                        _isEditingText = false;
+                      });
+                      // TODO: Implement the logic to save these changes
+                    } else {
+                      // If we're not in edit mode, then "Save" might prompt the user to edit first
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('수정하기 버튼을 눌러 수정하세요.'),
+                        ),
+                      );
+                    }
+                  },
+                  child: const Text('저장하기'),
+                ),
+              ],
             ),
           ],
         ),
