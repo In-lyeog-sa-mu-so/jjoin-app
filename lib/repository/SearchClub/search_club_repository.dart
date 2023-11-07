@@ -1,4 +1,4 @@
-import '../model/search_club.dart';
+import '../../model/SearchClub/search_club.dart';
 
 class SearchClubRepository {
   static List<SearchClub> getDummyClubs() {

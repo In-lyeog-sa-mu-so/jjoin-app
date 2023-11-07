@@ -1,11 +1,8 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:http/http.dart' as http;
-import '../repository/search_club_repository.dart';
+import '../repository/SearchClub/search_club_repository.dart';
 
-import '../model/search_club.dart';
+import '../model/SearchClub/search_club.dart';
 import 'detail_club_screen.dart';
 
 class SearchClubScreen extends StatefulWidget {
@@ -28,62 +25,10 @@ class _SearchClubScreenState extends State<SearchClubScreen> {
     clubs = SearchClubRepository.getDummyClubs();
   }
 
-  // void showFilterDialog() async {
-  //   final allTags = ['스터디', '운동', '음악', '봉사', '취미', '기타'];
-  //
-  //   await showDialog(
-  //     context: context,
-  //     builder: (context) {
-  //       // 선택된 태그의 상태를 관리하기 위한 임시 세트
-  //       final tempSelectedTags = Set<String>.from(selectedTags);
-  //       return AlertDialog(
-  //         title: const Text('태그 선택'),
-  //         content: SingleChildScrollView(
-  //           child: Wrap(
-  //             spacing: 8.0,
-  //             runSpacing: 8.0,
-  //             children: allTags.map((tag) => FilterChip(
-  //               label: Text(tag),
-  //               selected: tempSelectedTags.contains(tag),
-  //               selectedColor: Colors.green,
-  //               onSelected: (bool selected) {
-  //                 setState(() {
-  //                   if (selected) {
-  //                     tempSelectedTags.add(tag);
-  //                   } else {
-  //                     tempSelectedTags.remove(tag);
-  //                   }
-  //                   selectedTags = tempSelectedTags.toList();
-  //                 });
-  //               },
-  //             )).toList(),
-  //           ),
-  //         ),
-  //         actions: [
-  //           TextButton(
-  //             child: const Text('취소'),
-  //             onPressed: () => Navigator.of(context).pop(),
-  //           ),
-  //           TextButton(
-  //             child: const Text('적용'),
-  //             onPressed: () {
-  //               setState(() {
-  //                 selectedTags = tempSelectedTags.toList();
-  //               });
-  //               Navigator.of(context).pop();
-  //             },
-  //           ),
-  //         ],
-  //       );
-  //     },
-  //   );
-  // }
-
   void sendSearchRequest() async {
     print('searchQuery: $searchQuery');
     print('selectedTags: $selectedTags');
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -118,44 +63,49 @@ class _SearchClubScreenState extends State<SearchClubScreen> {
                 icon: const Icon(Icons.search),
                 onPressed: sendSearchRequest,
               ),
-              // IconButton(
-              //   icon: const Icon(Icons.filter_list),
-              //   onPressed: showFilterDialog,
-              // ),
             ],
           ),
-          // Displaying selected tags
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
-                // Wrap the FilterChip widgets in a Container with horizontal padding
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: Wrap(
                     spacing: 8.0,
                     runSpacing: 8.0,
-                    children: allTags.map((tag) => FilterChip(
-                      side: BorderSide(color: Colors.grey.withOpacity(0.5), width: 1),
-                      showCheckmark: false,
-                      label: Text(tag),
-                      selected: selectedTags.contains(tag),
-                      selectedColor: Colors.blue.shade100.withOpacity(0.8),
-                      backgroundColor: Colors.grey.withOpacity(0.1),
-
-                      onSelected: (bool selected) {
-                        setState(() {
-                          if (selected) {
-                            selectedTags.add(tag);
-                          } else {
-                            selectedTags.remove(tag);
-                          }
-                        });
-                      },
-                    )).toList(),
+                    children: allTags
+                        .map((tag) => FilterChip(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              side: BorderSide(
+                                  color: Colors.grey.withOpacity(0.05),
+                                  width: 0),
+                              showCheckmark: false,
+                              label: Text(
+                                tag,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                              selected: selectedTags.contains(tag),
+                              selectedColor:
+                                  Colors.blue.shade100.withOpacity(0.8),
+                              backgroundColor: Colors.grey.withOpacity(0.2),
+                              onSelected: (bool selected) {
+                                setState(() {
+                                  if (selected) {
+                                    selectedTags.add(tag);
+                                  } else {
+                                    selectedTags.remove(tag);
+                                  }
+                                });
+                              },
+                            ))
+                        .toList(),
                   ),
                 ),
-                // Clear button to clear all selected tags
                 IconButton(
                   icon: const Icon(Icons.refresh_outlined),
                   onPressed: () {
@@ -167,7 +117,7 @@ class _SearchClubScreenState extends State<SearchClubScreen> {
               ],
             ),
           ),
-          // 동아리 카드 리스트를 표시
+          // 동아리 카드 리스트 표시
           Expanded(
             child: ListView.builder(
               itemCount: clubs.length,
@@ -227,23 +177,29 @@ class ClubCard extends StatelessWidget {
             children: <Widget>[
               Text(
                 club.clubName,
-                style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                    fontSize: 20.0, fontWeight: FontWeight.bold),
               ),
-              Divider(), // clubName과 아래 행을 구분하는 줄
-              SizedBox(height: 10),
+              const Divider(), // clubName과 아래 행을 구분하는 줄
+              const SizedBox(height: 10),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   // 이미지 표시 부분 (임시로 placeholder 이미지 사용)
-                  Image.network(club.profileImageUuid.isNotEmpty ? club.profileImageUuid : 'assets/images/dgu_image.png', height: 80, width: 80),
-                  SizedBox(width: 10),
+                  Image.network(
+                      club.profileImageUuid.isNotEmpty
+                          ? club.profileImageUuid
+                          : 'assets/images/dgu_image.png',
+                      height: 80,
+                      width: 80),
+                  const SizedBox(width: 10),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
                           club.dependent ?? '',
-                          style: TextStyle(fontSize: 16.0),
+                          style: const TextStyle(fontSize: 16.0),
                         ),
                         Text(
                           recruitingText,
@@ -258,10 +214,10 @@ class ClubCard extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Text(
                 club.introduction,
-                style: TextStyle(fontSize: 16.0),
+                style: const TextStyle(fontSize: 16.0),
               ),
             ],
           ),
