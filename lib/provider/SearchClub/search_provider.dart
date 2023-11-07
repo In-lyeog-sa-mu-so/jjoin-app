@@ -1,16 +1,14 @@
 import 'dart:convert';
 
-import 'package:jjoin/model/search_club.dart';
+import 'package:jjoin/model/SearchClub/search_club.dart';
 import 'package:http/http.dart' as http;
 
 class ApiSearch {
-
   //엔드포인트의 searchclub response body 를 가져오는 함수
   Future<List<SearchClub>> getClubs() async {
     List<SearchClub> clubInstances = [];
     final response = await http.get(
-      Uri.parse(
-          'https://search'),
+      Uri.parse('https://search'),
     );
 
     if (response.statusCode == 200) {
@@ -19,13 +17,8 @@ class ApiSearch {
         clubInstances.add(SearchClub.fromJson(club));
       }
       return clubInstances;
-    }
-    else {
+    } else {
       throw Exception('Failed to load clubs');
     }
-    }
-
   }
-
-
-
+}

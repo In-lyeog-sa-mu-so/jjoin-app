@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
-import '../model/profile_user.dart';
-import '../repository/profile_repository.dart';
+import '../model/profile/profile_user.dart';
+import '../repository/Profile/profile_repository.dart';
 
 class ProfileEditScreen extends StatefulWidget {
   final String userDescription;
@@ -37,7 +37,8 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
   }
 
   Future<void> _pickImage() async {
-    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
         _profileImage = File(pickedFile.path);
@@ -93,7 +94,8 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                         children: [
                           Padding(
                             padding: const EdgeInsets.only(top: 6.0),
-                            child: Text(user.name,
+                            child: Text(
+                              user.name,
                               style: const TextStyle(
                                 fontSize: 22,
                                 fontWeight: FontWeight.w800,
@@ -106,8 +108,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                                 style: const TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w300,
-                                )
-                            ),
+                                )),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(top: 4.0),
@@ -115,8 +116,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                                 style: const TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w300,
-                                )
-                            ),
+                                )),
                           ),
                         ],
                       ),
@@ -133,64 +133,69 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                   borderRadius: BorderRadius.circular(5),
                 ),
                 padding: EdgeInsets.all(10),
-                child: TextField(
-                  controller: _descriptionController,
-                  decoration: const InputDecoration(
-                    labelText: '자기소개',
-                    labelStyle: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 20,
+                child: Column(
+                  children: [
+                    TextField(
+                      controller: _descriptionController,
+                      decoration: const InputDecoration(
+                        labelText: '자기소개',
+                        labelStyle: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 20,
+                        ),
+                        alignLabelWithHint: true,
+                        border: OutlineInputBorder(),
+                      ),
+                      style: TextStyle(
+                        color: _isEditingText
+                            ? Colors.black
+                            : Colors.grey.shade600,
+                      ),
+                      maxLines: 15,
+                      enabled: _isEditingText,
                     ),
-                    alignLabelWithHint: true,
-                    border: OutlineInputBorder(),
-                  ),
-                  style: TextStyle(
-                    color: _isEditingText ? Colors.black : Colors.grey.shade600,
-                  ),
-                  maxLines: 15,
-                  enabled: _isEditingText,
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              _isEditingText = true;
+                            });
+                          },
+                          child: const Text('수정하기'),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            if (_isEditingText) {
+                              print('Profile Image: ${_profileImage?.path}');
+                              print(
+                                  'User Introduction: ${_descriptionController.text}');
+                              setState(() {
+                                _isEditingText = false;
+                              });
+                              // TODO: Implement the logic to save these changes
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('수정하기 버튼을 눌러 수정하세요.'),
+                                ),
+                              );
+                            }
+                          },
+                          child: const Text('저장하기'),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
-            ),
-
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      _isEditingText = true;
-                    });
-                  },
-                  child: const Text('수정하기'),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    if (_isEditingText) {
-                      print('Profile Image: ${_profileImage?.path}');
-                      print(
-                          'User Introduction: ${_descriptionController.text}');
-                      setState(() {
-                        _isEditingText = false;
-                      });
-                      // TODO: Implement the logic to save these changes
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('수정하기 버튼을 눌러 수정하세요.'),
-                        ),
-                      );
-                    }
-                  },
-                  child: const Text('저장하기'),
-                ),
-              ],
             ),
           ],
         ),
       ),
     );
   }
-  }
+}

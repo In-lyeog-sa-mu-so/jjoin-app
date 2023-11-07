@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'dart:io';
-import 'package:jjoin/repository/profile_repository.dart';
+import 'package:jjoin/repository/Profile/profile_repository.dart';
 import 'package:jjoin/screen/profile_edit_screen.dart';
 
-import '../model/profile_user.dart';
+import '../model/profile/profile_user.dart';
+import 'detail_club_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -13,15 +13,23 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  File? _profileImage;
   bool _isPushNotificationEnabled = false;
   late User user;
+  List<JoinedClub> joinedClubs = [];
+  late Future<List<JoinedClub>> _items;
 
   @override
   void initState() {
     super.initState();
-    _items = _loadItems();
+    // User 및 joinedClubs 초기화
     user = ProfileRepository.getDummyUser();
+    joinedClubs = ProfileRepository.getDummyClubs();
+    // _loadItems 호출로 _items 초기화
+    _items = _loadItems();
+  }
+
+  Future<List<JoinedClub>> _loadItems() async {
+    return joinedClubs;
   }
 
   @override
@@ -39,13 +47,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Expanded(
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.white, // Set the background color of the container
+                color: Colors.white,
                 boxShadow: [
                   BoxShadow(
                     color: Colors.grey.withOpacity(0.3),
                     spreadRadius: 0.5,
                     blurRadius: 1,
-                    offset: Offset(0, 0), // changes position of shadow
+                    offset: Offset(0, 0),
                   ),
                 ],
               ),
@@ -53,9 +61,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 children: [
                   const SizedBox(height: 5),
                   _buildScrollingCards(context),
-                  const SizedBox(height: 10),
                   _buildOptions(context),
-                  SizedBox(height: MediaQuery.of(context).padding.bottom), // To ensure it extends to the bottom of the screen
+                  SizedBox(height: MediaQuery.of(context).padding.bottom),
                 ],
               ),
             ),
@@ -65,22 +72,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-
   Widget _buildTopBanner(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white, // Set the background color of the container
+          color: Colors.white,
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.3),
               spreadRadius: 0.5,
               blurRadius: 1,
-              offset: Offset(0, 0), // changes position of shadow
+              offset: Offset(0, 0),
             ),
           ],
-          borderRadius: BorderRadius.circular(10), // Round the corners slightly
+          borderRadius: BorderRadius.circular(10),
         ),
         child: Column(
           children: [
@@ -100,7 +106,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(top: 10),
-                          child: Text(user.name,
+                          child: Text(
+                            user.name,
                             style: const TextStyle(
                               fontSize: 22,
                               fontWeight: FontWeight.w800,
@@ -113,8 +120,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               style: const TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w300,
-                              )
-                          ),
+                              )),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(top: 5),
@@ -122,8 +128,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               style: const TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w300,
-                              )
-                          ),
+                              )),
                         ),
                       ],
                     ),
@@ -147,16 +152,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white, // Set the background color of the container
+          color: Colors.white,
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.5),
               spreadRadius: 0.5,
               blurRadius: 1,
-              offset: Offset(0, 0), // changes position of shadow
+              offset: Offset(0, 0),
             ),
           ],
-          borderRadius: BorderRadius.circular(10), // Round the corners slightly
+          borderRadius: BorderRadius.circular(10),
         ),
         child: Column(
           children: [
@@ -172,7 +177,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               );
             }),
             SwitchListTile(
-              title: const Text('앱 푸시 알림',
+              title: const Text(
+                '앱 푸시 알림',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w300,
@@ -184,11 +190,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   _isPushNotificationEnabled = value;
                 });
               },
-              secondary: const Icon(Icons.notifications,
-              size: 20,
+              secondary: const Icon(
+                Icons.notifications,
+                size: 20,
               ),
             ),
-            _buildVersionListTile(), // Add the version list tile here
+            _buildVersionListTile(),
           ],
         ),
       ),
@@ -202,11 +209,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
       onTap: onTap,
     );
   }
-  late Future<List<String>> _items; // 여기서는 예시로 String 리스트를 사용
 
   Widget _buildVersionListTile() {
     return const ListTile(
-      leading: Icon(Icons.info_outline), // Replace with your preferred icon
+      leading: Icon(Icons.info_outline),
       title: Text(
         '앱 버전',
         style: TextStyle(
@@ -224,42 +230,50 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Future<List<String>> _loadItems() async {
-    // 여기서 데이터베이스에서 아이템을 불러오는 로직을 구현
-    // 임시로 몇 개의 아이템을 생성하여 반환
-    await Future.delayed(Duration(seconds: 2)); // 가상의 로딩 시간
-    return List.generate(10, (index) => '아이템 $index'); // 가상의 데이터
-  }
-
   Widget _buildScrollingCards(BuildContext context) {
-    return FutureBuilder<List<String>>(
+    return FutureBuilder<List<JoinedClub>>(
       future: _items,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator(); // 데이터를 불러오는 동안 로딩 인디케이터를 표시합니다.
+          return CircularProgressIndicator(); // 로딩 인디케이터 표시
         } else if (snapshot.hasError) {
-          return Text('데이터를 불러오는데 실패했습니다.');
+          return Text('Failed to load data.'); // 데이터 로드 실패 시 메시지 표시
         } else if (snapshot.hasData) {
-          var items = snapshot.data!;
+          var clubs = snapshot.data!;
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0,),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Container(
               height: 120,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: items.length, // 불러온 데이터의 개수로 설정
+                itemCount: clubs.length,
                 itemBuilder: (BuildContext context, int index) {
                   return GestureDetector(
                     onTap: () {
-                      // TODO: 아이템 클릭 시 필요한 동작을 구현
-                      print('${items[index]} 클릭됨');
+                      // 클릭 시 DetailClubScreen으로 이동하며 clubId를 전달합니다.
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              DetailClubScreen(clubId: clubs[index].clubId),
+                        ),
+                      );
                     },
                     child: Container(
                       width: 100,
-                      child: Card(
-                        child: Center(
-                          child: Text(items[index]),
-                        ),
+                      child: Column(
+                        children: [
+                          CircleAvatar(
+                            radius: 40,
+                            backgroundImage:
+                                NetworkImage(clubs[index].clubImage),
+                          ),
+                          SizedBox(height: 6),
+                          Text(
+                            clubs[index].clubName,
+                            style: TextStyle(fontSize: 12),
+                          ),
+                        ],
                       ),
                     ),
                   );
@@ -268,7 +282,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           );
         } else {
-          return Text('데이터가 없습니다.');
+          return Text('No data.');
         }
       },
     );

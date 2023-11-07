@@ -1,4 +1,4 @@
-import '../model/profile_user.dart';
+import '../../model/profile/profile_user.dart';
 
 class ProfileRepository {
   static User getDummyUser() {
@@ -10,5 +10,9 @@ class ProfileRepository {
       profileImageUuid: "assets/images/jh_profile_image.png",
       studentId: 2019111989,
     );
+  }
+
+  static List<JoinedClub> getDummyClubs() {
+    return joinedClubs;
   }
 }

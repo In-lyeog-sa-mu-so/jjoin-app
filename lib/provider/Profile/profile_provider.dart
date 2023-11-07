@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:jjoin/model/profile_user.dart';
+import 'package:jjoin/model/profile/profile_user.dart';
 import 'package:http/http.dart' as http;
 
 class ApiProfile {
