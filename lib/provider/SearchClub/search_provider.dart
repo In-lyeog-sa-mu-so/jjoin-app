@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:jjoin/model/SearchClub/search_club.dart';
 import 'package:http/http.dart' as http;
 
-class ApiSearch {
+class SearchClubProvider {
   //엔드포인트의 searchclub response body 를 가져오는 함수
   Future<List<SearchClub>> getClubs() async {
     List<SearchClub> clubInstances = [];
