@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
-import 'package:image_picker/image_picker.dart';
 import 'package:jjoin/repository/profile_repository.dart';
 import 'package:jjoin/screen/profile_edit_screen.dart';
 
@@ -86,12 +85,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CircleAvatar(
-                    radius: 50,
+                    radius: 60,
                     backgroundImage: AssetImage(user.profileImageUuid),
                   ),
                   const SizedBox(width: 16),
@@ -101,7 +100,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(top: 10),
-                          child: Text('${user.name}',
+                          child: Text(user.name,
                             style: const TextStyle(
                               fontSize: 22,
                               fontWeight: FontWeight.w800,

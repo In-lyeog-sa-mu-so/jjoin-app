@@ -1,4 +1,3 @@
-// ProfileEditScreen.dart 파일
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
@@ -28,7 +27,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
   void initState() {
     super.initState();
     user = ProfileRepository.getDummyUser() as User;
-    _descriptionController = TextEditingController(text: user.introduction); // Initialize with user introduction
+    _descriptionController = TextEditingController(text: user.introduction);
   }
 
   @override
@@ -57,39 +56,106 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
         title: const Text('프로필 편집'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            GestureDetector(
-              onTap: _pickImage,
-              child: CircleAvatar(
-                radius: 80,
-                backgroundColor: Colors.grey.shade300,
-                backgroundImage: AssetImage(user.profileImageUuid)
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.3),
+                    spreadRadius: 0.5,
+                    blurRadius: 1,
+                    offset: Offset(0, 0),
+                  ),
+                ],
+              ),
+              padding: EdgeInsets.all(10),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  GestureDetector(
+                    onTap: _pickImage,
+                    child: CircleAvatar(
+                      radius: 60,
+                      backgroundImage: AssetImage(user.profileImageUuid),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 5),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(top: 6.0),
+                            child: Text(user.name,
+                              style: const TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 4.0),
+                            child: Text('전공: ${user.major}',
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w300,
+                                )
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 4.0),
+                            child: Text('학번: ${user.studentId.toString()}',
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w300,
+                                )
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 20),
-            Text(
-              user.name,
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
-            ),
-            Text(user.major,
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
-            ),
-            const SizedBox(height: 20),
-            TextField(
-              controller: _descriptionController,
-              decoration: const InputDecoration(
-                labelText: '자기소개',
-                border: OutlineInputBorder(),
+            const SizedBox(height: 15),
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                padding: EdgeInsets.all(10),
+                child: TextField(
+                  controller: _descriptionController,
+                  decoration: const InputDecoration(
+                    labelText: '자기소개',
+                    labelStyle: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 20,
+                    ),
+                    alignLabelWithHint: true,
+                    border: OutlineInputBorder(),
+                  ),
+                  style: TextStyle(
+                    color: _isEditingText ? Colors.black : Colors.grey.shade600,
+                  ),
+                  maxLines: 15,
+                  enabled: _isEditingText,
+                ),
               ),
-              maxLines: null,
-              enabled: _isEditingText,
             ),
 
             const SizedBox(height: 20),
-            Row( // Add this Row widget
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ElevatedButton(
@@ -104,13 +170,13 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                   onPressed: () {
                     if (_isEditingText) {
                       print('Profile Image: ${_profileImage?.path}');
-                      print('User Introduction: ${_descriptionController.text}');
+                      print(
+                          'User Introduction: ${_descriptionController.text}');
                       setState(() {
                         _isEditingText = false;
                       });
                       // TODO: Implement the logic to save these changes
                     } else {
-                      // If we're not in edit mode, then "Save" might prompt the user to edit first
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text('수정하기 버튼을 눌러 수정하세요.'),
@@ -127,4 +193,4 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
       ),
     );
   }
-}
+  }

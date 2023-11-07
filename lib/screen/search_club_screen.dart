@@ -138,7 +138,11 @@ class _SearchClubScreenState extends State<SearchClubScreen> {
                     children: allTags.map((tag) => FilterChip(
                       side: BorderSide(color: Colors.grey.withOpacity(0.5), width: 1),
                       showCheckmark: false,
-                      label: Text(tag),
+                      label: Text(tag,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                          )
+                          ,),
                       selected: selectedTags.contains(tag),
                       selectedColor: Colors.blue.shade100.withOpacity(0.8),
                       backgroundColor: Colors.grey.withOpacity(0.1),
