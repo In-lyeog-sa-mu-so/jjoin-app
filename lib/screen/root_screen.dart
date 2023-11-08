@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jjoin/screen/application_screen.dart';
 import 'package:jjoin/screen/profile_screen.dart';
 import 'package:jjoin/screen/search_club_screen.dart';
 
@@ -18,7 +19,7 @@ class RootScreen extends StatelessWidget {
         body: Obx(() => IndexedStack(
               index: CustomBottomNavigationBarController.to.selectedIndex.value,
               children: const [
-                HomeScreen(),
+                ApplicationScreen(),
                 CalendarScreen(),
                 SearchClubScreen(),
                 ProfileScreen(),
