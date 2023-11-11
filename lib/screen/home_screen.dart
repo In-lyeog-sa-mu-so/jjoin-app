@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:jjoin/widget/club/club_event_item_widget.dart';
+import 'package:jjoin/widget/club/club_recommend_item_widget.dart';
 
+import '../model/base/e_club_part.dart';
+import '../model/club/club_recommend.dart';
 import '../widget/club/club_big_card_widget.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -64,7 +67,36 @@ class _HomeScreenState extends State<HomeScreen> {
               (context, index) {
                 return const ClubEventItem();
               },
-              childCount: 20,
+              childCount: 3,
+            ),
+          ),
+          const SliverToBoxAdapter(
+              child: Padding(
+            // 왼쪽만 패딩
+            padding: EdgeInsets.only(left: 25, top: 5, bottom: 5),
+            child: Text(
+              "추천 동아리",
+              style: TextStyle(
+                fontSize: 25,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          )),
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                return ClubRecommendItem(
+                    item: ClubRecommend(
+                  id: 1,
+                  name: "컴퓨터공학과 학생회",
+                  description: "컴퓨터공학과 학생회입니다.",
+                  part: EClubPart.DEPARTMENT,
+                  memberCnt: 10,
+                  imageURL: "https://picsum.photos/200",
+                  tags: ["친목", "학술"],
+                ));
+              },
+              childCount: 3,
             ),
           ),
         ],
