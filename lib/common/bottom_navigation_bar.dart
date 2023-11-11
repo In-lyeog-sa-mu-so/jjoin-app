@@ -33,17 +33,17 @@ class CustomBottomNavigationBar
             items: <BottomNavigationBarItem>[
               BottomNavigationBarItem(
                   icon: SvgPicture.asset(
-                    'assets/icons/icon_home_24.svg',
+                    'assets/icons/icon_profile_24.svg',
                   ),
                   label: "홈"),
               BottomNavigationBarItem(
                   icon: SvgPicture.asset(
-                    'assets/icons/icon_home_24.svg',
+                    'assets/icons/icon_profile_24.svg',
                   ),
                   label: "캘린더"),
               BottomNavigationBarItem(
                   icon: SvgPicture.asset(
-                    'assets/icons/icon_home_24.svg',
+                    'assets/icons/icon_profile_24.svg',
                   ),
                   label: "동아리찾기"),
               BottomNavigationBarItem(
