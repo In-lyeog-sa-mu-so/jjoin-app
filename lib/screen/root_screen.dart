@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jjoin/screen/club_application_screen.dart';
 import 'package:jjoin/screen/profile_screen.dart';
 import 'package:jjoin/screen/search_club_screen.dart';
 
-import '../common/bottom_navigation_bar.dart';
+import '../widget/base/bottom_navigation_bar.dart';
+import 'calendar_screen.dart';
 import 'home_screen.dart';
 
 class RootScreen extends StatelessWidget {
@@ -20,8 +20,8 @@ class RootScreen extends StatelessWidget {
               index: CustomBottomNavigationBarController.to.selectedIndex.value,
               children: const [
                 HomeScreen(),
-                ClubApplicationScreen(),
-                // CalendarScreen(),
+                // ClubApplicationScreen(),
+                CalendarScreen(),
                 SearchClubScreen(),
                 ProfileScreen(),
               ],
