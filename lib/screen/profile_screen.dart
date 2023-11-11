@@ -43,7 +43,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: Column(
         children: [
           _buildTopBanner(context),
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
           Expanded(
             child: Container(
               decoration: BoxDecoration(
@@ -158,7 +158,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               color: Colors.grey.withOpacity(0.5),
               spreadRadius: 0.5,
               blurRadius: 1,
-              offset: Offset(0, 0),
+              offset: const Offset(0, 0),
             ),
           ],
           borderRadius: BorderRadius.circular(10),
@@ -170,13 +170,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ProfileEditScreen(
+                  builder: (context) => const ProfileEditScreen(
                     userDescription: userDescription,
                   ),
                 ),
               );
             }),
-            SwitchListTile(
+            ListTile(
+              leading: const Icon(Icons.notifications, size: 20), // 알람 아이콘 추가
               title: const Text(
                 '앱 푸시 알림',
                 style: TextStyle(
@@ -184,16 +185,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   fontWeight: FontWeight.w300,
                 ),
               ),
-              value: _isPushNotificationEnabled,
-              onChanged: (bool value) {
-                setState(() {
-                  _isPushNotificationEnabled = value;
-                });
-              },
-              secondary: const Icon(
-                Icons.notifications,
-                size: 20,
+              trailing: Switch(
+                value: _isPushNotificationEnabled,
+                onChanged: (bool value) {
+                  setState(() {
+                    _isPushNotificationEnabled = value;
+                  });
+                },
               ),
+              onTap: () {}, // ListTile의 onTap을 비활성화
             ),
             _buildVersionListTile(),
           ],
@@ -235,54 +235,66 @@ class _ProfileScreenState extends State<ProfileScreen> {
       future: _items,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator(); // 로딩 인디케이터 표시
+          return const CircularProgressIndicator(); // 로딩 인디케이터 표시
         } else if (snapshot.hasError) {
-          return Text('Failed to load data.'); // 데이터 로드 실패 시 메시지 표시
+          return const Text('Failed to load data.'); // 데이터 로드 실패 시 메시지 표시
         } else if (snapshot.hasData) {
           var clubs = snapshot.data!;
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Container(
-              height: 120,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: clubs.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return GestureDetector(
-                    onTap: () {
-                      // 클릭 시 DetailClubScreen으로 이동하며 clubId를 전달합니다.
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              DetailClubScreen(clubId: clubs[index].clubId),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      width: 100,
-                      child: Column(
-                        children: [
-                          CircleAvatar(
-                            radius: 40,
-                            backgroundImage:
-                                NetworkImage(clubs[index].clubImage),
-                          ),
-                          SizedBox(height: 6),
-                          Text(
-                            clubs[index].clubName,
-                            style: TextStyle(fontSize: 12),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+                child: Text(
+                  '가입한 동아리',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
               ),
-            ),
+              SizedBox(
+                height: 120,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: clubs.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return GestureDetector(
+                      onTap: () {
+                        // 클릭 시 DetailClubScreen으로 이동하며 clubId를 전달합니다.
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                DetailClubScreen(clubId: clubs[index].clubId),
+                          ),
+                        );
+                      },
+                      child: SizedBox(
+                        width: 100,
+                        child: Column(
+                          children: [
+                            CircleAvatar(
+                              radius: 40,
+                              backgroundImage:
+                                  AssetImage(clubs[index].clubImage),
+                            ),
+                            const SizedBox(height: 6),
+                            Text(
+                              clubs[index].clubName,
+                              style: TextStyle(fontSize: 12),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
           );
         } else {
-          return Text('No data.');
+          return const Text('No data.');
         }
       },
     );
