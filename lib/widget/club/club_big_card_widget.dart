@@ -55,15 +55,15 @@ class ClubBigCardWidget extends StatelessWidget {
             children: [
               ClubInfoWidget(
                   title: item.leaderName,
-                  imagePath: "assets/icons/icon_profile_24.svg"),
-              SizedBox.fromSize(size: const Size(5, 0)),
+                  imagePath: "assets/icons/icon_crown.svg"),
+              SizedBox.fromSize(size: const Size(10, 0)),
               ClubInfoWidget(
                   title: "${item.memberCnt}",
-                  imagePath: "assets/icons/icon_profile_24.svg"),
-              SizedBox.fromSize(size: const Size(5, 0)),
+                  imagePath: "assets/icons/icon_people.svg"),
+              SizedBox.fromSize(size: const Size(10, 0)),
               ClubInfoWidget(
                   title: item.part.nameStr,
-                  imagePath: "assets/icons/icon_profile_24.svg"),
+                  imagePath: "assets/icons/icon_dependency.svg"),
             ],
           ),
           SizedBox.fromSize(size: const Size.fromHeight(20)),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jjoin/model/club/club_schedule.dart';
+import 'package:jjoin/widget/base/default_appbar.dart';
 import 'package:jjoin/widget/club/club_event_item_widget.dart';
 import 'package:jjoin/widget/club/club_recommend_item_widget.dart';
 
@@ -36,15 +37,10 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFFFFFFF),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFFFFFFFF),
-        surfaceTintColor: const Color(0xFFFFFFFF),
-        title: const Text(
-          "JJoin",
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-          ),
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(50),
+        child: DefaultAppBar(
+          title: "JJoin",
         ),
       ),
       body: CustomScrollView(
