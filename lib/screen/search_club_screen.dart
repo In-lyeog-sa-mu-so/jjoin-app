@@ -186,7 +186,7 @@ class ClubCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   // 이미지 표시 부분 (임시로 placeholder 이미지 사용)
-                  Image.network(
+                  Image.asset(
                       club.profileImageUuid.isNotEmpty
                           ? club.profileImageUuid
                           : 'assets/images/dgu_image.png',
