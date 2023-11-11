@@ -3,7 +3,7 @@ import 'package:jjoin/repository/Profile/profile_repository.dart';
 import 'package:jjoin/screen/profile_edit_screen.dart';
 
 import '../model/profile/profile_user.dart';
-import 'detail_club_screen.dart';
+import 'club_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -262,13 +262,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     return GestureDetector(
                       onTap: () {
                         // 클릭 시 DetailClubScreen으로 이동하며 clubId를 전달합니다.
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                DetailClubScreen(clubId: clubs[index].clubId),
-                          ),
-                        );
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //     builder: (context) =>
+                        //         ClubScreen(clubId: clubs[index].clubId),
+                        //   ),
+                        // );
                       },
                       child: SizedBox(
                         width: 100,

@@ -4,14 +4,14 @@ import 'package:jjoin/provider/Application/application_provider.dart';
 import '../../model/Application/application_question.dart';
 import '../../repository/Application/application_repository.dart';
 
-class ApplicationScreen extends StatefulWidget {
-  const ApplicationScreen({Key? key}) : super(key: key);
+class ClubApplicationScreen extends StatefulWidget {
+  const ClubApplicationScreen({Key? key}) : super(key: key);
 
   @override
-  State<ApplicationScreen> createState() => _ApplicationScreenState();
+  State<ClubApplicationScreen> createState() => _ClubApplicationScreenState();
 }
 
-class _ApplicationScreenState extends State<ApplicationScreen> {
+class _ClubApplicationScreenState extends State<ClubApplicationScreen> {
   late final ApplicationForm applicationForm;
   final Map<int, TextEditingController> controllers = {};
   final Map<int, String> answers = {};

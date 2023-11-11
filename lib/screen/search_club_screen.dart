@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../repository/SearchClub/search_club_repository.dart';
 
 import '../model/SearchClub/search_club.dart';
-import 'detail_club_screen.dart';
+import 'club_screen.dart';
 
 class SearchClubScreen extends StatefulWidget {
   const SearchClubScreen({Key? key}) : super(key: key);
@@ -125,13 +126,7 @@ class _SearchClubScreenState extends State<SearchClubScreen> {
                 final club = clubs[index];
                 return InkWell(
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            DetailClubScreen(clubId: club.clubId),
-                      ),
-                    );
+                    Get.toNamed('/clubs/application', arguments: club.clubId);
                   },
                   child: ClubCard(club: club),
                 );
