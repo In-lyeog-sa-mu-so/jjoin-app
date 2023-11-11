@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:jjoin/provider/Application/application_provider.dart';
 import '../../model/Application/application_question.dart';
 import '../../repository/Application/application_repository.dart';
+import '../widget/application/application_question_widget.dart';
+import '../widget/base/default_back_appbar.dart';
+import '../widget/application/application_top_bar_widget.dart';
 
 class ClubApplicationScreen extends StatefulWidget {
   const ClubApplicationScreen({Key? key}) : super(key: key);
@@ -55,110 +57,44 @@ class _ClubApplicationScreenState extends State<ClubApplicationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          // title: Image.asset(
-          //   fit: BoxFit.cover,
-          //   'assets/images/dgu_image.png', // You can choose how to fit the image within the AppBar.
-          //   height: kToolbarHeight,
-          // ),
-          ),
+      backgroundColor: const Color(0xFFFFFFFF),
+      appBar: const PreferredSize(
+          preferredSize: Size.fromHeight(kToolbarHeight),
+          child: DefaultBackAppbar(title: '가입 신청서')),
       body: ListView(
         children: [
-          _buildTopBar(applicationForm: applicationForm),
+          ApplicationTopBar(applicationForm: applicationForm),
           const SizedBox(height: 10), // Add some spacing
           ...applicationForm.questions.map((question) {
-            return Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 6.0, horizontal: 2.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10.0),
-                  border: Border.all(
-                    color: Colors.grey.shade300,
-                    width: 1.0,
-                  ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(question.question,
-                          style: const TextStyle(fontSize: 18)),
-                      TextField(
-                        controller: controllers[question.questionId],
-                        onChanged: (value) {
-                          _updateAnswer(question.questionId, value);
-                        },
-                        decoration: const InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(horizontal: 8),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+            TextEditingController? controller =
+                controllers[question.questionId];
+            if (controller == null) {
+              controller = TextEditingController();
+              controllers[question.questionId] = controller;
+            }
+            return ApplicationQuestion(
+              questionText: question.question,
+              controller: controller,
+              onAnswerChanged: (value) =>
+                  _updateAnswer(question.questionId, value),
             );
           }).toList(),
           Container(
-            padding: const EdgeInsets.all(16.0),
-            alignment: Alignment.centerLeft,
+            padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20),
+            alignment: Alignment.centerRight,
             child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.teal.shade400,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+              ),
               onPressed: _submitAnswers,
               child: const Text('제출',
                   style: TextStyle(
-                    color: Colors.black,
+                    color: Colors.white,
                     fontSize: 16,
                   )),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _buildTopBar extends StatelessWidget {
-  const _buildTopBar({
-    super.key,
-    required this.applicationForm,
-  });
-
-  final ApplicationForm applicationForm;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10.0),
-        border: Border.all(
-          color: Colors.grey.shade300,
-          width: 1.0,
-        ),
-      ),
-      margin: const EdgeInsets.symmetric(horizontal: 2.0, vertical: 6.0),
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              '${applicationForm.clubName} 가입 신청서',
-              style: const TextStyle(
-                fontSize: 24.0,
-                fontWeight: FontWeight.bold,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text(
-              '모집 기간: ${DateFormat('yyyy-MM-dd').format(applicationForm.startDate)} ~ ${DateFormat('yyyy-MM-dd').format(applicationForm.endDate)}',
-              style: const TextStyle(fontSize: 16.0),
-              textAlign: TextAlign.center,
             ),
           ),
         ],

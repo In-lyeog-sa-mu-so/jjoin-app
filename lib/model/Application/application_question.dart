@@ -48,18 +48,6 @@ ApplicationForm applicationForm = ApplicationForm(
     endDate: DateTime.parse("2023-11-31"),
     questions: [
       Questions(
-        questionId: 12,
-        question: "이름",
-      ),
-      Questions(
-        questionId: 32,
-        question: "학번",
-      ),
-      Questions(
-        questionId: 3,
-        question: "전공",
-      ),
-      Questions(
         questionId: 3,
         question: "Email",
       ),

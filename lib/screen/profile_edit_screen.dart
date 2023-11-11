@@ -4,6 +4,7 @@ import 'dart:io';
 
 import '../model/profile/profile_user.dart';
 import '../repository/Profile/profile_repository.dart';
+import '../widget/base/default_back_appbar.dart';
 
 class ProfileEditScreen extends StatefulWidget {
   final String userDescription;
@@ -49,13 +50,10 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        title: const Text('프로필 편집'),
-      ),
+      backgroundColor: const Color(0xFFFFFFFF),
+      appBar: const PreferredSize(
+          preferredSize: Size.fromHeight(kToolbarHeight),
+          child: DefaultBackAppbar(title: '프로필 수정')),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Column(

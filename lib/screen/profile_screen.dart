@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:jjoin/repository/Profile/profile_repository.dart';
 import 'package:jjoin/screen/profile_edit_screen.dart';
+import 'package:jjoin/widget/profile/profile_club_widget.dart';
+import 'package:jjoin/widget/profile/profile_user_info_widget.dart';
 
 import '../model/profile/profile_user.dart';
 import 'club_screen.dart';
@@ -16,7 +19,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool _isPushNotificationEnabled = false;
   late User user;
   List<JoinedClub> joinedClubs = [];
-  late Future<List<JoinedClub>> _items;
+  late Future<List<JoinedClub>> items;
 
   @override
   void initState() {
@@ -25,7 +28,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     user = ProfileRepository.getDummyUser();
     joinedClubs = ProfileRepository.getDummyClubs();
     // _loadItems 호출로 _items 초기화
-    _items = _loadItems();
+    items = _loadItems();
   }
 
   Future<List<JoinedClub>> _loadItems() async {
@@ -35,14 +38,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFFFFFFF),
       appBar: AppBar(
-        title: const Text('프로필'),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
+        title: const Text(
+          'JJoin',
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+        ),
+        centerTitle: true,
+        surfaceTintColor: Colors.white,
+        backgroundColor: Colors.white,
+        automaticallyImplyLeading: true,
+        leadingWidth: 90,
       ),
       body: Column(
         children: [
-          _buildTopBanner(context),
+          ProfileUserInfo(user: user),
           const SizedBox(height: 15),
           Expanded(
             child: Container(
@@ -60,7 +70,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: ListView(
                 children: [
                   const SizedBox(height: 5),
-                  _buildScrollingCards(context),
+                  ProfileJoinedClub(items: items),
                   _buildOptions(context),
                   SizedBox(height: MediaQuery.of(context).padding.bottom),
                 ],
@@ -68,81 +78,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildTopBanner(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.3),
-              spreadRadius: 0.5,
-              blurRadius: 1,
-              offset: Offset(0, 0),
-            ),
-          ],
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CircleAvatar(
-                    radius: 60,
-                    backgroundImage: AssetImage(user.profileImageUuid),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 10),
-                          child: Text(
-                            user.name,
-                            style: const TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.w800,
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 5),
-                          child: Text('전공: ${user.major}',
-                              style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w300,
-                              )),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 5),
-                          child: Text('학번: ${user.studentId.toString()}',
-                              style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w300,
-                              )),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Text(
-              user.introduction,
-              textAlign: TextAlign.left,
-            ),
-            const SizedBox(height: 20)
-          ],
-        ),
       ),
     );
   }
@@ -167,14 +102,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
           children: [
             _buildOptionItem(Icons.person, '프로필 편집', () {
               const userDescription = " ";
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const ProfileEditScreen(
+              Get.to(() => const ProfileEditScreen(
                     userDescription: userDescription,
-                  ),
-                ),
-              );
+                  ));
             }),
             ListTile(
               leading: const Icon(Icons.notifications, size: 20), // 알람 아이콘 추가
@@ -227,76 +157,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           color: Colors.grey,
         ),
       ),
-    );
-  }
-
-  Widget _buildScrollingCards(BuildContext context) {
-    return FutureBuilder<List<JoinedClub>>(
-      future: _items,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator(); // 로딩 인디케이터 표시
-        } else if (snapshot.hasError) {
-          return const Text('Failed to load data.'); // 데이터 로드 실패 시 메시지 표시
-        } else if (snapshot.hasData) {
-          var clubs = snapshot.data!;
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-                child: Text(
-                  '가입한 동아리',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 120,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: clubs.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return GestureDetector(
-                      onTap: () {
-                        // 클릭 시 DetailClubScreen으로 이동하며 clubId를 전달합니다.
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: (context) =>
-                        //         ClubScreen(clubId: clubs[index].clubId),
-                        //   ),
-                        // );
-                      },
-                      child: SizedBox(
-                        width: 100,
-                        child: Column(
-                          children: [
-                            CircleAvatar(
-                              radius: 40,
-                              backgroundImage:
-                                  AssetImage(clubs[index].clubImage),
-                            ),
-                            const SizedBox(height: 6),
-                            Text(
-                              clubs[index].clubName,
-                              style: TextStyle(fontSize: 12),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
-          );
-        } else {
-          return const Text('No data.');
-        }
-      },
     );
   }
 }
