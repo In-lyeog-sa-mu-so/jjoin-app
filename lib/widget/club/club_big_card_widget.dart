@@ -1,10 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:jjoin/model/club/club_home_info.dart';
 import 'package:jjoin/widget/club/club_info_widget.dart';
 
 class ClubBigCardWidget extends StatelessWidget {
-  const ClubBigCardWidget({super.key});
-
-  final String _notiInfo = "2023년 할로윈 파티 일일호프 행사 관련 준비 공지";
+  final ClubHomeInfo item;
+  const ClubBigCardWidget({required this.item, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,26 +28,25 @@ class ClubBigCardWidget extends StatelessWidget {
       child: Column(
         children: [
           SizedBox.fromSize(size: const Size.fromHeight(10)),
-          Container(
-            width: 86,
-            height: 86,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(43),
-              image: const DecorationImage(
-                image: NetworkImage(
-                    'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg'),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
+          item.imageURL.isEmpty
+              ? SvgPicture.asset(
+                  'assets/icons/icon_not_loading.svg',
+                  width: 86,
+                  height: 86,
+                )
+              : CircleAvatar(
+                  radius: 43,
+                  backgroundColor: Colors.blue[300],
+                  backgroundImage: CachedNetworkImageProvider(item.imageURL),
+                ),
           SizedBox.fromSize(size: const Size.fromHeight(10)),
           Text(
-            '동아리 이름',
+            item.name,
             style: Theme.of(context).textTheme.headline6,
           ),
           SizedBox.fromSize(size: const Size.fromHeight(10)),
           Text(
-            '동아리 소개',
+            item.description,
             style: Theme.of(context).textTheme.bodyText2,
           ),
           SizedBox.fromSize(size: const Size.fromHeight(10)),
@@ -53,13 +54,15 @@ class ClubBigCardWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ClubInfoWidget(
-                  title: "김태욱", imagePath: "assets/icons/icon_profile_24.svg"),
+                  title: item.leaderName,
+                  imagePath: "assets/icons/icon_profile_24.svg"),
               SizedBox.fromSize(size: const Size(5, 0)),
               ClubInfoWidget(
-                  title: "38", imagePath: "assets/icons/icon_profile_24.svg"),
+                  title: "${item.memberCnt}",
+                  imagePath: "assets/icons/icon_profile_24.svg"),
               SizedBox.fromSize(size: const Size(5, 0)),
               ClubInfoWidget(
-                  title: "컴퓨터공학과",
+                  title: item.part.nameStr,
                   imagePath: "assets/icons/icon_profile_24.svg"),
             ],
           ),
@@ -77,9 +80,9 @@ class ClubBigCardWidget extends StatelessWidget {
               ),
               SizedBox.fromSize(size: const Size(10, 0)),
               Text(
-                _notiInfo.length > 23
-                    ? '${_notiInfo.substring(0, 23)}...'
-                    : _notiInfo,
+                item.recentNotice.length > 23
+                    ? '${item.recentNotice.substring(0, 23)}...'
+                    : item.recentNotice,
                 style: const TextStyle(
                   fontSize: 15,
                 ),

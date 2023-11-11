@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -23,7 +24,7 @@ class ClubRecommendItem extends StatelessWidget {
           print('클릭');
         },
         child: Container(
-          margin: const EdgeInsets.fromLTRB(15, 8, 15, 8),
+          margin: const EdgeInsets.fromLTRB(25, 8, 25, 8),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(16),
@@ -37,29 +38,20 @@ class ClubRecommendItem extends StatelessWidget {
             ],
           ),
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(25, 15, 25, 15),
+            padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
             child: Row(
               children: [
                 item.imageURL.isEmpty
-                    ? Container(
+                    ? SvgPicture.asset(
+                        'assets/icons/icon_not_loading.svg',
                         width: 96,
                         height: 96,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(48),
-                          color: Colors.grey.withOpacity(0.5),
-                        ),
-                        child: Center(
-                          child: SvgPicture.asset(
-                            'assets/icons/icon_profile_128.svg',
-                            width: 48,
-                            height: 48,
-                          ),
-                        ),
                       )
-                    : SvgPicture.asset(
-                        "assets/icons/icon_back.svg",
-                        width: 96,
-                        height: 96,
+                    : CircleAvatar(
+                        radius: 48,
+                        backgroundColor: Colors.blue[300],
+                        backgroundImage:
+                            CachedNetworkImageProvider(item.imageURL),
                       ),
                 SizedBox.fromSize(size: const Size(20, 0)),
                 Column(
@@ -69,8 +61,8 @@ class ClubRecommendItem extends StatelessWidget {
                       item.name.length > 10
                           ? '${item.name.substring(0, 10)}...'
                           : item.name,
-                      style: TextStyle(
-                        fontSize: 20,
+                      style: const TextStyle(
+                        fontSize: 18,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -78,8 +70,8 @@ class ClubRecommendItem extends StatelessWidget {
                       item.description.length > 20
                           ? '${item.description.substring(0, 20)}...'
                           : item.description,
-                      style: TextStyle(
-                        fontSize: 15,
+                      style: const TextStyle(
+                        fontSize: 13,
                       ),
                     ),
                     SizedBox.fromSize(size: const Size(0, 5)),

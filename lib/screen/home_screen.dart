@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:jjoin/model/club/club_schedule.dart';
 import 'package:jjoin/widget/club/club_event_item_widget.dart';
 import 'package:jjoin/widget/club/club_recommend_item_widget.dart';
 
 import '../model/base/e_club_part.dart';
+import '../model/club/club_home_info.dart';
 import '../model/club/club_recommend.dart';
 import '../widget/club/club_big_card_widget.dart';
 
@@ -57,7 +59,19 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
                 itemCount: 3,
                 itemBuilder: (context, index) {
-                  return ClubBigCardWidget();
+                  return ClubBigCardWidget(
+                    item: ClubHomeInfo(
+                      id: 1,
+                      name: "컴퓨터공학과 학생회",
+                      description: "컴퓨터공학과 학생회입니다.",
+                      part: EClubPart.DEPARTMENT,
+                      memberCnt: 10,
+                      imageURL:
+                          "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
+                      leaderName: "김태욱",
+                      recentNotice: "컴퓨터공학과 학생회입니다.",
+                    ),
+                  );
                 },
               ),
             ),
@@ -65,7 +79,12 @@ class _HomeScreenState extends State<HomeScreen> {
           SliverList(
             delegate: SliverChildBuilderDelegate(
               (context, index) {
-                return const ClubEventItem();
+                return ClubEventItem(
+                    item: ClubEvent(
+                  id: 1,
+                  title: "2023년 2학기 동아리 홍보전",
+                  date: "2023-10-10 18:30",
+                ));
               },
               childCount: 3,
             ),
@@ -92,7 +111,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   description: "컴퓨터공학과 학생회입니다.",
                   part: EClubPart.DEPARTMENT,
                   memberCnt: 10,
-                  imageURL: "https://picsum.photos/200",
+                  imageURL:
+                      "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
                   tags: ["친목", "학술"],
                 ));
               },

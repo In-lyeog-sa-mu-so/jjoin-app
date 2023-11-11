@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:jjoin/model/club/club_schedule.dart';
 
 class ClubEventItem extends StatelessWidget {
-  const ClubEventItem({super.key});
+  final ClubEvent item;
+  const ClubEventItem({required this.item, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +41,7 @@ class ClubEventItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "2021년 1학기 동아리 홍보전",
+                item.title,
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
@@ -54,7 +56,7 @@ class ClubEventItem extends StatelessWidget {
                   ),
                   const SizedBox(width: 5),
                   Text(
-                    "2021.01.01 ~ 2021.01.31",
+                    item.date,
                     style: const TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w400,
