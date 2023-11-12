@@ -14,6 +14,7 @@ class CustomBottomNavigationBar
             splashFactory: NoSplash.splashFactory,
           ),
           child: BottomNavigationBar(
+            elevation: 0,
             currentIndex: controller.selectedIndex.value,
             onTap: controller.changeIndex,
 

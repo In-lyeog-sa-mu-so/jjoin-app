@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:jjoin/model/club/club_home_info.dart';
 import 'package:jjoin/widget/club/club_info_widget.dart';
 
@@ -96,17 +97,18 @@ class ClubBigCardWidget extends StatelessWidget {
             children: [
               Expanded(
                 child: InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      Get.toNamed('/clubs');
+                    },
                     child: Container(
                       height: 40,
                       padding: const EdgeInsets.symmetric(
                         vertical: 5,
                         horizontal: 10,
                       ),
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: Color(0xFFD9D9D9),
-                        // 왼쪽 아래만 10
-                        borderRadius: const BorderRadius.only(
+                        borderRadius: BorderRadius.only(
                           bottomLeft: Radius.circular(10),
                         ),
                       ),

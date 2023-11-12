@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/get.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:jjoin/screen/club_application_screen.dart';
-import 'package:jjoin/screen/calendar_screen.dart';
-import 'package:jjoin/screen/club_screen.dart';
-import 'package:jjoin/screen/home_screen.dart';
-import 'package:jjoin/screen/profile_screen.dart';
+import 'package:jjoin/screen/club/club_screen.dart';
 import 'package:jjoin/screen/root_screen.dart';
-import 'package:jjoin/screen/search_club_screen.dart';
 
 void main() {
   initializeDateFormatting().then((_) => runApp(const MyApp()));
@@ -23,6 +20,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     // Remove splash
     FlutterNativeSplash.remove();
+
+    // 상태바 투명화
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: Colors.white, // 투명색
+      statusBarIconBrightness: Brightness.dark, // 아이콘 색
+    ));
 
     return GetMaterialApp(
       title: "JJoin",

@@ -4,8 +4,8 @@ import 'package:jjoin/screen/profile_screen.dart';
 import 'package:jjoin/screen/search_club_screen.dart';
 
 import '../widget/base/bottom_navigation_bar.dart';
-import 'calendar_screen.dart';
-import 'home_screen.dart';
+import 'calendar/calendar_screen.dart';
+import 'home/home_screen.dart';
 
 class RootScreen extends StatelessWidget {
   const RootScreen({super.key});
@@ -13,20 +13,24 @@ class RootScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Get.put(CustomBottomNavigationBarController());
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: const Color(0xFFFFFFFF),
-        body: Obx(() => IndexedStack(
-              index: CustomBottomNavigationBarController.to.selectedIndex.value,
-              children: const [
-                HomeScreen(),
-                // ClubApplicationScreen(),
-                CalendarScreen(),
-                SearchClubScreen(),
-                ProfileScreen(),
-              ],
-            )),
-        bottomNavigationBar: const CustomBottomNavigationBar(),
+    return Container(
+      color: const Color(0xFFFFFFFF),
+      child: SafeArea(
+        child: Scaffold(
+          backgroundColor: const Color(0xFFFFFFFF),
+          body: Obx(() => IndexedStack(
+                index:
+                    CustomBottomNavigationBarController.to.selectedIndex.value,
+                children: const [
+                  HomeScreen(),
+                  // ClubApplicationScreen(),
+                  CalendarScreen(),
+                  SearchClubScreen(),
+                  ProfileScreen(),
+                ],
+              )),
+          bottomNavigationBar: const CustomBottomNavigationBar(),
+        ),
       ),
     );
   }

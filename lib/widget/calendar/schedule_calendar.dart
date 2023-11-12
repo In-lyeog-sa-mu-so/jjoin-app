@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jjoin/widget/calendar/schedule_day_item.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class ScheduleCalendar extends StatefulWidget {
@@ -14,7 +15,7 @@ class _ScheduleCalendarState extends State<ScheduleCalendar> {
   DateTime _focusedDay = DateTime.now();
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: TableCalendar(
         // 기본 설정
@@ -23,6 +24,7 @@ class _ScheduleCalendarState extends State<ScheduleCalendar> {
         lastDay: DateTime.now().add(const Duration(days: 365 * 10 + 2)),
         focusedDay: _focusedDay,
         calendarFormat: _calendarFormat,
+        daysOfWeekHeight: 30,
 
         // UI 지정
         headerStyle: const HeaderStyle(
@@ -78,6 +80,34 @@ class _ScheduleCalendarState extends State<ScheduleCalendar> {
           // No need to call `setState()` here
           _focusedDay = focusedDay;
         },
+        calendarBuilders: CalendarBuilders(
+          defaultBuilder: (context, day, focusedDay) {
+            return ScheduleDayItem(
+              day: day,
+              isSelected: false,
+            );
+          },
+          outsideBuilder: (context, day, focusedDay) {
+            return Opacity(
+                opacity: 0.4,
+                child: ScheduleDayItem(
+                  day: day,
+                  isSelected: false,
+                ));
+          },
+          selectedBuilder: (context, day, focusedDay) {
+            return ScheduleDayItem(
+              day: day,
+              isSelected: true,
+            );
+          },
+          todayBuilder: (context, day, focusedDay) {
+            return ScheduleDayItem(
+              day: day,
+              isSelected: false,
+            );
+          },
+        ),
       ),
     );
   }
