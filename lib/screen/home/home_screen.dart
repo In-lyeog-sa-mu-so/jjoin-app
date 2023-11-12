@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:jjoin/model/club/club_schedule.dart';
+import 'package:get/get.dart';
+import 'package:jjoin/repository/club/club_repository.dart';
+import 'package:jjoin/viewmodel/home/home_viewmodel.dart';
 import 'package:jjoin/widget/base/default_appbar.dart';
 import 'package:jjoin/widget/club/club_event_item_widget.dart';
 import 'package:jjoin/widget/club/club_recommend_item_widget.dart';
@@ -8,6 +10,8 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../../model/base/e_club_part.dart';
 import '../../model/club/club_home_info.dart';
 import '../../model/club/club_recommend.dart';
+import '../../provider/club/club_local_provider.dart';
+import '../../provider/club/club_remote_provider.dart';
 import '../../widget/club/club_big_card_widget.dart';
 import 'package:flutter/foundation.dart' as foundation;
 
@@ -20,12 +24,19 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late final PageController _pageController;
+  late final HomeViewModel _homeViewModel;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _pageController = PageController(initialPage: 0, viewportFraction: 0.922);
+    _homeViewModel = Get.put<HomeViewModel>(HomeViewModel(
+      clubRepository: ClubRepository(
+        clubLocalProvider: Get.put(ClubLocalProvider()),
+        clubRemoteProvider: Get.put(ClubRemoteProvider()),
+      ),
+    ));
   }
 
   @override
@@ -33,6 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
     // TODO: implement dispose
     super.dispose();
     _pageController.dispose();
+    _homeViewModel.dispose();
   }
 
   @override
@@ -100,15 +112,9 @@ class _HomeScreenState extends State<HomeScreen> {
           SliverList(
             delegate: SliverChildBuilderDelegate(
               (context, index) {
-                return ClubEventItem(
-                  item: ClubEvent(
-                    id: 1,
-                    title: "2023년 2학기 동아리 홍보전",
-                    date: "2023-10-10 18:30",
-                  ),
-                );
+                return ClubEventItem(item: _homeViewModel.schedules[index]);
               },
-              childCount: 3,
+              childCount: _homeViewModel.schedules.length,
             ),
           ),
           const SliverToBoxAdapter(

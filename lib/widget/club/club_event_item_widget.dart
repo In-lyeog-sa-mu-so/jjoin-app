@@ -4,7 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jjoin/model/club/club_schedule.dart';
 
 class ClubEventItem extends StatelessWidget {
-  final ClubEvent item;
+  final ClubSchedule item;
   const ClubEventItem({required this.item, Key? key}) : super(key: key);
 
   @override
@@ -30,7 +30,7 @@ class ClubEventItem extends StatelessWidget {
             height: 80,
             decoration: BoxDecoration(
               color: Colors.red[100],
-              borderRadius: BorderRadius.only(
+              borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(16),
                 bottomLeft: Radius.circular(16),
               ),
@@ -47,12 +47,18 @@ class ClubEventItem extends StatelessWidget {
                   fontWeight: FontWeight.w600,
                 ),
               ),
+              Text(
+                item.clubName,
+                style: const TextStyle(
+                  fontSize: 12,
+                ),
+              ),
               const SizedBox(height: 8),
               Row(
                 children: [
                   const Icon(
                     Icons.calendar_today,
-                    size: 16,
+                    size: 12,
                   ),
                   const SizedBox(width: 5),
                   Text(
