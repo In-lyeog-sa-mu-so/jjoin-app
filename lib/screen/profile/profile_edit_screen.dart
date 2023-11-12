@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'package:get/get.dart';
 
-import '../model/profile/profile_user.dart';
-import '../repository/Profile/profile_repository.dart';
-import '../widget/base/default_back_appbar.dart';
+import '../../provider/Profile/profile_remote_provider.dart';
+import '../../provider/profile/profile_local_provider.dart';
+import '../../repository/profile/profile_repository.dart';
+import '../../viewmodel/profile/profile_edit_viewmodel.dart';
+import '../../widget/base/default_back_appbar.dart';
 
 class ProfileEditScreen extends StatefulWidget {
-  final String userDescription;
-
   const ProfileEditScreen({
     super.key,
-    required this.userDescription,
   });
 
   @override
@@ -19,16 +19,20 @@ class ProfileEditScreen extends StatefulWidget {
 }
 
 class _ProfileEditScreenState extends State<ProfileEditScreen> {
+  late final ProfileEditViewModel _profileEditViewModel;
   late TextEditingController _descriptionController;
-  File? _profileImage;
-  late User user;
-  bool _isEditingText = false;
 
   @override
   void initState() {
     super.initState();
-    user = ProfileRepository.getDummyUser() as User;
-    _descriptionController = TextEditingController(text: user.introduction);
+    _profileEditViewModel = Get.put<ProfileEditViewModel>(ProfileEditViewModel(
+      profileRepository: ProfileRepository(
+        profileLocalProvider: Get.put(ProfileLocalProvider()),
+        profileRemoteProvider: Get.put(ProfileRemoteProvider()),
+      ),
+    ));
+    _descriptionController =
+        TextEditingController(text: _profileEditViewModel.user!.introduction);
   }
 
   @override
@@ -41,9 +45,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
     final pickedFile =
         await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
-      setState(() {
-        _profileImage = File(pickedFile.path);
-      });
+      _profileEditViewModel.updateProfileImage(File(pickedFile.path));
     }
   }
 
@@ -81,7 +83,8 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                     onTap: _pickImage,
                     child: CircleAvatar(
                       radius: 60,
-                      backgroundImage: AssetImage(user.profileImageUuid),
+                      backgroundImage: AssetImage(
+                          _profileEditViewModel.user!.profileImageUuid),
                     ),
                   ),
                   const SizedBox(width: 16),
@@ -94,7 +97,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                           Padding(
                             padding: const EdgeInsets.only(top: 6.0),
                             child: Text(
-                              user.name,
+                              _profileEditViewModel.user!.name,
                               style: const TextStyle(
                                 fontSize: 22,
                                 fontWeight: FontWeight.w800,
@@ -103,15 +106,17 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                           ),
                           Padding(
                             padding: const EdgeInsets.only(top: 4.0),
-                            child: Text('전공: ${user.major}',
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w300,
-                                )),
+                            child:
+                                Text('전공: ${_profileEditViewModel.user!.major}',
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w300,
+                                    )),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(top: 4.0),
-                            child: Text('학번: ${user.studentId.toString()}',
+                            child: Text(
+                                '학번: ${_profileEditViewModel.user!.studentId.toString()}',
                                 style: const TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w300,
@@ -134,25 +139,27 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                 ),
                 child: Column(
                   children: [
-                    TextField(
-                      controller: _descriptionController,
-                      decoration: const InputDecoration(
-                        labelText: '자기소개',
-                        labelStyle: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 20,
+                    Obx(
+                      () => TextField(
+                        controller: _descriptionController,
+                        decoration: const InputDecoration(
+                          labelText: '자기소개',
+                          labelStyle: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 20,
+                          ),
+                          alignLabelWithHint: true,
+                          border: OutlineInputBorder(),
                         ),
-                        alignLabelWithHint: true,
-                        border: OutlineInputBorder(),
+                        style: TextStyle(
+                          color: _profileEditViewModel.isEditingText
+                              ? Colors.black
+                              : Colors.grey.shade600,
+                        ),
+                        maxLines: 15,
+                        enabled: _profileEditViewModel.isEditingText,
                       ),
-                      style: TextStyle(
-                        color: _isEditingText
-                            ? Colors.black
-                            : Colors.grey.shade600,
-                      ),
-                      maxLines: 15,
-                      enabled: _isEditingText,
                     ),
                     const SizedBox(height: 20),
                     Row(
@@ -160,29 +167,17 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                       children: [
                         ElevatedButton(
                           onPressed: () {
-                            setState(() {
-                              _isEditingText = true;
-                            });
+                            // Start editing the profile
+                            _profileEditViewModel.startEditing();
                           },
                           child: const Text('수정하기'),
                         ),
                         ElevatedButton(
                           onPressed: () {
-                            if (_isEditingText) {
-                              print('Profile Image: ${_profileImage?.path}');
-                              print(
-                                  'User Introduction: ${_descriptionController.text}');
-                              setState(() {
-                                _isEditingText = false;
-                              });
-                              // TODO: Implement the logic to save these changes
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text('수정하기 버튼을 눌러 수정하세요.'),
-                                ),
-                              );
-                            }
+                            _profileEditViewModel.saveProfile(
+                              _descriptionController.text,
+                              _profileEditViewModel.profileImage,
+                            );
                           },
                           child: const Text('저장하기'),
                         ),

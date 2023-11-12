@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../model/SearchClub/search_club.dart';
+import '../../model/search/search_club.dart';
 import 'search_club_card_widget.dart';
 
 class ClubCardListWidget extends StatelessWidget {
