@@ -25,6 +25,10 @@ dependencies:
   flutter_svg: ^2.0.9
   cached_network_image: ^3.3.0
 
+  smooth_page_indicator: ^1.1.0
+  flutter_sticky_header: ^0.6.5
+  table_calendar: ^3.0.9
+
   http: ^0.13.3
   dio: ^4.0.0
 

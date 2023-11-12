@@ -3,11 +3,13 @@ import 'package:jjoin/model/club/club_schedule.dart';
 import 'package:jjoin/widget/base/default_appbar.dart';
 import 'package:jjoin/widget/club/club_event_item_widget.dart';
 import 'package:jjoin/widget/club/club_recommend_item_widget.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-import '../model/base/e_club_part.dart';
-import '../model/club/club_home_info.dart';
-import '../model/club/club_recommend.dart';
-import '../widget/club/club_big_card_widget.dart';
+import '../../model/base/e_club_part.dart';
+import '../../model/club/club_home_info.dart';
+import '../../model/club/club_recommend.dart';
+import '../../widget/club/club_big_card_widget.dart';
+import 'package:flutter/foundation.dart' as foundation;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -23,7 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _pageController = PageController(initialPage: 0, viewportFraction: 0.90);
+    _pageController = PageController(initialPage: 0, viewportFraction: 0.922);
   }
 
   @override
@@ -47,7 +49,10 @@ class _HomeScreenState extends State<HomeScreen> {
         slivers: [
           SliverToBoxAdapter(
             child: SizedBox(
-              height: 310,
+              height: foundation.defaultTargetPlatform ==
+                      foundation.TargetPlatform.iOS
+                  ? 307
+                  : 310,
               child: PageView.builder(
                 controller: _pageController,
                 onPageChanged: (int index) {
@@ -72,15 +77,36 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
+          SliverPadding(
+            padding: const EdgeInsets.fromLTRB(25, 10, 0, 10),
+            sliver: SliverToBoxAdapter(
+              child: Center(
+                child: SmoothPageIndicator(
+                  controller: _pageController, // PageController
+                  count: 3,
+                  // forcing the indicator to use a specific direction
+                  textDirection: TextDirection.ltr,
+                  effect: const WormEffect(
+                    dotColor: Color(0xFFE5E5E5),
+                    activeDotColor: Color(0xFF56D57F),
+                    dotHeight: 10,
+                    dotWidth: 10,
+                    spacing: 10,
+                  ),
+                ),
+              ),
+            ),
+          ),
           SliverList(
             delegate: SliverChildBuilderDelegate(
               (context, index) {
                 return ClubEventItem(
-                    item: ClubEvent(
-                  id: 1,
-                  title: "2023년 2학기 동아리 홍보전",
-                  date: "2023-10-10 18:30",
-                ));
+                  item: ClubEvent(
+                    id: 1,
+                    title: "2023년 2학기 동아리 홍보전",
+                    date: "2023-10-10 18:30",
+                  ),
+                );
               },
               childCount: 3,
             ),

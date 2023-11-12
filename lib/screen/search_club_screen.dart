@@ -6,7 +6,7 @@ import '../model/SearchClub/search_club.dart';
 import '../widget/search/search_club_card_list_widget.dart';
 import '../widget/search/search_club_card_widget.dart';
 import '../widget/search/search_field_widget.dart';
-import 'club_screen.dart';
+import 'club/club_screen.dart';
 
 class SearchClubScreen extends StatefulWidget {
   const SearchClubScreen({Key? key}) : super(key: key);

@@ -14,6 +14,7 @@ class DefaultAppBar extends StatelessWidget {
           fontWeight: FontWeight.bold,
         ),
       ),
+      centerTitle: false,
       surfaceTintColor: Colors.white,
       backgroundColor: Colors.white,
       automaticallyImplyLeading: true,

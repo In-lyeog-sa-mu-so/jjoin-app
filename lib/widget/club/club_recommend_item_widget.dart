@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 
 import '../../model/club/club_recommend.dart';
 import 'club_info_widget.dart';
@@ -20,11 +21,10 @@ class ClubRecommendItem extends StatelessWidget {
       ),
       child: InkWell(
         onTap: () {
-          // Get.toNamed('/club/detail');
-          print('클릭');
+          Get.toNamed('/clubs');
         },
         child: Container(
-          margin: const EdgeInsets.fromLTRB(25, 8, 25, 8),
+          margin: const EdgeInsets.fromLTRB(20, 8, 20, 8),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(16),
