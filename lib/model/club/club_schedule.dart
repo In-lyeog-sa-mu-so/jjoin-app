@@ -1,6 +1,6 @@
 class ClubSchedule {
   final int id;
-  final String clubName;
+  final String? clubName;
   final DateTime startDate;
   final DateTime endDate;
   final String title;
@@ -8,7 +8,7 @@ class ClubSchedule {
 
   ClubSchedule({
     required this.id,
-    required this.clubName,
+    this.clubName,
     required this.startDate,
     required this.endDate,
     required this.title,

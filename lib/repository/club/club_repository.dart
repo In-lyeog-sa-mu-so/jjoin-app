@@ -1,4 +1,5 @@
 import 'package:jjoin/model/club/club_notice.dart';
+import 'package:jjoin/model/club/club_notice_detail.dart';
 import 'package:jjoin/model/club/club_recommend.dart';
 import 'package:jjoin/model/club/club_schedule.dart';
 
@@ -55,5 +56,10 @@ class ClubRepository {
 
   List<ClubSchedule> getClubSchedules(int page, int size) {
     return clubLocalProvider.getClubDummySchedules(page, size);
+  }
+
+  /* Club Notice Detail */
+  ClubNoticeDetail getClubNoticeDetail(int id) {
+    return clubLocalProvider.getClubDummyNoticeDetail(id);
   }
 }

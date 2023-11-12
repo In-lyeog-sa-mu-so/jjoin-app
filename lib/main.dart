@@ -5,6 +5,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/get.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:jjoin/screen/application/club_application_screen.dart';
+import 'package:jjoin/screen/club/club_notice_screen.dart';
 import 'package:jjoin/screen/club/club_screen.dart';
 import 'package:jjoin/screen/root_screen.dart';
 
@@ -62,8 +63,8 @@ class MyApp extends StatelessWidget {
               page: () => const ClubApplicationScreen(),
             ),
             GetPage(
-              name: '/notice',
-              page: () => const ClubApplicationScreen(),
+              name: '/notices',
+              page: () => ClubNoticeScreen(),
             )
           ],
         ),

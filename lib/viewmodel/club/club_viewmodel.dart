@@ -46,4 +46,8 @@ class ClubViewModel extends GetxController {
     _notices.value = clubRepository.getClubNotices(noticePage, noticeSize);
     _isLoadingNotices.value = false;
   }
+
+  bool updateSchedule(int id, bool isAgree) {
+    return clubRepository.updateSchedule(id, isAgree);
+  }
 }

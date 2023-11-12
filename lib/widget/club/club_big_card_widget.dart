@@ -98,7 +98,12 @@ class ClubBigCardWidget extends StatelessWidget {
               Expanded(
                 child: InkWell(
                     onTap: () {
-                      Get.toNamed('/clubs');
+                      Get.toNamed(
+                        '/clubs',
+                        arguments: {
+                          "clubId": item.id,
+                        },
+                      );
                     },
                     child: Container(
                       height: 40,

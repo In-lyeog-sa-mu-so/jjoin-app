@@ -64,7 +64,7 @@ class ClubAbleEventItem extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    item.clubName,
+                    item.clubName!,
                     style: const TextStyle(
                       fontSize: 12,
                     ),

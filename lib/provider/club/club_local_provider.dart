@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:jjoin/model/club/club_home_info.dart';
 import 'package:jjoin/model/club/club_notice.dart';
+import 'package:jjoin/model/club/club_notice_detail.dart';
 
 import '../../model/base/e_club_part.dart';
 import '../../model/club/club_recommend.dart';
@@ -21,7 +22,7 @@ class ClubLocalProvider extends GetConnect {
         recentNotice: "컴퓨터공학과 학생회입니다.",
       ),
       ClubHomeInfo(
-        id: 1,
+        id: 2,
         name: "GDSC",
         description: "모여서 가치를 만든다.",
         part: EClubPart.UNION,
@@ -32,7 +33,7 @@ class ClubLocalProvider extends GetConnect {
         recentNotice: "11월 10일 오픈 세미나",
       ),
       ClubHomeInfo(
-        id: 1,
+        id: 3,
         name: "Farm System",
         description: "코딩 제사를 지낸다.",
         part: EClubPart.DEPARTMENT,
@@ -322,28 +323,24 @@ class ClubLocalProvider extends GetConnect {
     List<ClubSchedule> clubSchedules = [
       ClubSchedule(
         id: 1,
-        clubName: "Farm System",
         title: "정기 회의",
         startDate: date,
         endDate: date.add(const Duration(days: 2)),
       ),
       ClubSchedule(
         id: 2,
-        clubName: "GDSC",
         title: "오픈 세미나",
         startDate: date,
         endDate: date.add(const Duration(hours: 1)),
       ),
       ClubSchedule(
         id: 3,
-        clubName: "멋쟁이사자처럼",
         title: "동아리 홍보전",
         startDate: date,
         endDate: date.add(const Duration(days: 1)),
       ),
       ClubSchedule(
         id: 3,
-        clubName: "컴퓨터공학과 학생회",
         title: "회의해라 씨발 후배년들아",
         startDate: date,
         endDate: date.add(const Duration(hours: 3)),
@@ -355,7 +352,6 @@ class ClubLocalProvider extends GetConnect {
       clubSchedules.add(
         ClubSchedule(
           id: 1 + i,
-          clubName: "Farm System",
           title: "정기 회의",
           startDate: date.subtract(Duration(days: i)),
           endDate:
@@ -366,7 +362,6 @@ class ClubLocalProvider extends GetConnect {
       clubSchedules.add(
         ClubSchedule(
           id: 2 + i,
-          clubName: "GDSC",
           title: "오픈 세미나",
           startDate: date.subtract(Duration(days: i)),
           endDate:
@@ -377,7 +372,6 @@ class ClubLocalProvider extends GetConnect {
       clubSchedules.add(
         ClubSchedule(
           id: 3 + i,
-          clubName: "멋쟁이사자처럼",
           title: "동아리 홍보전",
           startDate: date.subtract(Duration(days: i)),
           endDate:
@@ -387,5 +381,25 @@ class ClubLocalProvider extends GetConnect {
     }
 
     return clubSchedules.sublist(page * size, (page + 1) * size);
+  }
+
+  ClubNoticeDetail getClubDummyNoticeDetail(int id) {
+    DateTime date = DateTime.now();
+
+    return ClubNoticeDetail(
+      id: 1,
+      title: "정기 축구 연습",
+      content: "안녕하세요.\n"
+          "FC 세미콜론 주장, 이선호입니다.\n"
+          "이번주 정기 축구 연습은 10.1(월)입니다.\n"
+          "\n"
+          "오랜만에 다같이 축구한번하고 뒷풀이 합시다.\n"
+          "늦지 않게 오시길 바랍니다."
+          "\n\n[위치] 중구 서애로 5길 21 - 선호빌딩 123호\n"
+          "\n"
+          "[뒷풀이] 남산골 생고기 - 중구 서애로 5길 21",
+      updatedDate: date,
+      createdDate: date.subtract(const Duration(days: 1)),
+    );
   }
 }

@@ -4,9 +4,11 @@ import 'package:get/get.dart';
 import '../../model/club/club_notice.dart';
 
 class ClubNoticeItem extends StatelessWidget {
+  final int clubId;
   final ClubNotice item;
   const ClubNoticeItem({
     Key? key,
+    required this.clubId,
     required this.item,
   }) : super(key: key);
 
@@ -19,7 +21,13 @@ class ClubNoticeItem extends StatelessWidget {
       ),
       child: InkWell(
         onTap: () {
-          Get.toNamed("/clubs/notices");
+          Get.toNamed(
+            "/clubs/notices",
+            arguments: {
+              "clubId": clubId,
+              "noticeId": item.id,
+            },
+          );
         },
         child: Container(
           margin: const EdgeInsets.fromLTRB(20, 8, 20, 8),
@@ -73,7 +81,7 @@ class ClubNoticeItem extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Text(
-                          "작성일: ",
+                          "최근 수정일: ",
                           style: const TextStyle(
                             fontSize: 12,
                             height: 1.4,

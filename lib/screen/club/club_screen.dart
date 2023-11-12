@@ -23,6 +23,7 @@ class _ClubScreenState extends State<ClubScreen>
     with SingleTickerProviderStateMixin {
   late final TabController _tabController;
   late final ClubViewModel _clubViewModel;
+  late final int _clubId;
 
   @override
   void initState() {
@@ -41,6 +42,7 @@ class _ClubScreenState extends State<ClubScreen>
         clubRemoteProvider: Get.put(ClubRemoteProvider()),
       ),
     ));
+    _clubId = Get.arguments["clubId"];
   }
 
   @override
@@ -98,7 +100,10 @@ class _ClubScreenState extends State<ClubScreen>
                 ListView.builder(
                   itemCount: _clubViewModel.notices.length,
                   itemBuilder: (context, index) {
-                    return ClubNoticeItem(item: _clubViewModel.notices[index]);
+                    return ClubNoticeItem(
+                      item: _clubViewModel.notices[index],
+                      clubId: _clubId,
+                    );
                   },
                 ),
                 ListView.builder(
