@@ -39,7 +39,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       appBar: const PreferredSize(
         preferredSize: Size.fromHeight(50),
         child: DefaultAppBar(
-          title: "JJoin",
+          title: "마이페이지",
         ),
       ),
       body: Column(
