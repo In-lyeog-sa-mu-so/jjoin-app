@@ -20,34 +20,32 @@ class ProfileEditViewModel extends GetxController {
   final RxBool _isEditingText = false.obs;
   bool get isEditingText => _isEditingText.value;
 
-  final Rx<File?> _profileImage = Rx<File?>(null);
-  File? get profileImage => _profileImage.value;
+  final Rx<File?> _newImage = Rx<File?>(null);
+  File? get newImage => _newImage.value;
 
   void updateProfileImage(File? newImage) {
-    _profileImage.value = newImage;
+    _newImage.value = newImage;
   }
 
   void startEditing() {
     _isEditingText.value = true;
   }
 
-  void saveProfile(String introduction, File? profileImage) {
+  void saveProfile(String introduction, File? newImage) {
     if (isLoadingUser) return; // Don't proceed if user data is still loading
     // Logic to handle saving the profile
-    if (user != null) {
+    if (introduction != null) {
       // Update the user's introduction
-      user!.introduction = introduction;
-      // If a new profile image was picked, update it
-      if (profileImage != null) {
-        // You'd typically handle file uploading here, then update the user's profile image URL
-        // For example, upload the file and on success update user's profileImageUuid
-      }
-      //TODO
-      // profileRepository.saveUserProfile(user!);
+      print(introduction);
     }
-    _isEditingText.value = false; // Stop editing mode after save
-    // Make sure to update all listeners that the user has been updated
-    update();
+    if (newImage != null) {
+      // You'd typically handle file uploading here, then update the user's profile image URL
+      // For example, upload the file and on success update user's profileImageUuid
+      print(newImage.path);
+    }
+    //TODO
+    // profileRepository.saveUserProfile(user!);
+    _isEditingText.value = false;
   }
 
   @override

@@ -59,6 +59,7 @@ class SearchLocalProvider extends GetConnect {
         isFinished: false,
         startDate: DateTime.parse("2023-08-01"),
         endDate: DateTime.parse("2023-08-31"),
+        leaderName: "조원준",
       ),
       SearchClub(
         clubId: 2,
@@ -70,6 +71,7 @@ class SearchLocalProvider extends GetConnect {
         isFinished: true,
         startDate: DateTime.parse("2023-11-01"),
         endDate: DateTime.parse("2023-11-30"),
+        leaderName: "박재형",
       ),
       SearchClub(
         clubId: 3,
@@ -81,6 +83,7 @@ class SearchLocalProvider extends GetConnect {
         isFinished: true,
         startDate: DateTime.parse("2023-11-01"),
         endDate: DateTime.parse("2023-11-30"),
+        leaderName: "손형준",
       ),
       SearchClub(
         clubId: 4,
@@ -92,6 +95,7 @@ class SearchLocalProvider extends GetConnect {
         isFinished: true,
         startDate: DateTime.parse("2023-11-01"),
         endDate: DateTime.parse("2023-11-30"),
+        leaderName: "김민수",
       ),
     ];
 

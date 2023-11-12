@@ -96,15 +96,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
               Get.to(() => const ProfileEditScreen());
             }),
             Obx(() => ListTile(
-                  leading: const Icon(Icons.notifications, size: 20),
+                  leading: const Icon(Icons.notifications, size: 24),
                   title: const Text(
-                    '앱 푸시 알림',
+                    '알림 설정',
                     style: TextStyle(
                       fontSize: 16,
-                      fontWeight: FontWeight.w300,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                   trailing: Switch(
+                    activeColor: const Color(0xFFFFFFFF),
+                    activeTrackColor: const Color(0xFF5391FF),
                     value: _profileViewModel.isPushNotificationEnabled,
                     onChanged: _profileViewModel.togglePushNotification,
                   ),
@@ -119,8 +121,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _buildOptionItem(IconData icon, String label, VoidCallback onTap) {
     return ListTile(
-      leading: Icon(icon),
-      title: Text(label),
+      leading: Icon(icon, size: 24),
+      title: Text(label,
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+          )),
       onTap: onTap,
     );
   }
@@ -129,14 +135,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return const ListTile(
       leading: Icon(Icons.info_outline),
       title: Text(
-        '앱 버전',
+        '버전 정보',
         style: TextStyle(
           fontSize: 16.0,
           fontWeight: FontWeight.w300,
         ),
       ),
       trailing: Text(
-        'v0.0.1',
+        'v 0.0.1',
         style: TextStyle(
           fontSize: 16.0,
           color: Colors.grey,

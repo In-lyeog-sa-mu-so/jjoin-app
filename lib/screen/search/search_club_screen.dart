@@ -53,32 +53,36 @@ class _SearchClubScreenState extends State<SearchClubScreen> {
             child: Row(
               children: [
                 Obx(
-                  () => Wrap(
-                    spacing: 8.0,
-                    runSpacing: 8.0,
-                    children: _searchViewModel.tags
-                        .map(
-                          (tag) => FilterChip(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
+                  () => Padding(
+                    padding: const EdgeInsets.only(left: 6.0),
+                    child: Wrap(
+                      spacing: 8.0,
+                      runSpacing: 8.0,
+                      children: _searchViewModel.tags
+                          .map(
+                            (tag) => FilterChip(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              side: BorderSide(
+                                  color: Colors.grey.withOpacity(0.03),
+                                  width: 0),
+                              showCheckmark: false,
+                              label: Text(tag.tagName,
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w400)),
+                              selected: _searchViewModel.selectedTags
+                                  .contains(tag.tagName),
+                              selectedColor: Color(0xFF56D57F).withOpacity(0.5),
+                              backgroundColor: Colors.grey.withOpacity(0.2),
+                              onSelected: (bool selected) {
+                                _searchViewModel
+                                    .toggleTagSelection(tag.tagName);
+                              },
                             ),
-                            side: BorderSide(
-                                color: Colors.grey.withOpacity(0.05), width: 0),
-                            showCheckmark: false,
-                            label: Text(tag.tagName,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w400)),
-                            selected: _searchViewModel.selectedTags
-                                .contains(tag.tagName),
-                            selectedColor:
-                                Colors.blue.shade100.withOpacity(0.8),
-                            backgroundColor: Colors.grey.withOpacity(0.2),
-                            onSelected: (bool selected) {
-                              _searchViewModel.toggleTagSelection(tag.tagName);
-                            },
-                          ),
-                        )
-                        .toList(),
+                          )
+                          .toList(),
+                    ),
                   ),
                 ),
                 IconButton(

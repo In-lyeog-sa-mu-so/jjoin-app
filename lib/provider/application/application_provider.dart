@@ -23,6 +23,18 @@ class ApplicationProvider extends GetConnect {
             questionId: 51,
             question: "동아리에 지원하게 된 동기는 무엇인가요?",
           ),
+          Questions(
+            questionId: 52,
+            question: "주량은 몇병인가요?",
+          ),
+          Questions(
+            questionId: 53,
+            question: "각각 1지망, 2지망 희망하는 국을 적어주세요.",
+          ),
+          Questions(
+            questionId: 54,
+            question: "잘하는 것은 무엇인가요?",
+          ),
         ]);
     return applicationForm;
   }

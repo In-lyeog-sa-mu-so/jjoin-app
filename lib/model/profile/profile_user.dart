@@ -2,7 +2,7 @@ class User {
   final int userId;
   final String name;
   final String major;
-  late final String introduction;
+  final String introduction;
   final String profileImageUuid;
   final int studentId;
 

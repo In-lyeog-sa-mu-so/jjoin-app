@@ -49,26 +49,19 @@ class ApplicationViewModel extends GetxController {
     _isLoadingApplicationForm.value = false;
   }
 
+  bool checkAnswer() {
+    for (var answer in _answers.values) {
+      if (answer == '') {
+        return false;
+      }
+    }
+    return true;
+  }
+
   void submitApplicationForm() async {
     // Map the controllers to answers before submission
     controllers.forEach((questionId, controller) {
       answers[questionId] = controller.text.trim();
     });
-
-    // TODO: Implement your submission logic, example:
-    try {
-      //Todo
-      //bool success = await applicationRepository.submitApplicationForm(answers);
-      if (true) {
-        // Handle successful submission
-        Get.snackbar('Success', 'Application submitted successfully!');
-      } else {
-        // Handle failure of submission
-        Get.snackbar('Error', 'Failed to submit application.');
-      }
-    } catch (e) {
-      // Handle the error properly
-      Get.snackbar('Error', 'An error occurred: $e');
-    }
   }
 }
