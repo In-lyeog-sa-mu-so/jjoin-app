@@ -4,6 +4,7 @@ import 'package:jjoin/model/club/club_schedule.dart';
 import '../../model/club/club_home_info.dart';
 import '../../provider/club/club_local_provider.dart';
 import '../../provider/club/club_remote_provider.dart';
+import '../../utilities/date_time_util.dart';
 
 class ClubRepository {
   final ClubRemoteProvider clubRemoteProvider;
@@ -15,7 +16,6 @@ class ClubRepository {
   }) : assert(clubRemoteProvider != null || clubLocalProvider != null);
 
   /* Common */
-
   bool updateSchedule(int id, bool isAgree) {
     return true;
   }
@@ -34,9 +34,13 @@ class ClubRepository {
   }
 
   /* Calendar */
-  Map<String, dynamic> getCalendarSchedules(
-      DateTime startDate, DateTime endDate) {
-    return clubLocalProvider.getCalendarDummySchedules(startDate, endDate);
+  Map<String, List<ClubSchedule>> getCalendarSchedules(DateTime focusedDate) {
+    DateTime firstDayOfMonth = DateTimeUtil.getFirstDayOfCalendar(focusedDate);
+    DateTime lastDayOfMonth = DateTimeUtil.getLastDayOfCalendar(focusedDate);
+    var response = clubLocalProvider.getCalendarDummySchedules(
+        firstDayOfMonth, lastDayOfMonth);
+
+    return response;
   }
 
   List<ClubSchedule> getCalendarScheduleForDate(DateTime date) {

@@ -2,7 +2,6 @@ import 'package:get/get.dart';
 import 'package:jjoin/model/club/club_home_info.dart';
 
 import '../../model/base/e_club_part.dart';
-import '../../model/club/calendar_schedule.dart';
 import '../../model/club/club_recommend.dart';
 import '../../model/club/club_schedule.dart';
 
@@ -121,106 +120,90 @@ class ClubLocalProvider extends GetConnect {
     return clubRecommends;
   }
 
-  Map<String, CalendarSchedule> getCalendarDummySchedules(
+  Map<String, List<ClubSchedule>> getCalendarDummySchedules(
       DateTime startDate, DateTime endDate) {
-    Map<String, CalendarSchedule> calendarSchedules = {};
+    Map<String, List<ClubSchedule>> calendarSchedules = {};
 
     for (int i = 0; i < endDate.difference(startDate).inDays; i++) {
       DateTime date = startDate.add(Duration(days: i));
       switch (i % 4) {
         case 0:
-          calendarSchedules[date.toString().substring(0, 10)] =
-              CalendarSchedule(
-            date: date,
-            todos: [],
-          );
+          calendarSchedules[date.toString().substring(0, 10)] = [];
           break;
         case 1:
-          calendarSchedules[date.toString().substring(0, 10)] =
-              CalendarSchedule(
-            date: date,
-            todos: [
-              ClubSchedule(
-                id: 2 + i,
-                clubName: "GDSC",
-                title: "오픈 세미나",
-                startDate: date,
-                endDate: date.add(const Duration(hours: 1)),
-              ),
-              ClubSchedule(
-                id: 3 + i,
-                clubName: "컴퓨터공학과 학생회",
-                title: "회의해라 씨발 후배년들아",
-                startDate: date,
-                endDate: date.add(const Duration(hours: 3)),
-              ),
-            ],
-          );
+          calendarSchedules[date.toString().substring(0, 10)] = [
+            ClubSchedule(
+              id: 2 + i,
+              clubName: "GDSC",
+              title: "오픈 세미나",
+              startDate: date,
+              endDate: date.add(const Duration(hours: 1)),
+            ),
+            ClubSchedule(
+              id: 3 + i,
+              clubName: "컴퓨터공학과 학생회",
+              title: "회의해라 씨발 후배년들아",
+              startDate: date,
+              endDate: date.add(const Duration(hours: 3)),
+            ),
+          ];
           break;
         case 2:
-          calendarSchedules[date.toString().substring(0, 10)] =
-              CalendarSchedule(
-            date: date,
-            todos: [
-              ClubSchedule(
-                id: 1 + i,
-                clubName: "Farm System",
-                title: "정기 회의",
-                startDate: date,
-                endDate: date.add(const Duration(days: 2)),
-              ),
-              ClubSchedule(
-                id: 3 + i,
-                clubName: "멋쟁이사자처럼",
-                title: "동아리 홍보전",
-                startDate: date,
-                endDate: date.add(const Duration(days: 1)),
-              ),
-              ClubSchedule(
-                id: 3 + i,
-                clubName: "컴퓨터공학과 학생회",
-                title: "회의해라 씨발 후배년들아",
-                startDate: date,
-                endDate: date.add(const Duration(hours: 3)),
-              ),
-            ],
-          );
+          calendarSchedules[date.toString().substring(0, 10)] = [
+            ClubSchedule(
+              id: 1 + i,
+              clubName: "Farm System",
+              title: "정기 회의",
+              startDate: date,
+              endDate: date.add(const Duration(days: 2)),
+            ),
+            ClubSchedule(
+              id: 3 + i,
+              clubName: "멋쟁이사자처럼",
+              title: "동아리 홍보전",
+              startDate: date,
+              endDate: date.add(const Duration(days: 1)),
+            ),
+            ClubSchedule(
+              id: 3 + i,
+              clubName: "컴퓨터공학과 학생회",
+              title: "회의해라 씨발 후배년들아",
+              startDate: date,
+              endDate: date.add(const Duration(hours: 3)),
+            ),
+          ];
           break;
         case 3:
-          calendarSchedules[date.toString().substring(0, 10)] =
-              CalendarSchedule(
-            date: date,
-            todos: [
-              ClubSchedule(
-                id: 1 + i,
-                clubName: "Farm System",
-                title: "정기 회의",
-                startDate: date,
-                endDate: date.add(const Duration(days: 2)),
-              ),
-              ClubSchedule(
-                id: 2 + i,
-                clubName: "GDSC",
-                title: "오픈 세미나",
-                startDate: date,
-                endDate: date.add(const Duration(hours: 1)),
-              ),
-              ClubSchedule(
-                id: 3 + i,
-                clubName: "멋쟁이사자처럼",
-                title: "동아리 홍보전",
-                startDate: date,
-                endDate: date.add(const Duration(days: 1)),
-              ),
-              ClubSchedule(
-                id: 3 + i,
-                clubName: "컴퓨터공학과 학생회",
-                title: "회의해라 씨발 후배년들아",
-                startDate: date,
-                endDate: date.add(const Duration(hours: 3)),
-              ),
-            ],
-          );
+          calendarSchedules[date.toString().substring(0, 10)] = [
+            ClubSchedule(
+              id: 1 + i,
+              clubName: "Farm System",
+              title: "정기 회의",
+              startDate: date,
+              endDate: date.add(const Duration(days: 2)),
+            ),
+            ClubSchedule(
+              id: 2 + i,
+              clubName: "GDSC",
+              title: "오픈 세미나",
+              startDate: date,
+              endDate: date.add(const Duration(hours: 1)),
+            ),
+            ClubSchedule(
+              id: 3 + i,
+              clubName: "멋쟁이사자처럼",
+              title: "동아리 홍보전",
+              startDate: date,
+              endDate: date.add(const Duration(days: 1)),
+            ),
+            ClubSchedule(
+              id: 3 + i,
+              clubName: "컴퓨터공학과 학생회",
+              title: "회의해라 씨발 후배년들아",
+              startDate: date,
+              endDate: date.add(const Duration(hours: 3)),
+            ),
+          ];
           break;
       }
     }

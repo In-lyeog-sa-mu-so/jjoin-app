@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:jjoin/repository/club/club_repository.dart';
 import 'package:jjoin/viewmodel/home/home_viewmodel.dart';
 import 'package:jjoin/widget/base/default_appbar.dart';
-import 'package:jjoin/widget/club/club_event_item_widget.dart';
+import 'package:jjoin/widget/club/club_able_event_item_widget.dart';
 import 'package:jjoin/widget/club/club_recommend_item_widget.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -99,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Obx(() => SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
-                    return ClubEventItem(
+                    return ClubAbleEventItem(
                       item: _homeViewModel.schedules[index],
                       onAgree: (int id) {
                         if (!_homeViewModel.updateSchedule(id, true)) {

@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:jjoin/model/club/calendar_schedule.dart';
+
+import '../../model/club/club_schedule.dart';
 
 class ScheduleDayItem extends StatelessWidget {
-  final DateTime day;
+  final DateTime date;
   final bool isSelected;
-  final CalendarSchedule schedule;
+  final List<ClubSchedule> schedules;
   const ScheduleDayItem({
     Key? key,
-    required this.day,
+    required this.date,
     required this.isSelected,
-    required this.schedule,
+    required this.schedules,
   }) : super(key: key);
 
   @override
@@ -27,7 +28,7 @@ class ScheduleDayItem extends StatelessWidget {
           ),
           child: Center(
             child: Text(
-              day.day.toString(),
+              date.day.toString(),
               style: isSelected
                   ? const TextStyle(
                       color: Colors.white,
@@ -40,7 +41,7 @@ class ScheduleDayItem extends StatelessWidget {
             ),
           ),
         ),
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < (schedules.length > 3 ? 3 : schedules.length); i++)
           Container(
             height: 15,
             alignment: Alignment.center,
@@ -49,9 +50,9 @@ class ScheduleDayItem extends StatelessWidget {
             ),
             child: Center(
               child: Text(
-                schedule.todos[i].title.length > 4
-                    ? "${schedule.todos[i].title.substring(0, 4)}..."
-                    : schedule.todos[i].title,
+                schedules[i].title.length > 4
+                    ? "${schedules[i].title.substring(0, 4)}..."
+                    : schedules[i].title,
                 style: const TextStyle(
                   fontSize: 10,
                   color: Colors.black,

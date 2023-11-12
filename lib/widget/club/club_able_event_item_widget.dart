@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jjoin/model/club/club_schedule.dart';
 
-class ClubEventItem extends StatelessWidget {
+class ClubAbleEventItem extends StatelessWidget {
   final ClubSchedule item;
   final Function onAgree;
   final Function onDisagree;
-  const ClubEventItem({
+  const ClubAbleEventItem({
     Key? key,
     required this.item,
     required this.onAgree,

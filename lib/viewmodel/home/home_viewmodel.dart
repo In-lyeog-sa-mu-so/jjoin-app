@@ -34,9 +34,7 @@ class HomeViewModel extends GetxController {
     super.onInit();
 
     fetchClubHomeInfos();
-
     fetchSchedules();
-
     fetchClubRecommends();
   }
 
