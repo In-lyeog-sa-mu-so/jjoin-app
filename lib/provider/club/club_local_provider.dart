@@ -235,7 +235,7 @@ class ClubLocalProvider extends GetConnect {
         endDate: date.add(const Duration(days: 1)),
       ),
       ClubSchedule(
-        id: 3,
+        id: 4,
         clubName: "컴퓨터공학과 학생회",
         title: "회의해라 씨발 후배년들아",
         startDate: date,

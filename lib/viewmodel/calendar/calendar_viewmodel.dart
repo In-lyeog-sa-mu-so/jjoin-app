@@ -87,7 +87,13 @@ class CalendarViewModel extends GetxController {
     bool isSuccess = clubRepository.updateSchedule(id, isAgree);
 
     if (isSuccess) {
-      _schedules.removeWhere((element) => element.id == id);
+      // 찾아서 isParticipate 변경
+      for (int i = 0; i < _schedules.length; i++) {
+        if (_schedules[i].id == id) {
+          _schedules[i] = _schedules[i].copyWith(isParticipate: isAgree);
+          break;
+        }
+      }
       return true;
     } else {
       return false;

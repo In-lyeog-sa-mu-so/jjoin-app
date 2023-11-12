@@ -11,6 +11,7 @@ import '../../repository/club/club_repository.dart';
 import '../../viewmodel/calendar/calendar_viewmodel.dart';
 import '../../widget/calendar/schedule_calendar.dart';
 import '../../widget/club/club_able_event_item_widget.dart';
+import '../../widget/club/club_disable_event_item_widget.dart';
 
 class CalendarScreen extends StatelessWidget {
   final CalendarViewModel _viewModel =
@@ -66,35 +67,43 @@ class CalendarScreen extends StatelessWidget {
                   sliver: SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {
-                        return ClubAbleEventItem(
-                          item: _viewModel.schedules[index],
-                          onAgree: (int id) {
-                            if (!_viewModel.updateSchedule(id, true)) {
-                              Get.snackbar(
-                                "통신 오류",
-                                "동아리 일정 수락에 실패했습니다.",
-                                duration: const Duration(
-                                    seconds: 1, milliseconds: 500),
-                                snackPosition: SnackPosition.TOP,
-                                margin: const EdgeInsets.only(
-                                    top: 30, left: 20, right: 20),
-                              );
-                            }
-                          },
-                          onDisagree: (int id) {
-                            if (!_viewModel.updateSchedule(id, false)) {
-                              Get.snackbar(
-                                "통신 오류",
-                                "동아리 일정 수락에 실패했습니다.",
-                                duration: const Duration(
-                                    seconds: 1, milliseconds: 500),
-                                snackPosition: SnackPosition.TOP,
-                                margin: const EdgeInsets.only(
-                                    top: 30, left: 20, right: 20),
-                              );
-                            }
-                          },
-                        );
+                        // 스케줄의 startDate가 내일보다 이전이면 ClubDisAbleEventItem 반환
+                        if (_viewModel.schedules[index].startDate.isBefore(
+                            DateTime.now().add(const Duration(days: 1)))) {
+                          return ClubDisAbleEventItem(
+                            item: _viewModel.schedules[index],
+                          );
+                        } else {
+                          return ClubAbleEventItem(
+                            item: _viewModel.schedules[index],
+                            onAgree: (int id) {
+                              if (!_viewModel.updateSchedule(id, true)) {
+                                Get.snackbar(
+                                  "통신 오류",
+                                  "동아리 일정 수락에 실패했습니다.",
+                                  duration: const Duration(
+                                      seconds: 1, milliseconds: 500),
+                                  snackPosition: SnackPosition.TOP,
+                                  margin: const EdgeInsets.only(
+                                      top: 30, left: 20, right: 20),
+                                );
+                              }
+                            },
+                            onDisagree: (int id) {
+                              if (!_viewModel.updateSchedule(id, false)) {
+                                Get.snackbar(
+                                  "통신 오류",
+                                  "동아리 일정 수락에 실패했습니다.",
+                                  duration: const Duration(
+                                      seconds: 1, milliseconds: 500),
+                                  snackPosition: SnackPosition.TOP,
+                                  margin: const EdgeInsets.only(
+                                      top: 30, left: 20, right: 20),
+                                );
+                              }
+                            },
+                          );
+                        }
                       },
                       childCount: _viewModel.schedules.length,
                     ),

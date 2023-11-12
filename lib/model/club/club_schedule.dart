@@ -31,4 +31,15 @@ class ClubSchedule {
 
     return "$start ~ $end";
   }
+
+  ClubSchedule copyWith({required bool isParticipate}) {
+    return ClubSchedule(
+      id: id,
+      clubName: clubName,
+      startDate: startDate,
+      endDate: endDate,
+      title: title,
+      isParticipate: isParticipate,
+    );
+  }
 }

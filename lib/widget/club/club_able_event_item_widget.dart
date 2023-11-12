@@ -85,22 +85,40 @@ class ClubAbleEventItem extends StatelessWidget {
             onTap: () {
               onAgree(item.id);
             },
-            child: SvgPicture.asset(
-              'assets/icons/item_agree.svg',
-              width: 30,
-              height: 30,
-            ),
+            child: item.isParticipate == null || item.isParticipate == false
+                ? Opacity(
+                    opacity: 0.5,
+                    child: SvgPicture.asset(
+                      'assets/icons/item_agree.svg',
+                      width: 30,
+                      height: 30,
+                    ),
+                  )
+                : SvgPicture.asset(
+                    'assets/icons/item_agree.svg',
+                    width: 30,
+                    height: 30,
+                  ),
           ),
           SizedBox.fromSize(size: const Size(15, 0)),
           InkWell(
             onTap: () {
               onDisagree(item.id);
             },
-            child: SvgPicture.asset(
-              'assets/icons/item_disagree.svg',
-              width: 30,
-              height: 30,
-            ),
+            child: item.isParticipate == null || item.isParticipate == true
+                ? Opacity(
+                    opacity: 0.5,
+                    child: SvgPicture.asset(
+                      'assets/icons/item_disagree.svg',
+                      width: 30,
+                      height: 30,
+                    ),
+                  )
+                : SvgPicture.asset(
+                    'assets/icons/item_disagree.svg',
+                    width: 30,
+                    height: 30,
+                  ),
           ),
           SizedBox.fromSize(size: const Size(10, 0)),
         ],
