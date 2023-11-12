@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-class ClubInfoWidget extends StatelessWidget {
+class ClubSvgInfoWidget extends StatelessWidget {
   final String title;
   final String imagePath;
-  const ClubInfoWidget(
+  const ClubSvgInfoWidget(
       {super.key, required this.title, required this.imagePath});
 
   @override
@@ -17,7 +17,12 @@ class ClubInfoWidget extends StatelessWidget {
           height: 16,
         ),
         SizedBox.fromSize(size: const Size(5, 0)),
-        Text(title),
+        Text(
+          title,
+          style: TextStyle(
+            fontSize: 15,
+          ),
+        ),
       ],
     );
   }

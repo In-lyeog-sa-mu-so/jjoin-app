@@ -1,12 +1,11 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:jjoin/model/club/club_schedule.dart';
 
-class ClubDisAbleEventItem extends StatelessWidget {
-  final ClubSchedule item;
-  const ClubDisAbleEventItem({
+import '../../model/club/club_notice.dart';
+
+class ClubNoticeItem extends StatelessWidget {
+  final ClubNotice item;
+  const ClubNoticeItem({
     Key? key,
     required this.item,
   }) : super(key: key);
@@ -20,7 +19,7 @@ class ClubDisAbleEventItem extends StatelessWidget {
       ),
       child: InkWell(
         onTap: () {
-          Get.toNamed("/clubs/plan");
+          Get.toNamed("/clubs/notices");
         },
         child: Container(
           margin: const EdgeInsets.fromLTRB(20, 8, 20, 8),
@@ -40,7 +39,7 @@ class ClubDisAbleEventItem extends StatelessWidget {
             children: [
               Container(
                 width: 20,
-                height: 80,
+                height: 90,
                 decoration: BoxDecoration(
                   color: Colors.red[100],
                   borderRadius: const BorderRadius.only(
@@ -62,62 +61,31 @@ class ClubDisAbleEventItem extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      item.clubName,
+                      item.content.length > 100
+                          ? "${item.content.substring(0, 80)}..."
+                          : item.content,
                       style: const TextStyle(
                         fontSize: 12,
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 9),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        const Icon(
-                          Icons.calendar_today,
-                          size: 12,
+                        Text(
+                          "작성일: ",
+                          style: const TextStyle(
+                            fontSize: 12,
+                            height: 1.4,
+                          ),
                         ),
                         const SizedBox(width: 5),
                         Text(
                           item.date,
                           style: const TextStyle(
                             fontSize: 12,
-                            fontWeight: FontWeight.w400,
                             height: 1.4,
                           ),
-                        ),
-                        const Spacer(),
-                        Text(
-                          "참가",
-                          style: (item.isParticipate == null ||
-                                  item.isParticipate == false)
-                              ? const TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.grey,
-                                  fontWeight: FontWeight.bold,
-                                  height: 1.4,
-                                )
-                              : const TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.blue,
-                                  fontWeight: FontWeight.bold,
-                                  height: 1.4,
-                                ),
-                        ),
-                        SizedBox.fromSize(size: const Size(10, 0)),
-                        Text(
-                          "불참",
-                          style: (item.isParticipate == null ||
-                                  item.isParticipate == true)
-                              ? const TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.grey,
-                                  fontWeight: FontWeight.bold,
-                                  height: 1.4,
-                                )
-                              : const TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.red,
-                                  fontWeight: FontWeight.bold,
-                                  height: 1.4,
-                                ),
                         ),
                         SizedBox.fromSize(size: const Size(20, 0)),
                       ],

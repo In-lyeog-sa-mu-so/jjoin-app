@@ -1,12 +1,11 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:jjoin/model/club/club_schedule.dart';
 
-class ClubDisAbleEventItem extends StatelessWidget {
+import '../../model/club/club_schedule.dart';
+
+class ClubPlanItem extends StatelessWidget {
   final ClubSchedule item;
-  const ClubDisAbleEventItem({
+  const ClubPlanItem({
     Key? key,
     required this.item,
   }) : super(key: key);
@@ -61,29 +60,27 @@ class ClubDisAbleEventItem extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    Text(
-                      item.clubName,
-                      style: const TextStyle(
-                        fontSize: 12,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 4),
                     Row(
                       children: [
                         const Icon(
                           Icons.calendar_today,
-                          size: 12,
+                          size: 14,
                         ),
                         const SizedBox(width: 5),
                         Text(
                           item.date,
                           style: const TextStyle(
-                            fontSize: 12,
+                            fontSize: 14,
                             fontWeight: FontWeight.w400,
                             height: 1.4,
                           ),
                         ),
-                        const Spacer(),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
                         Text(
                           "참가",
                           style: (item.isParticipate == null ||
@@ -121,7 +118,7 @@ class ClubDisAbleEventItem extends StatelessWidget {
                         ),
                         SizedBox.fromSize(size: const Size(20, 0)),
                       ],
-                    ),
+                    )
                   ],
                 ),
               ),

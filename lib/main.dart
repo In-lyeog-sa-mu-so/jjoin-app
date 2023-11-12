@@ -54,9 +54,17 @@ class MyApp extends StatelessWidget {
           page: () => const ClubScreen(),
           children: [
             GetPage(
-              name: '/clubs/application',
+              name: '/application',
               page: () => const ClubApplicationScreen(),
             ),
+            GetPage(
+              name: '/plan',
+              page: () => const ClubApplicationScreen(),
+            ),
+            GetPage(
+              name: '/notice',
+              page: () => const ClubApplicationScreen(),
+            )
           ],
         ),
       ],

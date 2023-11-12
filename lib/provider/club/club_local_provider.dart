@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:jjoin/model/club/club_home_info.dart';
+import 'package:jjoin/model/club/club_notice.dart';
 
 import '../../model/base/e_club_part.dart';
 import '../../model/club/club_recommend.dart';
@@ -246,7 +247,78 @@ class ClubLocalProvider extends GetConnect {
     return clubSchedules;
   }
 
-  List<ClubSchedule> getClubDummySchedules(DateTime date) {
+  List<ClubNotice> getClubDummyNotices(int page, int size) {
+    DateTime date = DateTime.now();
+
+    List<ClubNotice> clubNotices = [
+      ClubNotice(
+        id: 1,
+        title: "정기 훈련 연기",
+        content: "이번주 일요일 날씨가 안좋아서 어쩌구 저쩌구 .............................",
+        updateDate: date,
+      ),
+      ClubNotice(
+        id: 2,
+        title: "비정기 훈련 연기",
+        content: "이번주 일요일 날씨가 안좋아서 어쩌구 저쩌구 .............................",
+        updateDate: date,
+      ),
+      ClubNotice(
+        id: 3,
+        title: "FC 토토배 출전멤버",
+        content: "이번주 토토배 출전 멤버 뽑겠습니다 어쩌구 저쩌구 .............................",
+        updateDate: date.subtract(const Duration(days: 1)),
+      ),
+      ClubNotice(
+        id: 4,
+        title: "FC 토토배 대기멤버",
+        content: "이번주 토토배 출전 멤버 뽑겠습니다 어쩌구 저쩌구 .............................",
+        updateDate: date.subtract(const Duration(days: 1)),
+      )
+    ];
+
+    // date 기준 10일 전까지 더미 데이터 생성
+    for (int i = 1; i < 10; i++) {
+      clubNotices.add(
+        ClubNotice(
+          id: 1 + i,
+          title: "정기 훈련 연기",
+          content: "이번주 일요일 날씨가 안좋아서 어쩌구 저쩌구 .............................",
+          updateDate: date.subtract(Duration(days: i)),
+        ),
+      );
+      clubNotices.add(
+        ClubNotice(
+          id: 2 + i,
+          title: "비정기 훈련 연기",
+          content: "이번주 일요일 날씨가 안좋아서 어쩌구 저쩌구 .............................",
+          updateDate: date.subtract(Duration(days: i)),
+        ),
+      );
+      clubNotices.add(
+        ClubNotice(
+          id: 3 + i,
+          title: "FC 토토배 출전멤버",
+          content: "이번주 토토배 출전 멤버 뽑겠습니다 어쩌구 저쩌구 .............................",
+          updateDate: date.subtract(Duration(days: i)),
+        ),
+      );
+      clubNotices.add(
+        ClubNotice(
+          id: 4 + i,
+          title: "FC 토토배 대기멤버",
+          content: "이번주 토토배 출전 멤버 뽑겠습니다 어쩌구 저쩌구 .............................",
+          updateDate: date.subtract(Duration(days: i)),
+        ),
+      );
+    }
+
+    return clubNotices;
+  }
+
+  List<ClubSchedule> getClubDummySchedules(int page, int size) {
+    DateTime date = DateTime.now();
+
     List<ClubSchedule> clubSchedules = [
       ClubSchedule(
         id: 1,
@@ -314,6 +386,6 @@ class ClubLocalProvider extends GetConnect {
       );
     }
 
-    return clubSchedules;
+    return clubSchedules.sublist(page * size, (page + 1) * size);
   }
 }

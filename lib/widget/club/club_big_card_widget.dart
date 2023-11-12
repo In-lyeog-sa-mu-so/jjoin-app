@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:jjoin/model/club/club_home_info.dart';
-import 'package:jjoin/widget/club/club_info_widget.dart';
+import 'package:jjoin/widget/club/club_svg_info_widget.dart';
 
 class ClubBigCardWidget extends StatelessWidget {
   final ClubHomeInfo item;
@@ -54,15 +54,15 @@ class ClubBigCardWidget extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ClubInfoWidget(
+              ClubSvgInfoWidget(
                   title: item.leaderName,
                   imagePath: "assets/icons/icon_crown.svg"),
               SizedBox.fromSize(size: const Size(10, 0)),
-              ClubInfoWidget(
+              ClubSvgInfoWidget(
                   title: "${item.memberCnt}",
                   imagePath: "assets/icons/icon_people.svg"),
               SizedBox.fromSize(size: const Size(10, 0)),
-              ClubInfoWidget(
+              ClubSvgInfoWidget(
                   title: item.part.nameStr,
                   imagePath: "assets/icons/icon_dependency.svg"),
             ],

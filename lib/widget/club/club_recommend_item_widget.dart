@@ -5,7 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import '../../model/club/club_recommend.dart';
-import 'club_info_widget.dart';
+import 'club_svg_info_widget.dart';
 import 'club_tag_widget.dart';
 
 class ClubRecommendItem extends StatelessWidget {
@@ -77,11 +77,11 @@ class ClubRecommendItem extends StatelessWidget {
                     SizedBox.fromSize(size: const Size(0, 5)),
                     Row(
                       children: [
-                        ClubInfoWidget(
+                        ClubSvgInfoWidget(
                             title: item.memberCnt.toString(),
                             imagePath: "assets/icons/icon_profile_24.svg"),
                         SizedBox.fromSize(size: const Size(5, 0)),
-                        ClubInfoWidget(
+                        ClubSvgInfoWidget(
                             title: item.part.nameStr,
                             imagePath: "assets/icons/icon_profile_24.svg"),
                       ],
