@@ -3,15 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jjoin/model/club/club_schedule.dart';
 
-class ClubAbleEventItem extends StatelessWidget {
+class ClubDisAbleEventItem extends StatelessWidget {
   final ClubSchedule item;
-  final Function onAgree;
-  final Function onDisagree;
-  const ClubAbleEventItem({
+  const ClubDisAbleEventItem({
     Key? key,
     required this.item,
-    required this.onAgree,
-    required this.onDisagree,
   }) : super(key: key);
 
   @override
@@ -44,65 +40,65 @@ class ClubAbleEventItem extends StatelessWidget {
             ),
           ),
           SizedBox.fromSize(size: const Size(10, 0)),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                item.title,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              Text(
-                item.clubName,
-                style: const TextStyle(
-                  fontSize: 12,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Row(
-                children: [
-                  const Icon(
-                    Icons.calendar_today,
-                    size: 12,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  item.title,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
                   ),
-                  const SizedBox(width: 5),
-                  Text(
-                    item.date,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400,
-                      height: 1.4,
+                ),
+                Text(
+                  item.clubName,
+                  style: const TextStyle(
+                    fontSize: 12,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    const Icon(
+                      Icons.calendar_today,
+                      size: 12,
                     ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          const Spacer(),
-          InkWell(
-            onTap: () {
-              onAgree(item.id);
-            },
-            child: SvgPicture.asset(
-              'assets/icons/item_agree.svg',
-              width: 30,
-              height: 30,
+                    const SizedBox(width: 5),
+                    Text(
+                      item.date,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        height: 1.4,
+                      ),
+                    ),
+                    const Spacer(),
+                    const Text(
+                      "참가",
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.blue,
+                        fontWeight: FontWeight.bold,
+                        height: 1.4,
+                      ),
+                    ),
+                    SizedBox.fromSize(size: const Size(10, 0)),
+                    const Text(
+                      "불참",
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold,
+                        height: 1.4,
+                      ),
+                    ),
+                    SizedBox.fromSize(size: const Size(10, 0)),
+                  ],
+                ),
+              ],
             ),
           ),
-          SizedBox.fromSize(size: const Size(15, 0)),
-          InkWell(
-            onTap: () {
-              onDisagree(item.id);
-            },
-            child: SvgPicture.asset(
-              'assets/icons/item_disagree.svg',
-              width: 30,
-              height: 30,
-            ),
-          ),
-          SizedBox.fromSize(size: const Size(10, 0)),
         ],
       ),
     );

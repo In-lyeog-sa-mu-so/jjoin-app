@@ -15,6 +15,8 @@ import '../../provider/club/club_remote_provider.dart';
 import '../../widget/club/club_big_card_widget.dart';
 import 'package:flutter/foundation.dart' as foundation;
 
+import '../../widget/club/club_disable_event_item_widget.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -128,6 +130,35 @@ class _HomeScreenState extends State<HomeScreen> {
                         }
                       },
                     );
+                    // return ClubAbleEventItem(
+                    //   item: _homeViewModel.schedules[index],
+                    //   onAgree: (int id) {
+                    //     if (!_homeViewModel.updateSchedule(id, true)) {
+                    //       Get.snackbar(
+                    //         "통신 오류",
+                    //         "동아리 일정 수락에 실패했습니다.",
+                    //         duration:
+                    //             const Duration(seconds: 1, milliseconds: 500),
+                    //         snackPosition: SnackPosition.TOP,
+                    //         margin: const EdgeInsets.only(
+                    //             top: 30, left: 20, right: 20),
+                    //       );
+                    //     }
+                    //   },
+                    //   onDisagree: (int id) {
+                    //     if (!_homeViewModel.updateSchedule(id, false)) {
+                    //       Get.snackbar(
+                    //         "통신 오류",
+                    //         "동아리 일정 수락에 실패했습니다.",
+                    //         duration:
+                    //             const Duration(seconds: 1, milliseconds: 500),
+                    //         snackPosition: SnackPosition.TOP,
+                    //         margin: const EdgeInsets.only(
+                    //             top: 30, left: 20, right: 20),
+                    //       );
+                    //     }
+                    //   },
+                    // );
                   },
                   childCount: _homeViewModel.schedules.length > 3
                       ? 3
