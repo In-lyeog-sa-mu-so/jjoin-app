@@ -28,9 +28,7 @@ class ProfileViewModel extends GetxController {
   @override
   void onInit() {
     super.onInit();
-
     fetchUser();
-
     fetchJoinedClubs();
   }
 

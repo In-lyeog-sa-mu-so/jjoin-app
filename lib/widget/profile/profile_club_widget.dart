@@ -22,7 +22,7 @@ class ProfileJoinedClub extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+          padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
           child: Text(
             '가입한 동아리',
             style: TextStyle(
@@ -37,9 +37,9 @@ class ProfileJoinedClub extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             itemCount: items.length,
             itemBuilder: (BuildContext context, int index) {
-              return GestureDetector(
+              return InkWell(
                 onTap: () {
-                  Get.to(() => ClubScreen(), arguments: items[index].clubId);
+                  Get.toNamed('/clubs/', arguments: items[index].clubId);
                 },
                 child: SizedBox(
                   width: 100,

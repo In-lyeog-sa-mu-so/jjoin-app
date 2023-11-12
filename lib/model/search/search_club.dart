@@ -10,6 +10,7 @@ class SearchClub {
   final bool isFinished;
   final DateTime startDate;
   final DateTime endDate;
+  final String leaderName;
 
   SearchClub({
     required this.clubId,
@@ -21,5 +22,6 @@ class SearchClub {
     required this.isFinished,
     required this.startDate,
     required this.endDate,
+    required this.leaderName,
   });
 }

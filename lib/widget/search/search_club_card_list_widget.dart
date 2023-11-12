@@ -19,7 +19,7 @@ class ClubCardListWidget extends StatelessWidget {
         final club = clubs[index];
         return InkWell(
           onTap: () {
-            Get.toNamed('/clubs/application', arguments: club.clubId);
+            Get.toNamed('/clubs/', arguments: club.clubId);
           },
           child: ClubCard(club: club),
         );
