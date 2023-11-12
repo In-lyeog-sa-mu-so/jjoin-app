@@ -39,7 +39,12 @@ class ProfileJoinedClub extends StatelessWidget {
             itemBuilder: (BuildContext context, int index) {
               return InkWell(
                 onTap: () {
-                  Get.toNamed('/clubs/', arguments: items[index].clubId);
+                  Get.toNamed(
+                    '/clubs/',
+                    arguments: {
+                      "clubId": items[index].clubId,
+                    },
+                  );
                 },
                 child: SizedBox(
                   width: 100,
