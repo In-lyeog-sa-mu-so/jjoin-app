@@ -16,7 +16,7 @@ class ApplicationQuestion extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 6.0),
+      padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 20.0),
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -27,7 +27,7 @@ class ApplicationQuestion extends StatelessWidget {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -40,26 +40,30 @@ class ApplicationQuestion extends StatelessWidget {
                 ),
                 child: Text(questionText, style: const TextStyle(fontSize: 18)),
               ),
-              TextField(
-                controller: controller,
-                onChanged: onAnswerChanged,
-                minLines: 1,
-                maxLines: 5,
-                decoration: const InputDecoration(
-                  contentPadding: EdgeInsets.symmetric(
-                    vertical: 8.0,
-                    horizontal: 8,
-                  ),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.grey,
-                      width: 1,
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextField(
+                  controller: controller,
+                  onChanged: onAnswerChanged,
+                  minLines: 1,
+                  maxLines: 5,
+                  decoration: const InputDecoration(
+                    hintText: '내 답변',
+                    contentPadding: EdgeInsets.symmetric(
+                      vertical: 8.0,
+                      horizontal: 8,
                     ),
-                  ),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.black,
-                      width: 1,
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.grey,
+                        width: 1,
+                      ),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.green,
+                        width: 1,
+                      ),
                     ),
                   ),
                 ),

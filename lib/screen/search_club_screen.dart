@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import '../repository/SearchClub/search_club_repository.dart';
 
 import '../model/SearchClub/search_club.dart';
+import '../widget/base/default_appbar.dart';
 import '../widget/search/search_club_card_list_widget.dart';
 import '../widget/search/search_club_card_widget.dart';
 import '../widget/search/search_field_widget.dart';
@@ -37,16 +38,11 @@ class _SearchClubScreenState extends State<SearchClubScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFFFFFFF),
-      appBar: AppBar(
-        title: const Text(
-          'JJoin',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(50),
+        child: DefaultAppBar(
+          title: "JJoin",
         ),
-        centerTitle: true,
-        surfaceTintColor: Colors.white,
-        backgroundColor: Colors.white,
-        automaticallyImplyLeading: true,
-        leadingWidth: 90,
       ),
       body: Column(
         children: [

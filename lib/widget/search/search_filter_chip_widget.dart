@@ -28,8 +28,8 @@ class TagFilterChipWidget extends StatelessWidget {
                 label: Text(tag,
                     style: const TextStyle(fontWeight: FontWeight.w400)),
                 selected: selectedTags.contains(tag),
-                selectedColor: Colors.blue.shade100.withOpacity(0.8),
-                backgroundColor: Colors.grey.withOpacity(0.2),
+                selectedColor: Colors.blue.shade100.withOpacity(0.7),
+                backgroundColor: Colors.grey.withOpacity(0.1),
                 onSelected: (bool selected) {
                   onTagSelected(tag);
                 },

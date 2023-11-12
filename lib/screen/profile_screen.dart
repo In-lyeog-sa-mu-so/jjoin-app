@@ -6,6 +6,7 @@ import 'package:jjoin/widget/profile/profile_club_widget.dart';
 import 'package:jjoin/widget/profile/profile_user_info_widget.dart';
 
 import '../model/profile/profile_user.dart';
+import '../widget/base/default_appbar.dart';
 import 'club/club_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -39,16 +40,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFFFFFFF),
-      appBar: AppBar(
-        title: const Text(
-          'JJoin',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(50),
+        child: DefaultAppBar(
+          title: "JJoin",
         ),
-        centerTitle: true,
-        surfaceTintColor: Colors.white,
-        backgroundColor: Colors.white,
-        automaticallyImplyLeading: true,
-        leadingWidth: 90,
       ),
       body: Column(
         children: [
@@ -60,10 +56,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 color: Colors.white,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.grey.withOpacity(0.3),
-                    spreadRadius: 0.5,
-                    blurRadius: 1,
-                    offset: Offset(0, 0),
+                    color: Colors.grey.withOpacity(0.2),
+                    spreadRadius: 2,
+                    blurRadius: 2,
+                    offset: const Offset(0, 1),
                   ),
                 ],
               ),
@@ -84,7 +80,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _buildOptions(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,

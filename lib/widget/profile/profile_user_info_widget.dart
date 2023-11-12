@@ -14,16 +14,16 @@ class ProfileUserInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20.0),
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.3),
-              spreadRadius: 0.5,
+              spreadRadius: 1,
               blurRadius: 1,
-              offset: Offset(0, 0),
+              offset: Offset(0, 2),
             ),
           ],
           borderRadius: BorderRadius.circular(10),
@@ -58,16 +58,16 @@ class ProfileUserInfo extends StatelessWidget {
                           padding: const EdgeInsets.only(top: 5),
                           child: Text('전공: ${user.major}',
                               style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w300,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
                               )),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(top: 5),
                           child: Text('학번: ${user.studentId.toString()}',
                               style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w300,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
                               )),
                         ),
                       ],
@@ -76,11 +76,18 @@ class ProfileUserInfo extends StatelessWidget {
                 ],
               ),
             ),
-            Text(
-              user.introduction,
-              textAlign: TextAlign.left,
+            Padding(
+              padding: const EdgeInsets.only(
+                right: 12,
+                left: 12,
+                bottom: 10,
+              ),
+              child: Text(
+                user.introduction,
+                textAlign: TextAlign.left,
+              ),
             ),
-            const SizedBox(height: 20)
+            //const SizedBox(height: 12)
           ],
         ),
       ),
