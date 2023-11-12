@@ -91,7 +91,7 @@ class ClubBigCardWidget extends StatelessWidget {
               SizedBox.fromSize(size: const Size(10, 0)),
             ],
           ),
-          SizedBox.fromSize(size: const Size.fromHeight(10)),
+          const Spacer(),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [

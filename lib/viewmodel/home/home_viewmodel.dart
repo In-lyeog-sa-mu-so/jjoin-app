@@ -33,34 +33,39 @@ class HomeViewModel extends GetxController {
   void onInit() {
     super.onInit();
 
-    // _isLoadingClubHomeInfos.value = true;
-    // _clubHomeInfos.value = clubRepository.getHomeMyClubInfos();
-    // _isLoadingClubHomeInfos.value = false;
+    fetchClubHomeInfos();
 
-    _isLoadingSchedules.value = true;
-    _schedules.value = clubRepository.getHomeClubSchedule();
-    _isLoadingSchedules.value = false;
+    fetchSchedules();
 
-    // _isLoadingClubRecommends.value = true;
-    // _clubRecommends.value = clubRepository.getHomeClubRecommends();
-    // _isLoadingClubRecommends.value = false;
+    fetchClubRecommends();
   }
 
   void fetchClubHomeInfos() {
-    // _isLoadingClubHomeInfos.value = true;
-    // _clubHomeInfos.value = clubRepository.getHomeMyClubInfos();
-    // _isLoadingClubHomeInfos.value = false;
+    _isLoadingClubHomeInfos.value = true;
+    _clubHomeInfos.value = clubRepository.getHomeMyClubInfos();
+    _isLoadingClubHomeInfos.value = false;
   }
 
   void fetchSchedules() {
     _isLoadingSchedules.value = true;
-    _schedules.value = clubRepository.getHomeClubSchedule();
+    _schedules.value = clubRepository.getHomeMyClubSchedules();
     _isLoadingSchedules.value = false;
   }
 
   void fetchClubRecommends() {
-    // _isLoadingClubRecommends.value = true;
-    // _clubRecommends.value = clubRepository.getHomeClubRecommends();
-    // _isLoadingClubRecommends.value = false;
+    _isLoadingClubRecommends.value = true;
+    _clubRecommends.value = clubRepository.getHomeRecommendClubs();
+    _isLoadingClubRecommends.value = false;
+  }
+
+  bool updateSchedule(int id, bool isAgree) {
+    bool isSuccess = clubRepository.updateSchedule(id, isAgree);
+
+    if (isSuccess) {
+      _schedules.removeWhere((element) => element.id == id);
+      return true;
+    } else {
+      return false;
+    }
   }
 }

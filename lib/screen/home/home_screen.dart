@@ -61,29 +61,16 @@ class _HomeScreenState extends State<HomeScreen> {
         slivers: [
           SliverToBoxAdapter(
             child: SizedBox(
-              height: foundation.defaultTargetPlatform ==
-                      foundation.TargetPlatform.iOS
-                  ? 307
-                  : 310,
+              height: 310,
               child: PageView.builder(
                 controller: _pageController,
                 onPageChanged: (int index) {
                   setState(() {});
                 },
-                itemCount: 3,
+                itemCount: _homeViewModel.clubHomeInfos.length,
                 itemBuilder: (context, index) {
                   return ClubBigCardWidget(
-                    item: ClubHomeInfo(
-                      id: 1,
-                      name: "컴퓨터공학과 학생회",
-                      description: "컴퓨터공학과 학생회입니다.",
-                      part: EClubPart.DEPARTMENT,
-                      memberCnt: 10,
-                      imageURL:
-                          "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
-                      leaderName: "김태욱",
-                      recentNotice: "컴퓨터공학과 학생회입니다.",
-                    ),
+                    item: _homeViewModel.clubHomeInfos[index],
                   );
                 },
               ),
@@ -109,14 +96,44 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                return ClubEventItem(item: _homeViewModel.schedules[index]);
-              },
-              childCount: _homeViewModel.schedules.length,
-            ),
-          ),
+          Obx(() => SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    return ClubEventItem(
+                      item: _homeViewModel.schedules[index],
+                      onAgree: (int id) {
+                        if (!_homeViewModel.updateSchedule(id, true)) {
+                          Get.snackbar(
+                            "통신 오류",
+                            "동아리 일정 수락에 실패했습니다.",
+                            duration:
+                                const Duration(seconds: 1, milliseconds: 500),
+                            snackPosition: SnackPosition.TOP,
+                            margin: const EdgeInsets.only(
+                                top: 30, left: 20, right: 20),
+                          );
+                        }
+                      },
+                      onDisagree: (int id) {
+                        if (!_homeViewModel.updateSchedule(id, false)) {
+                          Get.snackbar(
+                            "통신 오류",
+                            "동아리 일정 수락에 실패했습니다.",
+                            duration:
+                                const Duration(seconds: 1, milliseconds: 500),
+                            snackPosition: SnackPosition.TOP,
+                            margin: const EdgeInsets.only(
+                                top: 30, left: 20, right: 20),
+                          );
+                        }
+                      },
+                    );
+                  },
+                  childCount: _homeViewModel.schedules.length > 3
+                      ? 3
+                      : _homeViewModel.schedules.length,
+                ),
+              )),
           const SliverToBoxAdapter(
               child: Padding(
             // 왼쪽만 패딩
@@ -133,18 +150,12 @@ class _HomeScreenState extends State<HomeScreen> {
             delegate: SliverChildBuilderDelegate(
               (context, index) {
                 return ClubRecommendItem(
-                    item: ClubRecommend(
-                  id: 1,
-                  name: "컴퓨터공학과 학생회",
-                  description: "컴퓨터공학과 학생회입니다.",
-                  part: EClubPart.DEPARTMENT,
-                  memberCnt: 10,
-                  imageURL:
-                      "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
-                  tags: ["친목", "학술"],
-                ));
+                  item: _homeViewModel.clubRecommends[index],
+                );
               },
-              childCount: 3,
+              childCount: _homeViewModel.clubRecommends.length > 3
+                  ? 3
+                  : _homeViewModel.clubRecommends.length,
             ),
           ),
         ],

@@ -5,7 +5,14 @@ import 'package:jjoin/model/club/club_schedule.dart';
 
 class ClubEventItem extends StatelessWidget {
   final ClubSchedule item;
-  const ClubEventItem({required this.item, Key? key}) : super(key: key);
+  final Function onAgree;
+  final Function onDisagree;
+  const ClubEventItem({
+    Key? key,
+    required this.item,
+    required this.onAgree,
+    required this.onDisagree,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -76,9 +83,7 @@ class ClubEventItem extends StatelessWidget {
           const Spacer(),
           InkWell(
             onTap: () {
-              if (kDebugMode) {
-                print("agree");
-              }
+              onAgree(item.id);
             },
             child: SvgPicture.asset(
               'assets/icons/item_agree.svg',
@@ -89,9 +94,7 @@ class ClubEventItem extends StatelessWidget {
           SizedBox.fromSize(size: const Size(15, 0)),
           InkWell(
             onTap: () {
-              if (kDebugMode) {
-                print("disagree");
-              }
+              onDisagree(item.id);
             },
             child: SvgPicture.asset(
               'assets/icons/item_disagree.svg',

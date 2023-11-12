@@ -58,8 +58,8 @@ class ClubRecommendItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      item.name.length > 10
-                          ? '${item.name.substring(0, 10)}...'
+                      item.name.length > 12
+                          ? '${item.name.substring(0, 12)}...'
                           : item.name,
                       style: const TextStyle(
                         fontSize: 18,
