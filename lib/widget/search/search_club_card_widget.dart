@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../model/search/search_club.dart';
+import '../club/club_svg_info_widget.dart';
 
 class ClubCard extends StatelessWidget {
   const ClubCard({
@@ -18,14 +19,21 @@ class ClubCard extends StatelessWidget {
         ? '모집 중 (${DateFormat('MM.dd').format(club.startDate)}~${DateFormat('MM.dd').format(club.endDate)})'
         : '모집 마감';
 
-    return Card(
+    return Container(
       margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-      clipBehavior: Clip.antiAliasWithSaveLayer,
-      shape: ContinuousRectangleBorder(
-        borderRadius: BorderRadius.circular(20.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16.0),
+        border: Border.all(color: Colors.grey.withOpacity(0.5)),
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 2,
+            blurRadius: 2,
+            offset: const Offset(0, 1), // 변경 가능한 값
+          ),
+        ],
       ),
-      color: Colors.white,
-      elevation: 0.6,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -56,6 +64,7 @@ class ClubCard extends StatelessWidget {
                         '${club.part.nameStr} 동아리',
                         style: const TextStyle(fontSize: 16.0),
                       ),
+                      SizedBox(height: 4),
                       Text(
                         recruitingText,
                         style: TextStyle(
@@ -64,6 +73,20 @@ class ClubCard extends StatelessWidget {
                           color: isRecruiting ? Colors.green : Colors.red,
                         ),
                       ),
+                      const SizedBox(height: 4),
+                      Row(
+                        children: [
+                          ClubSvgInfoWidget(
+                            title: club.leaderName,
+                            imagePath: 'assets/icons/icon_crown.svg',
+                          ),
+                          const SizedBox(width: 10),
+                          ClubSvgInfoWidget(
+                            title: club.userNumber.toString(),
+                            imagePath: 'assets/icons/icon_people.svg',
+                          ),
+                        ],
+                      )
                     ],
                   ),
                 ),

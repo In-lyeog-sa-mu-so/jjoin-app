@@ -176,7 +176,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                           onPressed: () {
                             _profileEditViewModel.saveProfile(
                               _descriptionController.text,
-                              _profileEditViewModel.profileImage,
+                              _profileEditViewModel.newImage,
                             );
                           },
                           child: const Text('저장하기'),
