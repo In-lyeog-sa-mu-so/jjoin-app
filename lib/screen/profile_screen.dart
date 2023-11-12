@@ -7,7 +7,7 @@ import 'package:jjoin/widget/profile/profile_user_info_widget.dart';
 
 import '../model/profile/profile_user.dart';
 import '../widget/base/default_appbar.dart';
-import 'club_screen.dart';
+import 'club/club_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});

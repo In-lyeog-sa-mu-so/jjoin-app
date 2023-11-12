@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../model/profile/profile_user.dart';
-import '../../screen/club_screen.dart'; // 필요한 import 문 추가
+import '../../screen/club/club_screen.dart'; // 필요한 import 문 추가
 
 class ProfileJoinedClub extends StatelessWidget {
   final Future<List<JoinedClub>> items;

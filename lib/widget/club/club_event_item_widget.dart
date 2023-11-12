@@ -10,7 +10,7 @@ class ClubEventItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.fromLTRB(25, 8, 25, 8),
+      margin: const EdgeInsets.fromLTRB(20, 8, 20, 8),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
