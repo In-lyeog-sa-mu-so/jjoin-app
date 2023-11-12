@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:jjoin/provider/Application/application_provider.dart';
-import '../../model/Application/application_question.dart';
-import '../../repository/Application/application_repository.dart';
-import '../widget/application/application_question_widget.dart';
-import '../widget/base/default_back_appbar.dart';
-import '../widget/application/application_top_bar_widget.dart';
+import 'package:jjoin/viewmodel/application/application_viewmodel.dart';
+import '../../../repository/Application/application_repository.dart';
+import '../../widget/application/application_question_widget.dart';
+import '../../widget/base/default_back_appbar.dart';
+import '../../widget/application/application_top_bar_widget.dart';
 
 class ClubApplicationScreen extends StatefulWidget {
   const ClubApplicationScreen({Key? key}) : super(key: key);
@@ -14,23 +15,26 @@ class ClubApplicationScreen extends StatefulWidget {
 }
 
 class _ClubApplicationScreenState extends State<ClubApplicationScreen> {
-  late final ApplicationForm applicationForm;
-  final Map<int, TextEditingController> controllers = {};
-  final Map<int, String> answers = {};
+  late final ApplicationViewModel _applicationViewModel;
 
   @override
   void initState() {
     super.initState();
-    applicationForm = ApplicationRepository.getDummyApplicationForm();
-    for (var question in applicationForm.questions) {
-      controllers[question.questionId] = TextEditingController();
-      answers[question.questionId] = '';
-    }
+    _applicationViewModel = Get.put<ApplicationViewModel>(ApplicationViewModel(
+      applicationRepository: ApplicationRepository(
+        applicationProvider: Get.put(ApplicationProvider()),
+      ),
+    ));
+    // for (var question in _applicationViewModel.applicationForm!.questions) {
+    //   _applicationViewModel.controllers[question.questionId] =
+    //       TextEditingController();
+    //   _applicationViewModel.answers[question.questionId] = '';
+    // }
   }
 
   @override
   void dispose() {
-    for (var controller in controllers.values) {
+    for (var controller in _applicationViewModel.controllers.values) {
       controller.dispose();
     }
     super.dispose();
@@ -38,20 +42,8 @@ class _ClubApplicationScreenState extends State<ClubApplicationScreen> {
 
   void _updateAnswer(int questionId, String answer) {
     setState(() {
-      answers[questionId] = answer;
+      _applicationViewModel.answers[questionId] = answer;
     });
-  }
-
-  void _submitAnswers() async {
-    try {
-      await ApplicationProvider.postAnswer(1, applicationForm.applicationId,
-          answers); // Assuming 1 is the placeholder for clubId and applicationId
-      // TODO: Handle successful submission
-      print('Answers submitted successfully.');
-    } catch (e) {
-      // TODO: Handle submission error
-      print('Error submitting answers: $e');
-    }
   }
 
   @override
@@ -63,14 +55,16 @@ class _ClubApplicationScreenState extends State<ClubApplicationScreen> {
           child: DefaultBackAppbar(title: '가입 신청서')),
       body: ListView(
         children: [
-          ApplicationTopBar(applicationForm: applicationForm),
+          ApplicationTopBar(
+              applicationForm: _applicationViewModel.applicationForm!),
           const SizedBox(height: 10), // Add some spacing
-          ...applicationForm.questions.map((question) {
+          ..._applicationViewModel.applicationForm!.questions.map((question) {
             TextEditingController? controller =
-                controllers[question.questionId];
+                _applicationViewModel.controllers[question.questionId];
             if (controller == null) {
               controller = TextEditingController();
-              controllers[question.questionId] = controller;
+              _applicationViewModel.controllers[question.questionId] =
+                  controller;
             }
             return ApplicationQuestion(
               questionText: question.question,
@@ -80,17 +74,18 @@ class _ClubApplicationScreenState extends State<ClubApplicationScreen> {
             );
           }).toList(),
           Container(
-            padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20),
-            alignment: Alignment.centerRight,
+            padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 20),
+            alignment: Alignment.center,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.teal.shade300,
+                fixedSize: const Size(352.7, 40),
+                backgroundColor: Colors.green.withOpacity(0.8),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
               ),
-              onPressed: _submitAnswers,
-              child: const Text('제출',
+              onPressed: _applicationViewModel.submitApplicationForm,
+              child: const Text('제출하기',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 18,

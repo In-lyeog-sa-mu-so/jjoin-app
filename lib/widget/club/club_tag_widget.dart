@@ -14,13 +14,13 @@ class ClubTagWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(15),
         border: Border.all(
           color: Colors.grey.withOpacity(0.5),
-          width: 1,
+          width: 1.5,
         ),
       ),
       child: Center(
         child: Text(
           title,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 12,
           ),
         ),
