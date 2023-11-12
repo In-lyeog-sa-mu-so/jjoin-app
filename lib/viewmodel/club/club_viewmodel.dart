@@ -5,10 +5,13 @@ import '../../model/club/club_schedule.dart';
 import '../../repository/club/club_repository.dart';
 
 class ClubViewModel extends GetxController {
+  final int clubId;
   final ClubRepository clubRepository;
 
-  ClubViewModel({required this.clubRepository})
-      : assert(clubRepository != null);
+  ClubViewModel({
+    required this.clubId,
+    required this.clubRepository,
+  }) : assert(clubRepository != null);
 
   /* Club Notices */
   final RxList<ClubNotice> _notices = RxList();
@@ -37,13 +40,14 @@ class ClubViewModel extends GetxController {
   void fetchSchedules() {
     _isLoadingSchedules.value = true;
     _schedules.value =
-        clubRepository.getClubSchedules(schedulePage, scheduleSize);
+        clubRepository.getClubSchedules(clubId, schedulePage, scheduleSize);
     _isLoadingSchedules.value = false;
   }
 
   void fetchNotices() {
     _isLoadingNotices.value = true;
-    _notices.value = clubRepository.getClubNotices(noticePage, noticeSize);
+    _notices.value =
+        clubRepository.getClubNotices(clubId, noticePage, noticeSize);
     _isLoadingNotices.value = false;
   }
 

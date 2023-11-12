@@ -20,7 +20,13 @@ class ClubDisAbleEventItem extends StatelessWidget {
       ),
       child: InkWell(
         onTap: () {
-          Get.toNamed("/clubs/plan");
+          Get.toNamed(
+            "/clubs/plan",
+            arguments: {
+              "clubId": item.clubId!,
+              "scheduleId": item.id,
+            },
+          );
         },
         child: Container(
           margin: const EdgeInsets.fromLTRB(20, 8, 20, 8),

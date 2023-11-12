@@ -4,9 +4,11 @@ import 'package:get/get.dart';
 import '../../model/club/club_schedule.dart';
 
 class ClubPlanItem extends StatelessWidget {
+  final int clubId;
   final ClubSchedule item;
   const ClubPlanItem({
     Key? key,
+    required this.clubId,
     required this.item,
   }) : super(key: key);
 
@@ -19,7 +21,13 @@ class ClubPlanItem extends StatelessWidget {
       ),
       child: InkWell(
         onTap: () {
-          Get.toNamed("/clubs/plan");
+          Get.toNamed(
+            "/clubs/plan",
+            arguments: {
+              "clubId": clubId,
+              "scheduleId": item.id,
+            },
+          );
         },
         child: Container(
           margin: const EdgeInsets.fromLTRB(20, 8, 20, 8),

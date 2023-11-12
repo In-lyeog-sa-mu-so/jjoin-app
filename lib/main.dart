@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:jjoin/screen/application/club_application_screen.dart';
 import 'package:jjoin/screen/club/club_notice_screen.dart';
+import 'package:jjoin/screen/club/club_plan_screen.dart';
 import 'package:jjoin/screen/club/club_screen.dart';
 import 'package:jjoin/screen/root_screen.dart';
 
@@ -60,11 +61,11 @@ class MyApp extends StatelessWidget {
             ),
             GetPage(
               name: '/plan',
-              page: () => const ClubApplicationScreen(),
+              page: () => const ClubPlanScreen(),
             ),
             GetPage(
               name: '/notices',
-              page: () => ClubNoticeScreen(),
+              page: () => const ClubNoticeScreen(),
             )
           ],
         ),

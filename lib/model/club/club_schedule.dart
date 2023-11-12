@@ -1,5 +1,6 @@
 class ClubSchedule {
   final int id;
+  final int? clubId;
   final String? clubName;
   final DateTime startDate;
   final DateTime endDate;
@@ -8,6 +9,7 @@ class ClubSchedule {
 
   ClubSchedule({
     required this.id,
+    this.clubId,
     this.clubName,
     required this.startDate,
     required this.endDate,
@@ -35,6 +37,7 @@ class ClubSchedule {
   ClubSchedule copyWith({required bool isParticipate}) {
     return ClubSchedule(
       id: id,
+      clubId: clubId,
       clubName: clubName,
       startDate: startDate,
       endDate: endDate,

@@ -29,6 +29,8 @@ class _ClubScreenState extends State<ClubScreen>
   void initState() {
     // TODO: implement initState
     super.initState();
+    _clubId = Get.arguments["clubId"];
+
     _tabController = TabController(
       length: 2,
       vsync: this,
@@ -37,12 +39,12 @@ class _ClubScreenState extends State<ClubScreen>
       setState(() {});
     });
     _clubViewModel = Get.put(ClubViewModel(
+      clubId: _clubId,
       clubRepository: ClubRepository(
         clubLocalProvider: Get.put(ClubLocalProvider()),
         clubRemoteProvider: Get.put(ClubRemoteProvider()),
       ),
     ));
-    _clubId = Get.arguments["clubId"];
   }
 
   @override
@@ -109,7 +111,10 @@ class _ClubScreenState extends State<ClubScreen>
                 ListView.builder(
                   itemCount: _clubViewModel.schedules.length,
                   itemBuilder: (context, index) {
-                    return ClubPlanItem(item: _clubViewModel.schedules[index]);
+                    return ClubPlanItem(
+                      clubId: _clubId,
+                      item: _clubViewModel.schedules[index],
+                    );
                   },
                 ),
               ],

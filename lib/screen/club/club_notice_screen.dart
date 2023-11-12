@@ -24,7 +24,7 @@ class _ClubNoticeScreenState extends State<ClubNoticeScreen> {
     super.initState();
     _clubId = Get.arguments["clubId"];
     _noticeId = Get.arguments["noticeId"];
-    print("clubId: $_clubId, noticeId: $_noticeId");
+
     _clubNoticeViewModel = Get.put(
       ClubNoticeDetailViewModel(
         clubId: _clubId,
@@ -46,7 +46,7 @@ class _ClubNoticeScreenState extends State<ClubNoticeScreen> {
       appBar: const PreferredSize(
         preferredSize: Size.fromHeight(50),
         child: DefaultBackAppbar(
-          title: "공지사항",
+          title: "동아리 공지사항",
         ),
       ),
       body: Obx(

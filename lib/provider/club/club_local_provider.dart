@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:jjoin/model/club/club_home_info.dart';
 import 'package:jjoin/model/club/club_notice.dart';
 import 'package:jjoin/model/club/club_notice_detail.dart';
+import 'package:jjoin/model/club/club_plan_detail.dart';
 
 import '../../model/base/e_club_part.dart';
 import '../../model/club/club_recommend.dart';
@@ -54,6 +55,7 @@ class ClubLocalProvider extends GetConnect {
     List<ClubSchedule> clubSchedules = [
       ClubSchedule(
         id: 1,
+        clubId: 1,
         clubName: "Farm System",
         title: "정기 회의",
         startDate: date,
@@ -61,6 +63,7 @@ class ClubLocalProvider extends GetConnect {
       ),
       ClubSchedule(
         id: 2,
+        clubId: 1,
         clubName: "GDSC",
         title: "오픈 세미나",
         startDate: date,
@@ -68,6 +71,7 @@ class ClubLocalProvider extends GetConnect {
       ),
       ClubSchedule(
         id: 3,
+        clubId: 1,
         clubName: "멋쟁이사자처럼",
         title: "동아리 홍보전",
         startDate: date,
@@ -75,6 +79,7 @@ class ClubLocalProvider extends GetConnect {
       ),
       ClubSchedule(
         id: 4,
+        clubId: 1,
         clubName: "컴퓨터공학과 학생회",
         title: "회의해라 씨발 후배년들아",
         startDate: date,
@@ -136,6 +141,7 @@ class ClubLocalProvider extends GetConnect {
           calendarSchedules[date.toString().substring(0, 10)] = [
             ClubSchedule(
               id: 2 + i,
+              clubId: 1,
               clubName: "GDSC",
               title: "오픈 세미나",
               startDate: date,
@@ -143,6 +149,7 @@ class ClubLocalProvider extends GetConnect {
             ),
             ClubSchedule(
               id: 3 + i,
+              clubId: 1,
               clubName: "컴퓨터공학과 학생회",
               title: "회의해라 씨발 후배년들아",
               startDate: date,
@@ -154,6 +161,7 @@ class ClubLocalProvider extends GetConnect {
           calendarSchedules[date.toString().substring(0, 10)] = [
             ClubSchedule(
               id: 1 + i,
+              clubId: 1,
               clubName: "Farm System",
               title: "정기 회의",
               startDate: date,
@@ -161,6 +169,7 @@ class ClubLocalProvider extends GetConnect {
             ),
             ClubSchedule(
               id: 3 + i,
+              clubId: 1,
               clubName: "멋쟁이사자처럼",
               title: "동아리 홍보전",
               startDate: date,
@@ -168,6 +177,7 @@ class ClubLocalProvider extends GetConnect {
             ),
             ClubSchedule(
               id: 3 + i,
+              clubId: 1,
               clubName: "컴퓨터공학과 학생회",
               title: "회의해라 씨발 후배년들아",
               startDate: date,
@@ -179,6 +189,7 @@ class ClubLocalProvider extends GetConnect {
           calendarSchedules[date.toString().substring(0, 10)] = [
             ClubSchedule(
               id: 1 + i,
+              clubId: 1,
               clubName: "Farm System",
               title: "정기 회의",
               startDate: date,
@@ -186,6 +197,7 @@ class ClubLocalProvider extends GetConnect {
             ),
             ClubSchedule(
               id: 2 + i,
+              clubId: 1,
               clubName: "GDSC",
               title: "오픈 세미나",
               startDate: date,
@@ -193,6 +205,7 @@ class ClubLocalProvider extends GetConnect {
             ),
             ClubSchedule(
               id: 3 + i,
+              clubId: 1,
               clubName: "멋쟁이사자처럼",
               title: "동아리 홍보전",
               startDate: date,
@@ -200,6 +213,7 @@ class ClubLocalProvider extends GetConnect {
             ),
             ClubSchedule(
               id: 3 + i,
+              clubId: 1,
               clubName: "컴퓨터공학과 학생회",
               title: "회의해라 씨발 후배년들아",
               startDate: date,
@@ -217,6 +231,7 @@ class ClubLocalProvider extends GetConnect {
     List<ClubSchedule> clubSchedules = [
       ClubSchedule(
         id: 1,
+        clubId: 1,
         clubName: "Farm System",
         title: "정기 회의",
         startDate: date,
@@ -224,6 +239,7 @@ class ClubLocalProvider extends GetConnect {
       ),
       ClubSchedule(
         id: 2,
+        clubId: 1,
         clubName: "GDSC",
         title: "오픈 세미나",
         startDate: date,
@@ -231,6 +247,7 @@ class ClubLocalProvider extends GetConnect {
       ),
       ClubSchedule(
         id: 3,
+        clubId: 1,
         clubName: "멋쟁이사자처럼",
         title: "동아리 홍보전",
         startDate: date,
@@ -238,6 +255,7 @@ class ClubLocalProvider extends GetConnect {
       ),
       ClubSchedule(
         id: 4,
+        clubId: 1,
         clubName: "컴퓨터공학과 학생회",
         title: "회의해라 씨발 후배년들아",
         startDate: date,
@@ -248,7 +266,7 @@ class ClubLocalProvider extends GetConnect {
     return clubSchedules;
   }
 
-  List<ClubNotice> getClubDummyNotices(int page, int size) {
+  List<ClubNotice> getClubDummyNotices(int clubId, int page, int size) {
     DateTime date = DateTime.now();
 
     List<ClubNotice> clubNotices = [
@@ -317,7 +335,7 @@ class ClubLocalProvider extends GetConnect {
     return clubNotices;
   }
 
-  List<ClubSchedule> getClubDummySchedules(int page, int size) {
+  List<ClubSchedule> getClubDummySchedules(int clubId, int page, int size) {
     DateTime date = DateTime.now();
 
     List<ClubSchedule> clubSchedules = [
@@ -400,6 +418,31 @@ class ClubLocalProvider extends GetConnect {
           "[뒷풀이] 남산골 생고기 - 중구 서애로 5길 21",
       updatedDate: date,
       createdDate: date.subtract(const Duration(days: 1)),
+    );
+  }
+
+  ClubPlanDetail getClubDummyPlanDetail(int clubId, int scheduleId) {
+    DateTime date = DateTime.now();
+
+    return ClubPlanDetail(
+      id: scheduleId,
+      title: "정기 축구 연습",
+      content: "안녕하세요.\n"
+          "FC 세미콜론 주장, 이선호입니다.\n"
+          "이번주 정기 축구 연습은 10.1(월)입니다.\n"
+          "\n"
+          "오랜만에 다같이 축구한번하고 뒷풀이 합시다.\n"
+          "늦지 않게 오시길 바랍니다."
+          "\n\n[위치] 중구 서애로 5길 21 - 선호빌딩 123호\n"
+          "\n"
+          "[뒷풀이] 남산골 생고기 - 중구 서애로 5길 21",
+      startDate: date.add(const Duration(days: 5)),
+      endDate: date.add(const Duration(days: 5, hours: 2)),
+      updatedDate: date,
+      createdDate: date.subtract(const Duration(days: 1)),
+      isAgree: true,
+      numberOfAgree: 10,
+      numberOfDisagree: 2,
     );
   }
 }
