@@ -36,7 +36,7 @@ class _SearchClubScreenState extends State<SearchClubScreen> {
       backgroundColor: const Color(0xFFFFFFFF),
       appBar: const PreferredSize(
         preferredSize: Size.fromHeight(50),
-        child: DefaultAppBar(title: "JJoin"),
+        child: DefaultAppBar(title: "동아리 찾기"),
       ),
       body: Column(
         children: [
