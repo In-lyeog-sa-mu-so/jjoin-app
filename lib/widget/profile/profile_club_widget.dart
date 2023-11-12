@@ -45,15 +45,6 @@ class ProfileJoinedClub extends StatelessWidget {
                       onTap: () {
                         Get.to(() => const ClubScreen(),
                             arguments: clubs[index].clubId);
-                        //TODO getx로 변경
-                        // 클릭 시 DetailClubScreen으로 이동하며 clubId를 전달합니다.
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: (context) =>
-                        //         ClubScreen(clubId: clubs[index].clubId),
-                        //   ),
-                        // );
                       },
                       child: SizedBox(
                         width: 100,

@@ -50,12 +50,13 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: const Color(0xFFFFFFFF),
       appBar: const PreferredSize(
           preferredSize: Size.fromHeight(kToolbarHeight),
           child: DefaultBackAppbar(title: '프로필 수정')),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -126,11 +127,11 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
             const SizedBox(height: 15),
             Expanded(
               child: Container(
+                width: double.infinity,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(5),
                 ),
-                padding: EdgeInsets.all(10),
                 child: Column(
                   children: [
                     TextField(

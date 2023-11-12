@@ -84,7 +84,7 @@ class _ClubApplicationScreenState extends State<ClubApplicationScreen> {
             alignment: Alignment.centerRight,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.teal.shade400,
+                backgroundColor: Colors.teal.shade300,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
@@ -93,7 +93,7 @@ class _ClubApplicationScreenState extends State<ClubApplicationScreen> {
               child: const Text('제출',
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 16,
+                    fontSize: 18,
                   )),
             ),
           ),

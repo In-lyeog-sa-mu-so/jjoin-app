@@ -30,6 +30,8 @@ class ClubCard extends StatelessWidget {
         ),
       ),
       child: Card(
+        color: Colors.white,
+        elevation: 0.4,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -45,13 +47,12 @@ class ClubCard extends StatelessWidget {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  // 이미지 표시 부분 (임시로 placeholder 이미지 사용)
-                  Image.asset(
-                      club.profileImageUuid.isNotEmpty
-                          ? club.profileImageUuid
-                          : 'assets/images/dgu_image.png',
-                      height: 80,
-                      width: 80),
+                  CircleAvatar(
+                    radius: 40,
+                    backgroundImage: club.profileImageUuid.isNotEmpty
+                        ? AssetImage(club.profileImageUuid)
+                        : const AssetImage('assets/images/dgu_image.png'),
+                  ),
                   const SizedBox(width: 10),
                   Expanded(
                     child: Column(
