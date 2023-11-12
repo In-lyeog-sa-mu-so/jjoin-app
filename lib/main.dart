@@ -4,7 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/get.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:jjoin/screen/club_application_screen.dart';
+import 'package:jjoin/screen/application/club_application_screen.dart';
 import 'package:jjoin/screen/club/club_screen.dart';
 import 'package:jjoin/screen/root_screen.dart';
 

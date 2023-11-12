@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jjoin/repository/Profile/profile_repository.dart';
-import 'package:jjoin/screen/profile_edit_screen.dart';
-import 'package:jjoin/widget/profile/profile_club_widget.dart';
-import 'package:jjoin/widget/profile/profile_user_info_widget.dart';
+import 'package:jjoin/screen/profile/profile_edit_screen.dart';
 
-import '../model/profile/profile_user.dart';
-import '../widget/base/default_appbar.dart';
-import 'club/club_screen.dart';
+import '../../provider/Profile/profile_remote_provider.dart';
+import '../../provider/profile/profile_local_provider.dart';
+import '../../repository/profile/profile_repository.dart';
+import '../../viewmodel/profile/profile_viewmodel.dart';
+import '../../widget/base/default_appbar.dart';
+import '../../widget/profile/profile_club_widget.dart';
+import '../../widget/profile/profile_user_info_widget.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -17,23 +18,18 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  bool _isPushNotificationEnabled = false;
-  late User user;
-  List<JoinedClub> joinedClubs = [];
-  late Future<List<JoinedClub>> items;
+  late final ProfileViewModel _profileViewModel;
 
   @override
   void initState() {
     super.initState();
     // User 및 joinedClubs 초기화
-    user = ProfileRepository.getDummyUser();
-    joinedClubs = ProfileRepository.getDummyClubs();
-    // _loadItems 호출로 _items 초기화
-    items = _loadItems();
-  }
-
-  Future<List<JoinedClub>> _loadItems() async {
-    return joinedClubs;
+    _profileViewModel = Get.put<ProfileViewModel>(ProfileViewModel(
+      profileRepository: ProfileRepository(
+        profileLocalProvider: Get.put(ProfileLocalProvider()),
+        profileRemoteProvider: Get.put(ProfileRemoteProvider()),
+      ),
+    ));
   }
 
   @override
@@ -48,7 +44,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
       body: Column(
         children: [
-          ProfileUserInfo(user: user),
+          ProfileUserInfo(user: _profileViewModel.user!),
           const SizedBox(height: 15),
           Expanded(
             child: Container(
@@ -66,7 +62,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: ListView(
                 children: [
                   const SizedBox(height: 5),
-                  ProfileJoinedClub(items: items),
+                  ProfileJoinedClub(items: _profileViewModel.joinedClubs),
                   _buildOptions(context),
                   SizedBox(height: MediaQuery.of(context).padding.bottom),
                 ],
@@ -97,30 +93,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: Column(
           children: [
             _buildOptionItem(Icons.person, '프로필 편집', () {
-              const userDescription = " ";
-              Get.to(() => const ProfileEditScreen(
-                    userDescription: userDescription,
-                  ));
+              Get.to(() => const ProfileEditScreen());
             }),
-            ListTile(
-              leading: const Icon(Icons.notifications, size: 20), // 알람 아이콘 추가
-              title: const Text(
-                '앱 푸시 알림',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w300,
-                ),
-              ),
-              trailing: Switch(
-                value: _isPushNotificationEnabled,
-                onChanged: (bool value) {
-                  setState(() {
-                    _isPushNotificationEnabled = value;
-                  });
-                },
-              ),
-              onTap: () {}, // ListTile의 onTap을 비활성화
-            ),
+            Obx(() => ListTile(
+                  leading: const Icon(Icons.notifications, size: 20),
+                  title: const Text(
+                    '앱 푸시 알림',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w300,
+                    ),
+                  ),
+                  trailing: Switch(
+                    value: _profileViewModel.isPushNotificationEnabled,
+                    onChanged: _profileViewModel.togglePushNotification,
+                  ),
+                  onTap: () {},
+                )),
             _buildVersionListTile(),
           ],
         ),
