@@ -14,10 +14,10 @@ class ClubLocalProvider extends GetConnect {
       ClubHomeInfo(
         id: 1,
         name: "컴퓨터공학과 학생회",
-        description: "컴퓨터공학과 학생회입니다.",
+        introduction: "컴퓨터공학과 학생회입니다.",
         part: EClubPart.DEPARTMENT,
         memberCnt: 10,
-        imageURL:
+        imageUuid:
             "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
         leaderName: "김태욱",
         recentNotice: "컴퓨터공학과 학생회입니다.",
@@ -25,10 +25,10 @@ class ClubLocalProvider extends GetConnect {
       ClubHomeInfo(
         id: 2,
         name: "GDSC",
-        description: "모여서 가치를 만든다.",
+        introduction: "모여서 가치를 만든다.",
         part: EClubPart.UNION,
         memberCnt: 37,
-        imageURL:
+        imageUuid:
             "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
         leaderName: "서희찬",
         recentNotice: "11월 10일 오픈 세미나",
@@ -36,10 +36,10 @@ class ClubLocalProvider extends GetConnect {
       ClubHomeInfo(
         id: 3,
         name: "Farm System",
-        description: "코딩 제사를 지낸다.",
-        part: EClubPart.DEPARTMENT,
+        introduction: "코딩 제사를 지낸다.",
+        part: EClubPart.CENTRAL,
         memberCnt: 10,
-        imageURL:
+        imageUuid:
             "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
         leaderName: "서희찬",
         recentNotice: "11월 1일 정기 보고",

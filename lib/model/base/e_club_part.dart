@@ -12,4 +12,17 @@ enum EClubPart implements Comparable<EClubPart> {
   int compareTo(EClubPart other) {
     return name.compareTo(other.name);
   }
+
+  factory EClubPart.fromString(String part) {
+    switch (part) {
+      case "학과":
+        return EClubPart.DEPARTMENT;
+      case "연합":
+        return EClubPart.UNION;
+      case "중앙":
+        return EClubPart.CENTRAL;
+      default:
+        return EClubPart.DEPARTMENT;
+    }
+  }
 }

@@ -1,3 +1,4 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:jjoin/model/club/club_notice.dart';
 import 'package:jjoin/model/club/club_notice_detail.dart';
 import 'package:jjoin/model/club/club_plan_detail.dart';
@@ -10,6 +11,7 @@ import '../../provider/club/club_remote_provider.dart';
 import '../../utilities/date_time_util.dart';
 
 class ClubRepository {
+  static final String _imageUrl = dotenv.env['JJOIN_IMAGE_SERVER_URL']!;
   final ClubRemoteProvider clubRemoteProvider;
   final ClubLocalProvider clubLocalProvider;
 
@@ -24,8 +26,15 @@ class ClubRepository {
   }
 
   /* Home */
-  List<ClubHomeInfo> getHomeMyClubInfos() {
-    return clubLocalProvider.getHomeDummyMyClubInfos();
+  Future<List<ClubHomeInfo>> readJoinClubs() async {
+    Map<String, dynamic> data = await clubRemoteProvider.getJoinClubs();
+
+    return data["data"]
+        .map<ClubHomeInfo>((json) => ClubHomeInfo.fromJson(
+              json: json,
+              imageUrl: _imageUrl,
+            ))
+        .toList();
   }
 
   List<ClubSchedule> getHomeMyClubSchedules() {

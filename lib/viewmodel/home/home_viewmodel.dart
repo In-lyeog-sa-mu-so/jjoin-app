@@ -40,8 +40,13 @@ class HomeViewModel extends GetxController {
 
   void fetchClubHomeInfos() {
     _isLoadingClubHomeInfos.value = true;
-    _clubHomeInfos.value = clubRepository.getHomeMyClubInfos();
-    _isLoadingClubHomeInfos.value = false;
+    clubRepository
+        .readJoinClubs()
+        .then((value) => {
+              _clubHomeInfos.value = value,
+              print("fetchClubHomeInfos: ${_clubHomeInfos.length}")
+            })
+        .then((_) => _isLoadingClubHomeInfos.value = false);
   }
 
   void fetchSchedules() {

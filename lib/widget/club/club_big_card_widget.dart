@@ -29,7 +29,7 @@ class ClubBigCardWidget extends StatelessWidget {
       child: Column(
         children: [
           SizedBox.fromSize(size: const Size.fromHeight(10)),
-          item.imageURL.isEmpty
+          item.imageUuid.isEmpty
               ? SvgPicture.asset(
                   'assets/icons/icon_not_loading.svg',
                   width: 86,
@@ -38,7 +38,10 @@ class ClubBigCardWidget extends StatelessWidget {
               : CircleAvatar(
                   radius: 43,
                   backgroundColor: Colors.blue[300],
-                  backgroundImage: CachedNetworkImageProvider(item.imageURL),
+                  backgroundImage: CachedNetworkImageProvider(item.imageUuid),
+                  onBackgroundImageError: (exception, stackTrace) {
+                    print(exception);
+                  },
                 ),
           SizedBox.fromSize(size: const Size.fromHeight(10)),
           Text(
@@ -47,7 +50,7 @@ class ClubBigCardWidget extends StatelessWidget {
           ),
           SizedBox.fromSize(size: const Size.fromHeight(10)),
           Text(
-            item.description,
+            item.introduction,
             style: Theme.of(context).textTheme.bodyText2,
           ),
           SizedBox.fromSize(size: const Size.fromHeight(10)),
