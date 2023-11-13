@@ -41,7 +41,7 @@ class ClubRecommendItem extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
             child: Row(
               children: [
-                item.imageURL.isEmpty
+                item.imageUrl.isEmpty
                     ? SvgPicture.asset(
                         'assets/icons/icon_not_loading.svg',
                         width: 96,
@@ -51,7 +51,7 @@ class ClubRecommendItem extends StatelessWidget {
                         radius: 48,
                         backgroundColor: Colors.blue[300],
                         backgroundImage:
-                            CachedNetworkImageProvider(item.imageURL),
+                            CachedNetworkImageProvider(item.imageUrl),
                       ),
                 SizedBox.fromSize(size: const Size(20, 0)),
                 Column(
@@ -67,9 +67,9 @@ class ClubRecommendItem extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      item.description.length > 20
-                          ? '${item.description.substring(0, 20)}...'
-                          : item.description,
+                      item.introduction.length > 20
+                          ? '${item.introduction.substring(0, 20)}...'
+                          : item.introduction,
                       style: const TextStyle(
                         fontSize: 13,
                       ),

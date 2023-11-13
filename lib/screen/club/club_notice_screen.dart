@@ -32,7 +32,7 @@ class _ClubNoticeScreenState extends State<ClubNoticeScreen> {
         clubRepository: Get.put(
           ClubRepository(
             clubLocalProvider: Get.put(ClubLocalProvider()),
-            clubRemoteProvider: Get.put(ClubRemoteProvider()),
+            clubProvider: Get.put(ClubProvider()),
           ),
         ),
       ),

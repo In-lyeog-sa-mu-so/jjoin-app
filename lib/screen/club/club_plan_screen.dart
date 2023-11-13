@@ -35,7 +35,7 @@ class _ClubPlanScreenState extends State<ClubPlanScreen> {
         clubRepository: Get.put(
           ClubRepository(
             clubLocalProvider: Get.put(ClubLocalProvider()),
-            clubRemoteProvider: Get.put(ClubRemoteProvider()),
+            clubProvider: Get.put(ClubProvider()),
           ),
         ),
       ),

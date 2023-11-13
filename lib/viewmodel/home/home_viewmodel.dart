@@ -8,67 +8,101 @@ import '../../model/club/club_schedule.dart';
 class HomeViewModel extends GetxController {
   final ClubRepository clubRepository;
 
-  HomeViewModel({required this.clubRepository})
-      : assert(clubRepository != null);
+  HomeViewModel({required this.clubRepository});
 
   /* Club Home Info */
-  final RxList<ClubHomeInfo> _clubHomeInfos = RxList();
-  final RxBool _isLoadingClubHomeInfos = false.obs;
-  List<ClubHomeInfo> get clubHomeInfos => _clubHomeInfos;
-  bool get isLoadingClubHomeInfos => _isLoadingClubHomeInfos.value;
+  late final RxList<ClubHomeInfo> _userJoinClubs;
+  late final RxBool _isLoadingUserJoinClubs;
+  List<ClubHomeInfo> get userJoinClubs => _userJoinClubs;
+  bool get isLoadingUserJoinClubs => _isLoadingUserJoinClubs.value;
 
   /* Club Schedules */
-  final RxList<ClubSchedule> _schedules = RxList();
-  final RxBool _isLoadingSchedules = false.obs;
-  List<ClubSchedule> get schedules => _schedules;
-  bool get isLoadingSchedules => _isLoadingSchedules.value;
+  late final RxList<ClubSchedule> _userSchedules;
+  late final RxBool _isLoadingUserSchedules;
+  List<ClubSchedule> get userSchedules => _userSchedules;
+  bool get isLoadingUserSchedules => _isLoadingUserSchedules.value;
 
   /* Club Recommend */
-  final RxList<ClubRecommend> _clubRecommends = RxList();
-  final RxBool _isLoadingClubRecommends = false.obs;
-  List<ClubRecommend> get clubRecommends => _clubRecommends;
-  bool get isLoadingClubRecommends => _isLoadingClubRecommends.value;
+  late final RxList<ClubRecommend> _userRecommendClubs;
+  late final RxBool _isLoadingRecommendClubs;
+  List<ClubRecommend> get userRecommendClubs => _userRecommendClubs;
+  bool get isLoadingRecommendClubsForUser => _isLoadingRecommendClubs.value;
 
   @override
   void onInit() {
     super.onInit();
+    _isLoadingUserJoinClubs = false.obs;
+    _isLoadingUserSchedules = false.obs;
+    _isLoadingRecommendClubs = false.obs;
 
-    fetchClubHomeInfos();
-    fetchSchedules();
-    fetchClubRecommends();
+    initUserJoinClubs();
+    initUserSchedules();
+    initRecommendClubs();
   }
 
-  void fetchClubHomeInfos() {
-    _isLoadingClubHomeInfos.value = true;
+  /* Init Date */
+  void initUserJoinClubs() {
+    _isLoadingUserJoinClubs.value = true;
     clubRepository
-        .readJoinClubs()
-        .then((value) => {
-              _clubHomeInfos.value = value,
-              print("fetchClubHomeInfos: ${_clubHomeInfos.length}")
-            })
-        .then((_) => _isLoadingClubHomeInfos.value = false);
+        .readUserJoinClubs()
+        .then((value) => _userJoinClubs = value.obs)
+        .then((_) => _isLoadingUserJoinClubs.value = false);
   }
 
-  void fetchSchedules() {
-    _isLoadingSchedules.value = true;
-    _schedules.value = clubRepository.getHomeMyClubSchedules();
-    _isLoadingSchedules.value = false;
+  void initUserSchedules() {
+    _isLoadingUserSchedules.value = true;
+    clubRepository
+        .readUserSchedules()
+        .then((value) => _userSchedules = value.obs)
+        .then((value) => _isLoadingUserSchedules.value = false);
   }
 
-  void fetchClubRecommends() {
-    _isLoadingClubRecommends.value = true;
-    _clubRecommends.value = clubRepository.getHomeRecommendClubs();
-    _isLoadingClubRecommends.value = false;
+  void initRecommendClubs() {
+    _isLoadingRecommendClubs.value = true;
+    clubRepository
+        .readUserRecommendClubs()
+        .then((value) => _userRecommendClubs = value.obs)
+        .then((value) => _isLoadingRecommendClubs.value = false);
   }
 
-  bool updateSchedule(int id, bool isAgree) {
-    bool isSuccess = clubRepository.updateSchedule(id, isAgree);
+  /* fetch Date */
+  void fetchUserJoinClubs() {
+    _isLoadingUserJoinClubs.value = true;
+    clubRepository
+        .readUserJoinClubs()
+        .then((value) => _userJoinClubs.value = value)
+        .then((_) => _isLoadingUserJoinClubs.value = false);
+  }
+
+  void fetchUserSchedules() {
+    _isLoadingUserSchedules.value = true;
+    clubRepository
+        .readUserSchedules()
+        .then((value) => _userSchedules.value = value)
+        .then((value) => _isLoadingUserSchedules.value = false);
+  }
+
+  void fetchRecommendClubs() {
+    _isLoadingRecommendClubs.value = true;
+    clubRepository
+        .readUserRecommendClubs()
+        .then((value) => _userRecommendClubs.value = value)
+        .then((value) => _isLoadingRecommendClubs.value = false);
+  }
+
+  /* Update Data */
+  Future<bool> updateSchedule(int id, bool isAgree) async {
+    bool isSuccess = await clubRepository.updateSchedule(id, isAgree);
 
     if (isSuccess) {
-      _schedules.removeWhere((element) => element.id == id);
+      _userSchedules.removeWhere((element) => element.id == id);
       return true;
     } else {
       return false;
     }
+  }
+
+  void updateScheduleByUpdatingPlan(int id, bool isAgree) {
+    _userSchedules.removeWhere((element) => element.id == id);
   }
 }

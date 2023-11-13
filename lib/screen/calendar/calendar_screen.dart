@@ -17,7 +17,7 @@ class CalendarScreen extends StatelessWidget {
       Get.put<CalendarViewModel>(CalendarViewModel(
     clubRepository: ClubRepository(
       clubLocalProvider: Get.put(ClubLocalProvider()),
-      clubRemoteProvider: Get.put(ClubRemoteProvider()),
+      clubProvider: Get.put(ClubProvider()),
     ),
   ));
   CalendarScreen({super.key});

@@ -41,7 +41,7 @@ class ClubPlanDetailViewModel extends GetxController {
 
   bool updateSchedule(int id, bool isAgree) {
     bool? beforeIsAgree = _planDetail.value.isAgree;
-    bool isSuccess = clubRepository.updateSchedule(id, isAgree);
+    bool isSuccess = true;
 
     if (isSuccess) {
       if (beforeIsAgree == null) {

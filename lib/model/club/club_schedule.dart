@@ -5,6 +5,7 @@ class ClubSchedule {
   final DateTime startDate;
   final DateTime endDate;
   final String title;
+  final String content;
   final bool? isParticipate;
 
   ClubSchedule({
@@ -14,6 +15,7 @@ class ClubSchedule {
     required this.startDate,
     required this.endDate,
     required this.title,
+    required this.content,
     this.isParticipate,
   });
 
@@ -42,7 +44,21 @@ class ClubSchedule {
       startDate: startDate,
       endDate: endDate,
       title: title,
+      content: content,
       isParticipate: isParticipate,
+    );
+  }
+
+  factory ClubSchedule.fromJson({required Map<String, dynamic> json}) {
+    return ClubSchedule(
+      id: json["id"],
+      clubId: json["clubId"],
+      clubName: json["name"],
+      startDate: DateTime.parse(json["startDate"]),
+      endDate: DateTime.parse(json["endDate"]),
+      title: json["title"],
+      content: json["content"],
+      isParticipate: json["isParticipate"],
     );
   }
 }

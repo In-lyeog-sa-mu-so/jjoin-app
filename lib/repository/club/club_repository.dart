@@ -12,37 +12,44 @@ import '../../utilities/date_time_util.dart';
 
 class ClubRepository {
   static final String _imageUrl = dotenv.env['JJOIN_IMAGE_SERVER_URL']!;
-  final ClubRemoteProvider clubRemoteProvider;
+  final ClubProvider clubProvider;
   final ClubLocalProvider clubLocalProvider;
 
   ClubRepository({
-    required this.clubRemoteProvider,
+    required this.clubProvider,
     required this.clubLocalProvider,
-  }) : assert(clubRemoteProvider != null || clubLocalProvider != null);
+  }) : assert(clubProvider != null || clubLocalProvider != null);
 
   /* Common */
-  bool updateSchedule(int id, bool isAgree) {
-    return true;
+  Future<bool> updateSchedule(int id, bool isAgree) async {
+    return await clubProvider.patchSchedule(id);
   }
 
   /* Home */
-  Future<List<ClubHomeInfo>> readJoinClubs() async {
-    Map<String, dynamic> data = await clubRemoteProvider.getJoinClubs();
+  Future<List<ClubHomeInfo>> readUserJoinClubs() async {
+    Map<String, dynamic> data = await clubProvider.getJoinClubs();
 
     return data["data"]
-        .map<ClubHomeInfo>((json) => ClubHomeInfo.fromJson(
-              json: json,
-              imageUrl: _imageUrl,
-            ))
+        .map<ClubHomeInfo>(
+            (json) => ClubHomeInfo.fromJson(json: json, imageUrl: _imageUrl))
         .toList();
   }
 
-  List<ClubSchedule> getHomeMyClubSchedules() {
-    return clubLocalProvider.getHomeDummyMyClubSchedules();
+  Future<List<ClubSchedule>> readUserSchedules() async {
+    Map<String, dynamic> data = await clubProvider.getUserSchedules();
+
+    return data["data"]
+        .map<ClubSchedule>((json) => ClubSchedule.fromJson(json: json))
+        .toList();
   }
 
-  List<ClubRecommend> getHomeRecommendClubs() {
-    return clubLocalProvider.getHomeDummyRecommendClubs();
+  Future<List<ClubRecommend>> readUserRecommendClubs() async {
+    Map<String, dynamic> data = await clubProvider.getUserRecommendClubs();
+
+    return data["data"]
+        .map<ClubRecommend>(
+            (json) => ClubRecommend.fromJson(json: json, imageUrl: _imageUrl))
+        .toList();
   }
 
   /* Calendar */
