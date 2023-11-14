@@ -22,7 +22,12 @@ class ClubRecommendItem extends StatelessWidget {
         ),
         child: InkWell(
           onTap: () {
-            Get.toNamed('/clubs');
+            Get.toNamed(
+              '/clubs',
+              arguments: {
+                "clubId": item.id,
+              },
+            );
           },
           child: Container(
             margin: const EdgeInsets.fromLTRB(20, 8, 20, 8),
