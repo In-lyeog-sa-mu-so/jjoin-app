@@ -1,4 +1,5 @@
 enum EClubPart implements Comparable<EClubPart> {
+  NONE(name: "없음"),
   DEPARTMENT(name: "학과"),
   UNION(name: "연합"),
   CENTRAL(name: "중앙");
@@ -15,6 +16,8 @@ enum EClubPart implements Comparable<EClubPart> {
 
   factory EClubPart.fromString(String part) {
     switch (part) {
+      case "없음":
+        return EClubPart.NONE;
       case "학과":
         return EClubPart.DEPARTMENT;
       case "연합":

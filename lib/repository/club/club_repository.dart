@@ -1,5 +1,6 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/intl.dart';
+import 'package:jjoin/model/base/e_club_part.dart';
 import 'package:jjoin/model/club/club_notice.dart';
 import 'package:jjoin/model/club/club_notice_detail.dart';
 import 'package:jjoin/model/club/club_plan_detail.dart';
@@ -30,27 +31,45 @@ class ClubRepository {
   Future<List<ClubHomeInfo>> readUserJoinClubs() async {
     Map<String, dynamic> data = await clubProvider.getJoinClubs();
 
-    return data["data"]
+    var result = data["data"]
         .map<ClubHomeInfo>(
             (json) => ClubHomeInfo.fromJson(json: json, imageUrl: _imageUrl))
         .toList();
+
+    if (result.length == 0) {
+      result.add(ClubHomeInfo.empty());
+    }
+
+    return result;
   }
 
   Future<List<ClubSchedule>> readUserSchedules() async {
     Map<String, dynamic> data = await clubProvider.getUserSchedules();
 
-    return data["data"]
+    var result = data["data"]
         .map<ClubSchedule>((json) => ClubSchedule.fromJson(json: json))
         .toList();
+
+    if (result.length == 0) {
+      result.add(ClubSchedule.empty());
+    }
+
+    return result;
   }
 
   Future<List<ClubRecommend>> readUserRecommendClubs() async {
     Map<String, dynamic> data = await clubProvider.getUserRecommendClubs();
 
-    return data["data"]
+    var result = data["data"]
         .map<ClubRecommend>(
             (json) => ClubRecommend.fromJson(json: json, imageUrl: _imageUrl))
         .toList();
+
+    if (result.length == 0) {
+      result.add(ClubRecommend.empty());
+    }
+
+    return result;
   }
 
   /* Calendar */

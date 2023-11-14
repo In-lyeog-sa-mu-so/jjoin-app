@@ -34,4 +34,17 @@ class ClubHomeInfo {
       recentNotice: json["newestNotice"],
     );
   }
+
+  factory ClubHomeInfo.empty() {
+    return ClubHomeInfo(
+      id: 0,
+      name: "가입한 동아리가 없습니다.",
+      introduction: "동아리를 찾아보세요!",
+      imageUuid: "",
+      leaderName: "",
+      memberCnt: 0,
+      part: EClubPart.fromString("없음"),
+      recentNotice: "",
+    );
+  }
 }

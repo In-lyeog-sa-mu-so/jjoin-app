@@ -30,4 +30,16 @@ class ClubRecommend {
       tags: json["tags"].cast<String>(),
     );
   }
+
+  factory ClubRecommend.empty() {
+    return ClubRecommend(
+      id: 0,
+      name: "추천할 동아리가 없어요...ㅠㅠ",
+      introduction: "동아리를 찾아보세요!",
+      imageUrl: "",
+      memberCnt: 0,
+      part: EClubPart.fromString("없음"),
+      tags: [],
+    );
+  }
 }

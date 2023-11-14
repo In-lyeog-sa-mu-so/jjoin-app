@@ -47,6 +47,16 @@ class ClubSchedule {
     );
   }
 
+  factory ClubSchedule.empty() {
+    return ClubSchedule(
+      id: 0,
+      title: "일정이 없습니다.",
+      content: "미확정된 일정이 없습니다!!",
+      startDate: DateTime.now(),
+      endDate: DateTime.now(),
+    );
+  }
+
   factory ClubSchedule.fromJson({required Map<String, dynamic> json}) {
     return ClubSchedule(
       id: json["id"],
