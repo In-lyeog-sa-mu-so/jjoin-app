@@ -8,7 +8,7 @@ import 'package:jjoin/widget/club/club_recommend_item_widget.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../provider/club/club_local_provider.dart';
-import '../../provider/club/club_remote_provider.dart';
+import '../../provider/club/club_provider.dart';
 import '../../widget/club/club_big_card_widget.dart';
 
 class HomeScreen extends StatefulWidget {

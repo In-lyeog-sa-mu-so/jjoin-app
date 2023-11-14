@@ -8,27 +8,24 @@ import '../../model/club/club_schedule.dart';
 class CalendarViewModel extends GetxController {
   final ClubRepository clubRepository;
 
-  CalendarViewModel({required this.clubRepository})
-      : assert(clubRepository != null);
+  CalendarViewModel({required this.clubRepository});
 
   /* Calendar Date */
-  final Rx<CalendarDate> _calendarDate = CalendarDate.selectedDate(
-    selectedDate: DateTime.now(),
-  ).obs;
+  late final Rx<CalendarDate> _calendarDate;
   DateTime get selectedDate => _calendarDate.value.selectedDate;
   DateTime get focusedDate => _calendarDate.value.focusedDate;
 
   /* Calendar */
-  final Rx<CalendarFormat> _calendarFormat = CalendarFormat.week.obs;
-  final RxMap<String, List<ClubSchedule>> _calendarDays = RxMap({});
-  final RxBool _isLoadingCalendar = false.obs;
+  late final Rx<CalendarFormat> _calendarFormat;
+  late final RxMap<String, List<String>> _calendarDays;
+  late final RxBool _isLoadingCalendar;
   CalendarFormat get calendarFormat => _calendarFormat.value;
-  Map<String, List<ClubSchedule>> get calendarDays => _calendarDays;
-  bool get isLoadedCalendar => _isLoadingCalendar.value;
+  Map<String, List<String>> get calendarDays => _calendarDays;
+  bool get isLoadingCalendar => _isLoadingCalendar.value;
 
   /* Club Schedules */
-  final RxList<ClubSchedule> _schedules = RxList();
-  final RxBool _isLoadingSchedules = false.obs;
+  late final RxList<ClubSchedule> _schedules;
+  late final RxBool _isLoadingSchedules;
   List<ClubSchedule> get schedules => _schedules;
   bool get isLoadingSchedules => _isLoadingSchedules.value;
 
@@ -36,16 +33,40 @@ class CalendarViewModel extends GetxController {
   void onInit() {
     super.onInit();
 
-    fetchCalendarDays();
-    fetchSchedules();
+    _calendarDate = CalendarDate.selectedDate(selectedDate: DateTime.now()).obs;
+    _calendarFormat = CalendarFormat.week.obs;
+    _isLoadingCalendar = false.obs;
+
+    _isLoadingSchedules = true.obs;
+
+    initCalendarDays();
+    initSchedules();
   }
 
-  /* Fetch */
+  /* Init */
+  void initCalendarDays() {
+    _isLoadingCalendar.value = true;
+    clubRepository
+        .getCalendarSchedules(_calendarDate.value.focusedDate)
+        .then((value) => _calendarDays = value.obs)
+        .then((value) => _isLoadingCalendar.value = false);
+  }
+
+  void initSchedules() {
+    _isLoadingCalendar.value = true;
+    _schedules = clubRepository
+        .getCalendarScheduleForDate(_calendarDate.value.selectedDate)
+        .obs;
+    _isLoadingCalendar.value = false;
+  }
+
+  /* fetch */
   void fetchCalendarDays() {
     _isLoadingCalendar.value = true;
-    _calendarDays.value =
-        clubRepository.getCalendarSchedules(_calendarDate.value.focusedDate);
-    _isLoadingCalendar.value = false;
+    clubRepository
+        .getCalendarSchedules(_calendarDate.value.focusedDate)
+        .then((value) => _calendarDays.value = value)
+        .then((value) => _isLoadingCalendar.value = false);
   }
 
   void fetchSchedules() {

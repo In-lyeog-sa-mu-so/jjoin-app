@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../model/club/club_schedule.dart';
-
 class ScheduleDayItem extends StatelessWidget {
   final DateTime date;
   final bool isSelected;
-  final List<ClubSchedule> schedules;
+  final List<String> schedules;
   const ScheduleDayItem({
     Key? key,
     required this.date,
@@ -50,9 +48,9 @@ class ScheduleDayItem extends StatelessWidget {
             ),
             child: Center(
               child: Text(
-                schedules[i].title.length > 4
-                    ? "${schedules[i].title.substring(0, 4)}..."
-                    : schedules[i].title,
+                schedules[i].length > 4
+                    ? "${schedules[i].substring(0, 4)}..."
+                    : schedules[i],
                 style: const TextStyle(
                   fontSize: 10,
                   color: Colors.black,

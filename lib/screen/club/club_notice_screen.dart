@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:jjoin/widget/base/default_back_appbar.dart';
 
 import '../../provider/club/club_local_provider.dart';
-import '../../provider/club/club_remote_provider.dart';
+import '../../provider/club/club_provider.dart';
 import '../../repository/club/club_repository.dart';
 import '../../viewmodel/club/club_notice_detail_viewmodel.dart';
 

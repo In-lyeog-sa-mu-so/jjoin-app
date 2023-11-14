@@ -1,4 +1,5 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:intl/intl.dart';
 import 'package:jjoin/model/club/club_notice.dart';
 import 'package:jjoin/model/club/club_notice_detail.dart';
 import 'package:jjoin/model/club/club_plan_detail.dart';
@@ -7,7 +8,7 @@ import 'package:jjoin/model/club/club_schedule.dart';
 
 import '../../model/club/club_home_info.dart';
 import '../../provider/club/club_local_provider.dart';
-import '../../provider/club/club_remote_provider.dart';
+import '../../provider/club/club_provider.dart';
 import '../../utilities/date_time_util.dart';
 
 class ClubRepository {
@@ -18,7 +19,7 @@ class ClubRepository {
   ClubRepository({
     required this.clubProvider,
     required this.clubLocalProvider,
-  }) : assert(clubProvider != null || clubLocalProvider != null);
+  });
 
   /* Common */
   Future<bool> updateSchedule(int id, bool isAgree) async {
@@ -53,16 +54,33 @@ class ClubRepository {
   }
 
   /* Calendar */
-  Map<String, List<ClubSchedule>> getCalendarSchedules(DateTime focusedDate) {
+  Future<Map<String, List<String>>> getCalendarSchedules(
+      DateTime focusedDate) async {
     DateTime firstDayOfMonth = DateTimeUtil.getFirstDayOfCalendar(focusedDate);
     DateTime lastDayOfMonth = DateTimeUtil.getLastDayOfCalendar(focusedDate);
-    var response = clubLocalProvider.getCalendarDummySchedules(
-        firstDayOfMonth, lastDayOfMonth);
 
-    return response;
+    Map<String, dynamic> data = await clubProvider.getUserCalendar(
+      firstDayOfMonth,
+      lastDayOfMonth,
+    );
+
+    Map<String, List<String>> result = {};
+
+    // for (int i = 0; i < data["data"].length; i++) {
+    //   String date = DateFormat("yyyy-MM-dd")
+    //       .format(DateTime.parse(data["data"][i]["date"]));
+    //   List<String> schedules = data["data"][i]["scheduleDayDtos"]
+    //       .map<String>((json) => json["name"])
+    //       .toList();
+    //
+    //   result[date] = schedules;
+    // }
+
+    return result;
   }
 
   List<ClubSchedule> getCalendarScheduleForDate(DateTime date) {
+    print(date);
     return clubLocalProvider.getCalendarDummyScheduleForDate(date);
   }
 

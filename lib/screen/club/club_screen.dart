@@ -7,7 +7,7 @@ import 'package:jjoin/widget/club/club_disable_event_item_widget.dart';
 import 'package:jjoin/widget/club/club_plan_item_widget.dart';
 
 import '../../provider/club/club_local_provider.dart';
-import '../../provider/club/club_remote_provider.dart';
+import '../../provider/club/club_provider.dart';
 import '../../repository/club/club_repository.dart';
 import '../../widget/club/club_information_widget.dart';
 import '../../widget/club/club_notice_item_widget.dart';

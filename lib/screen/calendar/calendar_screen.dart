@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:jjoin/widget/base/default_appbar.dart';
 
 import '../../provider/club/club_local_provider.dart';
-import '../../provider/club/club_remote_provider.dart';
+import '../../provider/club/club_provider.dart';
 import '../../repository/club/club_repository.dart';
 import '../../viewmodel/calendar/calendar_viewmodel.dart';
 import '../../widget/calendar/schedule_calendar.dart';
