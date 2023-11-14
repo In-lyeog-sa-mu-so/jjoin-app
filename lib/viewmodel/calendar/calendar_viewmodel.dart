@@ -4,6 +4,7 @@ import 'package:table_calendar/table_calendar.dart';
 
 import '../../model/club/calendar_date.dart';
 import '../../model/club/club_schedule.dart';
+import '../home/home_viewmodel.dart';
 
 class CalendarViewModel extends GetxController {
   final ClubRepository clubRepository;
@@ -33,17 +34,20 @@ class CalendarViewModel extends GetxController {
   void onInit() {
     super.onInit();
 
-    _calendarDate = CalendarDate.selectedDate(selectedDate: DateTime.now()).obs;
-    _calendarFormat = CalendarFormat.week.obs;
-    _isLoadingCalendar = false.obs;
-
-    _isLoadingSchedules = true.obs;
-
+    initCalendarBase();
     initCalendarDays();
     initSchedules();
   }
 
   /* Init */
+  void initCalendarBase() {
+    _calendarDate = CalendarDate.selectedDate(selectedDate: DateTime.now()).obs;
+    _calendarFormat = CalendarFormat.week.obs;
+
+    _isLoadingCalendar = true.obs;
+    _isLoadingSchedules = true.obs;
+  }
+
   void initCalendarDays() {
     _isLoadingCalendar.value = true;
     clubRepository
@@ -53,27 +57,24 @@ class CalendarViewModel extends GetxController {
   }
 
   void initSchedules() {
-    _isLoadingCalendar.value = true;
-    _schedules = clubRepository
+    _isLoadingSchedules.value = true;
+    clubRepository
         .getCalendarScheduleForDate(_calendarDate.value.selectedDate)
-        .obs;
-    _isLoadingCalendar.value = false;
+        .then((value) => _schedules = value.obs)
+        .then((value) => _isLoadingSchedules.value = false);
   }
 
   /* fetch */
   void fetchCalendarDays() {
-    _isLoadingCalendar.value = true;
     clubRepository
         .getCalendarSchedules(_calendarDate.value.focusedDate)
-        .then((value) => _calendarDays.value = value)
-        .then((value) => _isLoadingCalendar.value = false);
+        .then((value) => _calendarDays.value = value);
   }
 
   void fetchSchedules() {
-    _isLoadingCalendar.value = true;
-    _schedules.value = clubRepository
-        .getCalendarScheduleForDate(_calendarDate.value.selectedDate);
-    _isLoadingCalendar.value = false;
+    clubRepository
+        .getCalendarScheduleForDate(_calendarDate.value.selectedDate)
+        .then((value) => _schedules.value = value);
   }
 
   /* Update */
@@ -104,20 +105,32 @@ class CalendarViewModel extends GetxController {
     _calendarFormat.value = format;
   }
 
-  bool updateSchedule(int id, bool isAgree) {
-    bool isSuccess = false;
-    clubRepository.updateSchedule(id, isAgree).then((value) => {
-          if (value)
-            {
-              _schedules.removeWhere((element) => element.id == id),
-              isSuccess = true
-            }
-          else
-            {
-              isSuccess = false,
-            }
-        });
+  Future<bool> updateSchedule(int id, bool isAgree) async {
+    bool isSuccess = await clubRepository.updateSchedule(id, isAgree);
 
-    return isSuccess;
+    if (isSuccess) {
+      fetchCalendarDays();
+      Get.find<HomeViewModel>().updateScheduleByUpdatingPlan(id, isAgree);
+      _schedules.value = _schedules.map((e) {
+        if (e.id == id) {
+          return e.copyWith(isAgreed: isAgree);
+        } else {
+          return e;
+        }
+      }).toList();
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  void updateScheduleByUpdatingSchedule(int id, bool isAgreed) {
+    _schedules.value = _schedules.map((e) {
+      if (e.id == id) {
+        return e.copyWith(isAgreed: isAgreed);
+      } else {
+        return e;
+      }
+    }).toList();
   }
 }

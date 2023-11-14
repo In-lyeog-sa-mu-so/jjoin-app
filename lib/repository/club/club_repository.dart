@@ -1,6 +1,5 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/intl.dart';
-import 'package:jjoin/model/base/e_club_part.dart';
 import 'package:jjoin/model/club/club_notice.dart';
 import 'package:jjoin/model/club/club_notice_detail.dart';
 import 'package:jjoin/model/club/club_plan_detail.dart';
@@ -24,7 +23,7 @@ class ClubRepository {
 
   /* Common */
   Future<bool> updateSchedule(int id, bool isAgree) async {
-    return await clubProvider.patchSchedule(id);
+    return await clubProvider.patchSchedule(id, isAgree);
   }
 
   /* Home */
@@ -85,22 +84,32 @@ class ClubRepository {
 
     Map<String, List<String>> result = {};
 
-    // for (int i = 0; i < data["data"].length; i++) {
-    //   String date = DateFormat("yyyy-MM-dd")
-    //       .format(DateTime.parse(data["data"][i]["date"]));
-    //   List<String> schedules = data["data"][i]["scheduleDayDtos"]
-    //       .map<String>((json) => json["name"])
-    //       .toList();
-    //
-    //   result[date] = schedules;
-    // }
+    for (int i = 0; i < data["data"].length; i++) {
+      String date = DateFormat('yyyy-MM-dd')
+          .format(DateTime.parse(data["data"][i]["date"]).toLocal());
+
+      List<String> names = [];
+      for (int j = 0; j < data["data"][i]["scheduleDayDtos"].length; j++) {
+        names.add(data["data"][i]["scheduleDayDtos"][j]["name"]);
+      }
+      result[date] = names;
+    }
 
     return result;
   }
 
-  List<ClubSchedule> getCalendarScheduleForDate(DateTime date) {
-    print(date);
-    return clubLocalProvider.getCalendarDummyScheduleForDate(date);
+  Future<List<ClubSchedule>> getCalendarScheduleForDate(DateTime date) async {
+    Map<String, dynamic> data = await clubProvider.getUserSchedulesByDate(date);
+
+    var result = data["data"]
+        .map<ClubSchedule>((json) => ClubSchedule.fromJson(json: json))
+        .toList();
+
+    if (result.length == 0) {
+      result.add(ClubSchedule.empty());
+    }
+
+    return result;
   }
 
   /* Club */

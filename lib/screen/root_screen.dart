@@ -23,7 +23,6 @@ class RootScreen extends StatelessWidget {
                     CustomBottomNavigationBarController.to.selectedIndex.value,
                 children: [
                   HomeScreen(),
-                  //ClubApplicationScreen(),
                   CalendarScreen(),
                   SearchClubScreen(),
                   ProfileScreen(),

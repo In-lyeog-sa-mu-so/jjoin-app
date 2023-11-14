@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:jjoin/model/club/club_recommend.dart';
 import 'package:jjoin/repository/club/club_repository.dart';
+import 'package:jjoin/viewmodel/calendar/calendar_viewmodel.dart';
 
 import '../../model/club/club_home_info.dart';
 import '../../model/club/club_schedule.dart';
@@ -96,6 +97,8 @@ class HomeViewModel extends GetxController {
 
     if (isSuccess) {
       _userSchedules.removeWhere((element) => element.id == id);
+      Get.find<CalendarViewModel>()
+          .updateScheduleByUpdatingSchedule(id, isAgree);
       return true;
     } else {
       return false;

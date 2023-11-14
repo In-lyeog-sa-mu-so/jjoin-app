@@ -4,12 +4,12 @@ import 'package:jjoin/repository/club/club_repository.dart';
 import 'package:jjoin/viewmodel/home/home_viewmodel.dart';
 import 'package:jjoin/widget/base/default_appbar.dart';
 import 'package:jjoin/widget/club/club_able_event_item_widget.dart';
-import 'package:jjoin/widget/club/club_recommend_item_widget.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../provider/club/club_local_provider.dart';
 import '../../provider/club/club_provider.dart';
 import '../../widget/club/club_big_card_widget.dart';
+import '../../widget/club/club_recommend_item_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -173,22 +173,24 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           )),
-          Obx(() => _viewModel.isLoadingRecommendClubsForUser
-              ? const SliverToBoxAdapter(
-                  child: SizedBox(
-                    height: 30,
+          Obx(
+            () => _viewModel.isLoadingRecommendClubsForUser
+                ? const SliverToBoxAdapter(
+                    child: SizedBox(
+                      height: 30,
+                    ),
+                  )
+                : SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        return ClubRecommendItem(
+                          item: _viewModel.userRecommendClubs[index],
+                        );
+                      },
+                      childCount: _viewModel.userRecommendClubs.length,
+                    ),
                   ),
-                )
-              : SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      return ClubRecommendItem(
-                        item: _viewModel.userRecommendClubs[index],
-                      );
-                    },
-                    childCount: _viewModel.userRecommendClubs.length,
-                  ),
-                )),
+          ),
         ],
       ),
     );

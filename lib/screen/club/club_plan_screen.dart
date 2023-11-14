@@ -26,8 +26,6 @@ class _ClubPlanScreenState extends State<ClubPlanScreen> {
     _clubId = Get.arguments["clubId"];
     _scheduleId = Get.arguments["scheduleId"];
 
-    print("clubId: $_clubId, scheduleId: $_scheduleId");
-
     _viewModel = Get.put(
       ClubPlanDetailViewModel(
         clubId: _clubId,

@@ -16,6 +16,7 @@ class ClubAbleEventItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(item.isParticipate);
     if (item.id != 0) {
       return Theme(
         data: ThemeData(

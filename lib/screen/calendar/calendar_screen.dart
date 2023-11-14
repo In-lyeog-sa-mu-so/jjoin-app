@@ -12,108 +12,143 @@ import '../../widget/calendar/schedule_calendar.dart';
 import '../../widget/club/club_able_event_item_widget.dart';
 import '../../widget/club/club_disable_event_item_widget.dart';
 
-class CalendarScreen extends StatelessWidget {
-  final CalendarViewModel _viewModel =
-      Get.put<CalendarViewModel>(CalendarViewModel(
-    clubRepository: ClubRepository(
-      clubLocalProvider: Get.put(ClubLocalProvider()),
-      clubProvider: Get.put(ClubProvider()),
-    ),
-  ));
-  CalendarScreen({super.key});
+class CalendarScreen extends StatefulWidget {
+  const CalendarScreen({super.key});
+
+  @override
+  State<CalendarScreen> createState() => _CalendarScreenState();
+}
+
+class _CalendarScreenState extends State<CalendarScreen> {
+  late final CalendarViewModel _viewModel;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _viewModel = Get.put<CalendarViewModel>(CalendarViewModel(
+      clubRepository: ClubRepository(
+          clubLocalProvider: Get.put(ClubLocalProvider()),
+          clubProvider: Get.put(ClubProvider())),
+    ));
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text("일정"),
+    return Scaffold(
+      backgroundColor: const Color(0xFFFFFFFF),
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(50),
+        child: DefaultAppBar(
+          title: "일정",
+        ),
+      ),
+      body: Center(
+        child: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: ScheduleCalendar(
+                viewModel: _viewModel,
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: Container(
+                margin: EdgeInsets.only(top: 10),
+                width: double.infinity,
+                height: 1,
+                color: Color(0xFFE5E5E5),
+              ),
+            ),
+            Obx(() => _viewModel.isLoadingSchedules
+                ? SliverToBoxAdapter(
+                    child: Container(
+                      margin: EdgeInsets.only(top: 10),
+                      width: double.infinity,
+                      height: 1,
+                      color: Color(0xFFE5E5E5),
+                    ),
+                  )
+                : SliverStickyHeader(
+                    header: Container(
+                      height: 50.0,
+                      color: Colors.white,
+                      padding: EdgeInsets.symmetric(horizontal: 16.0),
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        DateFormat('yyyy년 MM월 dd일')
+                            .format(_viewModel.selectedDate),
+                        style: const TextStyle(
+                          fontSize: 21,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    sliver: SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          // 스케줄의 startDate가 내일보다 이전이면 ClubDisAbleEventItem 반환
+                          if (_viewModel.schedules[index].startDate.isBefore(
+                              DateTime.now().add(const Duration(days: 1)))) {
+                            return ClubDisAbleEventItem(
+                              item: _viewModel.schedules[index],
+                            );
+                          } else {
+                            return ClubAbleEventItem(
+                              item: _viewModel.schedules[index],
+                              onAgree: (int id) {
+                                _viewModel
+                                    .updateSchedule(id, true)
+                                    .then((value) => {
+                                          if (!value)
+                                            {
+                                              Get.snackbar(
+                                                "통신 오류",
+                                                "동아리 일정 수락에 실패했습니다.",
+                                                duration: const Duration(
+                                                    seconds: 1,
+                                                    milliseconds: 500),
+                                                snackPosition:
+                                                    SnackPosition.TOP,
+                                                margin: const EdgeInsets.only(
+                                                    top: 30,
+                                                    left: 20,
+                                                    right: 20),
+                                              )
+                                            }
+                                        });
+                              },
+                              onDisagree: (int id) {
+                                _viewModel
+                                    .updateSchedule(id, false)
+                                    .then((value) => {
+                                          if (!value)
+                                            {
+                                              Get.snackbar(
+                                                "통신 오류",
+                                                "동아리 일정 수락에 실패했습니다.",
+                                                duration: const Duration(
+                                                    seconds: 1,
+                                                    milliseconds: 500),
+                                                snackPosition:
+                                                    SnackPosition.TOP,
+                                                margin: const EdgeInsets.only(
+                                                    top: 30,
+                                                    left: 20,
+                                                    right: 20),
+                                              )
+                                            }
+                                        });
+                              },
+                            );
+                          }
+                        },
+                        childCount: _viewModel.schedules.length,
+                      ),
+                    ),
+                  )),
+          ],
+        ),
+      ),
     );
-    // return Scaffold(
-    //   backgroundColor: const Color(0xFFFFFFFF),
-    //   appBar: const PreferredSize(
-    //     preferredSize: Size.fromHeight(50),
-    //     child: DefaultAppBar(
-    //       title: "일정",
-    //     ),
-    //   ),
-    //   body: Center(
-    //     child: CustomScrollView(
-    //       slivers: [
-    //         SliverToBoxAdapter(
-    //           child: ScheduleCalendar(
-    //             viewModel: _viewModel,
-    //           ),
-    //         ),
-    //         SliverToBoxAdapter(
-    //           child: Container(
-    //             margin: EdgeInsets.only(top: 10),
-    //             width: double.infinity,
-    //             height: 1,
-    //             color: Color(0xFFE5E5E5),
-    //           ),
-    //         ),
-    //         Obx(() => SliverStickyHeader(
-    //               header: Container(
-    //                 height: 50.0,
-    //                 color: Colors.white,
-    //                 padding: EdgeInsets.symmetric(horizontal: 16.0),
-    //                 alignment: Alignment.centerLeft,
-    //                 child: Text(
-    //                   DateFormat('yyyy년 MM월 dd일')
-    //                       .format(_viewModel.selectedDate),
-    //                   style: const TextStyle(
-    //                     fontSize: 21,
-    //                     fontWeight: FontWeight.bold,
-    //                   ),
-    //                 ),
-    //               ),
-    //               sliver: SliverList(
-    //                 delegate: SliverChildBuilderDelegate(
-    //                   (context, index) {
-    //                     // 스케줄의 startDate가 내일보다 이전이면 ClubDisAbleEventItem 반환
-    //                     if (_viewModel.schedules[index].startDate.isBefore(
-    //                         DateTime.now().add(const Duration(days: 1)))) {
-    //                       return ClubDisAbleEventItem(
-    //                         item: _viewModel.schedules[index],
-    //                       );
-    //                     } else {
-    //                       return ClubAbleEventItem(
-    //                         item: _viewModel.schedules[index],
-    //                         onAgree: (int id) {
-    //                           if (!_viewModel.updateSchedule(id, true)) {
-    //                             Get.snackbar(
-    //                               "통신 오류",
-    //                               "동아리 일정 수락에 실패했습니다.",
-    //                               duration: const Duration(
-    //                                   seconds: 1, milliseconds: 500),
-    //                               snackPosition: SnackPosition.TOP,
-    //                               margin: const EdgeInsets.only(
-    //                                   top: 30, left: 20, right: 20),
-    //                             );
-    //                           }
-    //                         },
-    //                         onDisagree: (int id) {
-    //                           if (!_viewModel.updateSchedule(id, false)) {
-    //                             Get.snackbar(
-    //                               "통신 오류",
-    //                               "동아리 일정 수락에 실패했습니다.",
-    //                               duration: const Duration(
-    //                                   seconds: 1, milliseconds: 500),
-    //                               snackPosition: SnackPosition.TOP,
-    //                               margin: const EdgeInsets.only(
-    //                                   top: 30, left: 20, right: 20),
-    //                             );
-    //                           }
-    //                         },
-    //                       );
-    //                     }
-    //                   },
-    //                   childCount: _viewModel.schedules.length,
-    //                 ),
-    //               ),
-    //             )),
-    //       ],
-    //     ),
-    //   ),
-    // );
   }
 }

@@ -6,13 +6,13 @@ class ClubProvider extends GetConnect {
   static final String _apiUrl = dotenv.env['JJOIN_API_SERVER_URL']!;
 
   /* Common */
-  Future<bool> patchSchedule(int scheduleId) async {
+  Future<bool> patchSchedule(int scheduleId, bool isAgree) async {
     Response? response;
     try {
       response = await patch(
-        "$_apiUrl/schedules/1",
+        "$_apiUrl/schedules/$scheduleId",
         {
-          "isAgree": true,
+          "isAgreed": isAgree,
         },
       );
     } catch (e) {
@@ -50,7 +50,6 @@ class ClubProvider extends GetConnect {
 
     // 통신 성공
     if (response.statusCode == 200) {
-      print(response.body);
       return response.body;
     } else {
       return {"data": []};
@@ -75,7 +74,6 @@ class ClubProvider extends GetConnect {
 
     // 통신 성공
     if (response.statusCode == 200) {
-      print(response.body);
       return response.body;
     } else {
       return {"data": []};
@@ -111,7 +109,7 @@ class ClubProvider extends GetConnect {
     Response? response;
     try {
       response = await get(
-        "$_apiUrl/users/schedules",
+        "$_apiUrl/schedules",
         query: {
           "startDate": DateFormat('yyyyMMdd').format(startDate),
           "endDate": DateFormat('yyyyMMdd').format(endDate),
@@ -136,7 +134,7 @@ class ClubProvider extends GetConnect {
     Response? response;
     try {
       response = await get(
-        "$_apiUrl/schedules/${DateFormat('yyyyMMdd').format(date)}",
+        "$_apiUrl/schedules/days/${DateFormat('yyyyMMdd').format(date)}",
       );
     } catch (e) {
       response = null;

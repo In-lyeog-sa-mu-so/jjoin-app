@@ -21,20 +21,23 @@ class ClubSchedule {
     this.isParticipate,
   });
 
-  // yyyy-MM-dd HH시 mm분 ~ yyyy-MM-dd HH시 mm분 형태로 리턴
-  // 만약 날짜가 같다면 yyyy-MM-dd HH시 mm분 ~ HH시 mm분 형태로 리턴
+  // yyyy-MM-dd HH:mm ~ yyyy-MM-dd HH:mm 형태로 리턴
+  // 만약 날짜가 같다면 yyyy-MM-dd HH:mm ~ HH:mm 형태로 리턴
   String get date {
-    String startDateString = DateFormat('yyyy-MM-dd HH시 mm분').format(startDate);
-    String endDateString = DateFormat('yyyy-MM-dd HH시 mm분').format(endDate);
+    String startDateStr = DateFormat('yyyy-MM-dd HH:mm').format(startDate);
+    String endDateStr = DateFormat('yyyy-MM-dd HH:mm').format(endDate);
 
-    if (startDateString.substring(0, 10) == endDateString.substring(0, 10)) {
-      return "${startDateString.substring(0, 10)} ${startDateString.substring(11, 16)} ~ ${endDateString.substring(11, 16)}";
-    } else {
-      return "$startDateString ~ $endDateString";
+    print(startDateStr + " ~ " + endDateStr);
+    if (startDate.year == endDate.year &&
+        startDate.month == endDate.month &&
+        startDate.day == endDate.day) {
+      endDateStr = DateFormat('HH:mm').format(endDate);
     }
+
+    return "$startDateStr ~ $endDateStr";
   }
 
-  ClubSchedule copyWith({required bool isParticipate}) {
+  ClubSchedule copyWith({required bool isAgreed}) {
     return ClubSchedule(
       id: id,
       clubId: clubId,
@@ -43,7 +46,7 @@ class ClubSchedule {
       endDate: endDate,
       title: title,
       content: content,
-      isParticipate: isParticipate,
+      isParticipate: isAgreed,
     );
   }
 
@@ -51,22 +54,23 @@ class ClubSchedule {
     return ClubSchedule(
       id: 0,
       title: "일정이 없습니다.",
-      content: "미확정된 일정이 없습니다!!",
+      content: "확정된 일정이 없습니다!!",
       startDate: DateTime.now(),
       endDate: DateTime.now(),
     );
   }
 
   factory ClubSchedule.fromJson({required Map<String, dynamic> json}) {
+    // parse할때 ksT로 해야함
     return ClubSchedule(
       id: json["id"],
       clubId: json["clubId"],
       clubName: json["name"],
-      startDate: DateTime.parse(json["startDate"]),
-      endDate: DateTime.parse(json["endDate"]),
+      startDate: DateTime.parse(json["startDate"]).toLocal(),
+      endDate: DateTime.parse(json["endDate"]).toLocal(),
       title: json["title"],
       content: json["content"],
-      isParticipate: json["isParticipate"],
+      isParticipate: json["isAgreed"],
     );
   }
 }
