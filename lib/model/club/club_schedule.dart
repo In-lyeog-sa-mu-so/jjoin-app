@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class ClubSchedule {
   final int id;
   final int? clubId;
@@ -5,6 +7,7 @@ class ClubSchedule {
   final DateTime startDate;
   final DateTime endDate;
   final String title;
+  final String content;
   final bool? isParticipate;
 
   ClubSchedule({
@@ -14,24 +17,21 @@ class ClubSchedule {
     required this.startDate,
     required this.endDate,
     required this.title,
+    required this.content,
     this.isParticipate,
   });
 
-  // yyyy-MM-dd HH:mm ~ yyyy-MM-dd HH:mm 형태로 리턴
-  // 만약 날짜가 같다면 yyyy-MM-dd HH:mm ~ HH:mm 형태로 리턴
+  // yyyy-MM-dd HH시 mm분 ~ yyyy-MM-dd HH시 mm분 형태로 리턴
+  // 만약 날짜가 같다면 yyyy-MM-dd HH시 mm분 ~ HH시 mm분 형태로 리턴
   String get date {
-    String start =
-        "${startDate.year}-${startDate.month}-${startDate.day} ${startDate.hour}:${startDate.minute}";
-    String end =
-        "${endDate.year}-${endDate.month}-${endDate.day} ${endDate.hour}:${endDate.minute}";
+    String startDateString = DateFormat('yyyy-MM-dd HH시 mm분').format(startDate);
+    String endDateString = DateFormat('yyyy-MM-dd HH시 mm분').format(endDate);
 
-    if (startDate.year == endDate.year &&
-        startDate.month == endDate.month &&
-        startDate.day == endDate.day) {
-      return "$start ~ ${endDate.hour}:${endDate.minute}";
+    if (startDateString.substring(0, 10) == endDateString.substring(0, 10)) {
+      return "${startDateString.substring(0, 10)} ${startDateString.substring(11, 16)} ~ ${endDateString.substring(11, 16)}";
+    } else {
+      return "$startDateString ~ $endDateString";
     }
-
-    return "$start ~ $end";
   }
 
   ClubSchedule copyWith({required bool isParticipate}) {
@@ -42,7 +42,31 @@ class ClubSchedule {
       startDate: startDate,
       endDate: endDate,
       title: title,
+      content: content,
       isParticipate: isParticipate,
+    );
+  }
+
+  factory ClubSchedule.empty() {
+    return ClubSchedule(
+      id: 0,
+      title: "일정이 없습니다.",
+      content: "미확정된 일정이 없습니다!!",
+      startDate: DateTime.now(),
+      endDate: DateTime.now(),
+    );
+  }
+
+  factory ClubSchedule.fromJson({required Map<String, dynamic> json}) {
+    return ClubSchedule(
+      id: json["id"],
+      clubId: json["clubId"],
+      clubName: json["name"],
+      startDate: DateTime.parse(json["startDate"]),
+      endDate: DateTime.parse(json["endDate"]),
+      title: json["title"],
+      content: json["content"],
+      isParticipate: json["isParticipate"],
     );
   }
 }

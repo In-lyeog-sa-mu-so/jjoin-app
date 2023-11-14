@@ -4,7 +4,7 @@ import 'package:jjoin/repository/club/club_repository.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
 import '../../provider/club/club_local_provider.dart';
-import '../../provider/club/club_remote_provider.dart';
+import '../../provider/club/club_provider.dart';
 import '../../viewmodel/club/club_plan_detail_viewmodel.dart';
 import '../../widget/base/default_back_appbar.dart';
 
@@ -35,7 +35,7 @@ class _ClubPlanScreenState extends State<ClubPlanScreen> {
         clubRepository: Get.put(
           ClubRepository(
             clubLocalProvider: Get.put(ClubLocalProvider()),
-            clubRemoteProvider: Get.put(ClubRemoteProvider()),
+            clubProvider: Get.put(ClubProvider()),
           ),
         ),
       ),

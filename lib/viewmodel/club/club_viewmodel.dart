@@ -52,6 +52,19 @@ class ClubViewModel extends GetxController {
   }
 
   bool updateSchedule(int id, bool isAgree) {
-    return clubRepository.updateSchedule(id, isAgree);
+    bool isSuccess = false;
+    clubRepository.updateSchedule(id, isAgree).then((value) => {
+          if (value)
+            {
+              _schedules.removeWhere((element) => element.id == id),
+              isSuccess = true
+            }
+          else
+            {
+              isSuccess = false,
+            }
+        });
+
+    return isSuccess;
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/get.dart';
@@ -11,7 +12,9 @@ import 'package:jjoin/screen/club/club_screen.dart';
 import 'package:jjoin/screen/root_screen.dart';
 
 void main() {
-  initializeDateFormatting().then((_) => runApp(const MyApp()));
+  initializeDateFormatting()
+      .then((_) => dotenv.load(fileName: 'assets/config/.env'))
+      .then((_) => runApp(const MyApp()));
 }
 
 class MyApp extends StatelessWidget {

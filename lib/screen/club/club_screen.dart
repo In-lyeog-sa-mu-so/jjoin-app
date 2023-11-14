@@ -7,7 +7,7 @@ import 'package:jjoin/widget/club/club_disable_event_item_widget.dart';
 import 'package:jjoin/widget/club/club_plan_item_widget.dart';
 
 import '../../provider/club/club_local_provider.dart';
-import '../../provider/club/club_remote_provider.dart';
+import '../../provider/club/club_provider.dart';
 import '../../repository/club/club_repository.dart';
 import '../../widget/club/club_information_widget.dart';
 import '../../widget/club/club_notice_item_widget.dart';
@@ -42,7 +42,7 @@ class _ClubScreenState extends State<ClubScreen>
       clubId: _clubId,
       clubRepository: ClubRepository(
         clubLocalProvider: Get.put(ClubLocalProvider()),
-        clubRemoteProvider: Get.put(ClubRemoteProvider()),
+        clubProvider: Get.put(ClubProvider()),
       ),
     ));
   }
@@ -56,72 +56,74 @@ class _ClubScreenState extends State<ClubScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFFFFFFF),
-      appBar: const PreferredSize(
+    return const Scaffold(
+      backgroundColor: Color(0xFFFFFFFF),
+      appBar: PreferredSize(
         preferredSize: Size.fromHeight(50),
         child: DefaultBackAppbar(
           title: "동아리",
         ),
       ),
-      body: Column(
-        children: [
-          ClubInformation(),
-          // 실선
-          Container(
-            margin: const EdgeInsets.only(
-              top: 10,
-            ),
-            height: 1,
-            color: Colors.grey[300],
-          ),
-          TabBar(
-            controller: _tabController,
-            indicatorColor: Colors.green,
-            labelColor: Colors.green,
-            // 올렸을 때 색 바꾸기
-            unselectedLabelColor: Colors.grey[600],
-            overlayColor: MaterialStateProperty.all(Colors.white),
-            labelStyle: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
-            tabs: const [
-              Tab(
-                text: "공지 사항",
-              ),
-              Tab(
-                text: "행사 일정",
-              ),
-            ],
-          ),
-          Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                ListView.builder(
-                  itemCount: _clubViewModel.notices.length,
-                  itemBuilder: (context, index) {
-                    return ClubNoticeItem(
-                      item: _clubViewModel.notices[index],
-                      clubId: _clubId,
-                    );
-                  },
-                ),
-                ListView.builder(
-                  itemCount: _clubViewModel.schedules.length,
-                  itemBuilder: (context, index) {
-                    return ClubPlanItem(
-                      clubId: _clubId,
-                      item: _clubViewModel.schedules[index],
-                    );
-                  },
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+      body: Text("동아리"),
     );
+    //   body: Column(
+    //     children: [
+    //       ClubInformation(),
+    //       // 실선
+    //       Container(
+    //         margin: const EdgeInsets.only(
+    //           top: 10,
+    //         ),
+    //         height: 1,
+    //         color: Colors.grey[300],
+    //       ),
+    //       TabBar(
+    //         controller: _tabController,
+    //         indicatorColor: Colors.green,
+    //         labelColor: Colors.green,
+    //         // 올렸을 때 색 바꾸기
+    //         unselectedLabelColor: Colors.grey[600],
+    //         overlayColor: MaterialStateProperty.all(Colors.white),
+    //         labelStyle: const TextStyle(
+    //           fontSize: 16,
+    //           fontWeight: FontWeight.bold,
+    //         ),
+    //         tabs: const [
+    //           Tab(
+    //             text: "공지 사항",
+    //           ),
+    //           Tab(
+    //             text: "행사 일정",
+    //           ),
+    //         ],
+    //       ),
+    //       Expanded(
+    //         child: TabBarView(
+    //           controller: _tabController,
+    //           children: [
+    //             ListView.builder(
+    //               itemCount: _clubViewModel.notices.length,
+    //               itemBuilder: (context, index) {
+    //                 return ClubNoticeItem(
+    //                   item: _clubViewModel.notices[index],
+    //                   clubId: _clubId,
+    //                 );
+    //               },
+    //             ),
+    //             ListView.builder(
+    //               itemCount: _clubViewModel.schedules.length,
+    //               itemBuilder: (context, index) {
+    //                 return ClubPlanItem(
+    //                   clubId: _clubId,
+    //                   item: _clubViewModel.schedules[index],
+    //                 );
+    //               },
+    //             ),
+    //           ],
+    //         ),
+    //       ),
+    //     ],
+    //   ),
+    // );
   }
 }

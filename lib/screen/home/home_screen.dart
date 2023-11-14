@@ -7,15 +7,9 @@ import 'package:jjoin/widget/club/club_able_event_item_widget.dart';
 import 'package:jjoin/widget/club/club_recommend_item_widget.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-import '../../model/base/e_club_part.dart';
-import '../../model/club/club_home_info.dart';
-import '../../model/club/club_recommend.dart';
 import '../../provider/club/club_local_provider.dart';
-import '../../provider/club/club_remote_provider.dart';
+import '../../provider/club/club_provider.dart';
 import '../../widget/club/club_big_card_widget.dart';
-import 'package:flutter/foundation.dart' as foundation;
-
-import '../../widget/club/club_disable_event_item_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -26,17 +20,17 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late final PageController _pageController;
-  late final HomeViewModel _homeViewModel;
+  late final HomeViewModel _viewModel;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _pageController = PageController(initialPage: 0, viewportFraction: 0.922);
-    _homeViewModel = Get.put<HomeViewModel>(HomeViewModel(
+    _viewModel = Get.put<HomeViewModel>(HomeViewModel(
       clubRepository: ClubRepository(
         clubLocalProvider: Get.put(ClubLocalProvider()),
-        clubRemoteProvider: Get.put(ClubRemoteProvider()),
+        clubProvider: Get.put(ClubProvider()),
       ),
     ));
   }
@@ -46,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
     // TODO: implement dispose
     super.dispose();
     _pageController.dispose();
-    _homeViewModel.dispose();
+    _viewModel.dispose();
   }
 
   @override
@@ -61,110 +55,112 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: CustomScrollView(
         slivers: [
-          SliverToBoxAdapter(
-            child: SizedBox(
-              height: 310,
-              child: PageView.builder(
-                controller: _pageController,
-                onPageChanged: (int index) {
-                  setState(() {});
-                },
-                itemCount: _homeViewModel.clubHomeInfos.length,
-                itemBuilder: (context, index) {
-                  return ClubBigCardWidget(
-                    item: _homeViewModel.clubHomeInfos[index],
-                  );
-                },
-              ),
-            ),
-          ),
-          SliverPadding(
-            padding: const EdgeInsets.fromLTRB(25, 10, 0, 10),
-            sliver: SliverToBoxAdapter(
-              child: Center(
-                child: SmoothPageIndicator(
-                  controller: _pageController, // PageController
-                  count: 3,
-                  // forcing the indicator to use a specific direction
-                  textDirection: TextDirection.ltr,
-                  effect: const WormEffect(
-                    dotColor: Color(0xFFE5E5E5),
-                    activeDotColor: Color(0xFF56D57F),
-                    dotHeight: 10,
-                    dotWidth: 10,
-                    spacing: 10,
+          Obx(() => _viewModel.isLoadingUserJoinClubs
+              ? const SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: 310,
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
                   ),
-                ),
-              ),
-            ),
-          ),
-          Obx(() => SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    return ClubAbleEventItem(
-                      item: _homeViewModel.schedules[index],
-                      onAgree: (int id) {
-                        if (!_homeViewModel.updateSchedule(id, true)) {
-                          Get.snackbar(
-                            "통신 오류",
-                            "동아리 일정 수락에 실패했습니다.",
-                            duration:
-                                const Duration(seconds: 1, milliseconds: 500),
-                            snackPosition: SnackPosition.TOP,
-                            margin: const EdgeInsets.only(
-                                top: 30, left: 20, right: 20),
-                          );
-                        }
+                )
+              : SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: 310,
+                    child: PageView.builder(
+                      controller: _pageController,
+                      onPageChanged: (int index) {
+                        setState(() {});
                       },
-                      onDisagree: (int id) {
-                        if (!_homeViewModel.updateSchedule(id, false)) {
-                          Get.snackbar(
-                            "통신 오류",
-                            "동아리 일정 수락에 실패했습니다.",
-                            duration:
-                                const Duration(seconds: 1, milliseconds: 500),
-                            snackPosition: SnackPosition.TOP,
-                            margin: const EdgeInsets.only(
-                                top: 30, left: 20, right: 20),
-                          );
-                        }
+                      itemCount: _viewModel.userJoinClubs.length,
+                      itemBuilder: (context, index) {
+                        return ClubBigCardWidget(
+                          item: _viewModel.userJoinClubs[index],
+                        );
                       },
-                    );
-                    // return ClubAbleEventItem(
-                    //   item: _homeViewModel.schedules[index],
-                    //   onAgree: (int id) {
-                    //     if (!_homeViewModel.updateSchedule(id, true)) {
-                    //       Get.snackbar(
-                    //         "통신 오류",
-                    //         "동아리 일정 수락에 실패했습니다.",
-                    //         duration:
-                    //             const Duration(seconds: 1, milliseconds: 500),
-                    //         snackPosition: SnackPosition.TOP,
-                    //         margin: const EdgeInsets.only(
-                    //             top: 30, left: 20, right: 20),
-                    //       );
-                    //     }
-                    //   },
-                    //   onDisagree: (int id) {
-                    //     if (!_homeViewModel.updateSchedule(id, false)) {
-                    //       Get.snackbar(
-                    //         "통신 오류",
-                    //         "동아리 일정 수락에 실패했습니다.",
-                    //         duration:
-                    //             const Duration(seconds: 1, milliseconds: 500),
-                    //         snackPosition: SnackPosition.TOP,
-                    //         margin: const EdgeInsets.only(
-                    //             top: 30, left: 20, right: 20),
-                    //       );
-                    //     }
-                    //   },
-                    // );
-                  },
-                  childCount: _homeViewModel.schedules.length > 3
-                      ? 3
-                      : _homeViewModel.schedules.length,
-                ),
-              )),
+                    ),
+                  ),
+                )),
+          Obx(() => _viewModel.isLoadingUserJoinClubs
+              ? const SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: 30,
+                  ),
+                )
+              : SliverPadding(
+                  padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                  sliver: SliverToBoxAdapter(
+                    child: Center(
+                      child: SmoothPageIndicator(
+                        controller: _pageController, // PageController
+                        count: _viewModel.userJoinClubs.length,
+                        // forcing the indicator to use a specific direction
+                        textDirection: TextDirection.ltr,
+                        effect: const WormEffect(
+                          dotColor: Color(0xFFE5E5E5),
+                          activeDotColor: Color(0xFF56D57F),
+                          dotHeight: 10,
+                          dotWidth: 10,
+                          spacing: 10,
+                        ),
+                      ),
+                    ),
+                  ),
+                )),
+          Obx(() => _viewModel.isLoadingUserSchedules
+              ? const SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: 30,
+                  ),
+                )
+              : SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      return ClubAbleEventItem(
+                        item: _viewModel.userSchedules[index],
+                        onAgree: (int id) {
+                          _viewModel.updateSchedule(id, false).then(
+                                (isSuccess) => {
+                                  if (!isSuccess)
+                                    {
+                                      Get.snackbar(
+                                        "통신 오류",
+                                        "동아리 일정 수락에 실패했습니다.",
+                                        duration: const Duration(
+                                            seconds: 1, milliseconds: 500),
+                                        snackPosition: SnackPosition.TOP,
+                                        margin: const EdgeInsets.only(
+                                            top: 30, left: 20, right: 20),
+                                      )
+                                    }
+                                },
+                              );
+                        },
+                        onDisagree: (int id) {
+                          _viewModel.updateSchedule(id, false).then(
+                                (isSuccess) => {
+                                  if (!isSuccess)
+                                    {
+                                      Get.snackbar(
+                                        "통신 오류",
+                                        "동아리 일정 수락에 실패했습니다.",
+                                        duration: const Duration(
+                                            seconds: 1, milliseconds: 500),
+                                        snackPosition: SnackPosition.TOP,
+                                        margin: const EdgeInsets.only(
+                                            top: 30, left: 20, right: 20),
+                                      )
+                                    }
+                                },
+                              );
+                        },
+                      );
+                    },
+                    childCount: _viewModel.userSchedules.length > 5
+                        ? 5
+                        : _viewModel.userSchedules.length,
+                  ),
+                )),
           const SliverToBoxAdapter(
               child: Padding(
             // 왼쪽만 패딩
@@ -177,18 +173,22 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           )),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                return ClubRecommendItem(
-                  item: _homeViewModel.clubRecommends[index],
-                );
-              },
-              childCount: _homeViewModel.clubRecommends.length > 3
-                  ? 3
-                  : _homeViewModel.clubRecommends.length,
-            ),
-          ),
+          Obx(() => _viewModel.isLoadingRecommendClubsForUser
+              ? const SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: 30,
+                  ),
+                )
+              : SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      return ClubRecommendItem(
+                        item: _viewModel.userRecommendClubs[index],
+                      );
+                    },
+                    childCount: _viewModel.userRecommendClubs.length,
+                  ),
+                )),
         ],
       ),
     );
