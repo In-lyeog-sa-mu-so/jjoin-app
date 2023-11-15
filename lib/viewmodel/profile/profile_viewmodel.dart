@@ -7,16 +7,17 @@ import '../../model/profile/profile_user.dart';
 class ProfileViewModel extends GetxController {
   final ProfileRepository profileRepository;
 
-  ProfileViewModel({required this.profileRepository})
-      : assert(profileRepository != null);
+  ProfileViewModel({required this.profileRepository});
 
-  final Rx<User?> _user = Rx<User?>(null);
-  final RxBool _isLoadingUser = false.obs;
-  User? get user => _user.value;
-  bool get isLoadingUser => _isLoadingUser.value;
+  /* User Profile */
+  late final Rx<User> _userInfo;
+  late final RxBool _isLoadingUserInfo;
+  User get userInfo => _userInfo.value;
+  bool get isLoadingUserInfo => _isLoadingUserInfo.value;
 
-  final RxList<JoinedClub> _joinedClubs = RxList();
-  final RxBool _isLoadingJoinedClubs = false.obs;
+  /* Club Joined */
+  late final RxList<JoinedClub> _joinedClubs;
+  late final RxBool _isLoadingJoinedClubs;
   List<JoinedClub> get joinedClubs => _joinedClubs;
   bool get isLoadingJoinedClubs => _isLoadingJoinedClubs.value;
 
@@ -27,21 +28,45 @@ class ProfileViewModel extends GetxController {
 
   @override
   void onInit() {
+    _isLoadingUserInfo = false.obs;
+    _isLoadingJoinedClubs = false.obs;
+
     super.onInit();
-    fetchUser();
-    fetchJoinedClubs();
+
+    initUserInfo();
+    initJoinedClubs();
   }
 
-  void fetchUser() {
-    _isLoadingUser.value = true;
-    _user.value = profileRepository.getUser();
-    _isLoadingUser.value = false;
+  void initUserInfo() {
+    _isLoadingUserInfo.value = true;
+    profileRepository
+        .readUserInfo()
+        .then((value) => _userInfo = value.obs)
+        .then((_) => _isLoadingUserInfo.value = false);
+  }
+
+  void initJoinedClubs() {
+    _isLoadingJoinedClubs.value = true;
+    profileRepository
+        .readUserJoinClubs()
+        .then((value) => _joinedClubs = value.obs)
+        .then((value) => _isLoadingJoinedClubs.value = false);
+  }
+
+  void fetchUserInfo() {
+    _isLoadingUserInfo.value = true;
+    profileRepository
+        .readUserInfo()
+        .then((value) => _userInfo.value = value)
+        .then((_) => _isLoadingUserInfo.value = false);
   }
 
   void fetchJoinedClubs() {
     _isLoadingJoinedClubs.value = true;
-    _joinedClubs.value = profileRepository.getClubs();
-    _isLoadingJoinedClubs.value = false;
+    profileRepository
+        .readUserJoinClubs()
+        .then((value) => _joinedClubs.value = value)
+        .then((value) => _isLoadingJoinedClubs.value = false);
   }
 
   void togglePushNotification(bool value) {

@@ -1,10 +1,12 @@
+import 'dart:io';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:io';
 import 'package:get/get.dart';
 
-import '../../provider/Profile/profile_remote_provider.dart';
 import '../../provider/profile/profile_local_provider.dart';
+import '../../provider/profile/profile_provider.dart';
 import '../../repository/profile/profile_repository.dart';
 import '../../viewmodel/profile/profile_edit_viewmodel.dart';
 import '../../widget/base/default_back_appbar.dart';
@@ -23,29 +25,30 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
   late TextEditingController _descriptionController;
 
   @override
+  void dispose() {
+    super.dispose();
+    _descriptionController.dispose();
+  }
+
+  @override
   void initState() {
     super.initState();
     _profileEditViewModel = Get.put<ProfileEditViewModel>(ProfileEditViewModel(
       profileRepository: ProfileRepository(
         profileLocalProvider: Get.put(ProfileLocalProvider()),
-        profileRemoteProvider: Get.put(ProfileRemoteProvider()),
+        profileProvider: Get.put(ProfileProvider()),
       ),
     ));
     _descriptionController =
-        TextEditingController(text: _profileEditViewModel.user!.introduction);
-  }
-
-  @override
-  void dispose() {
-    _descriptionController.dispose();
-    super.dispose();
+        TextEditingController(text: Get.arguments['introduction']);
   }
 
   Future<void> _pickImage() async {
-    final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
+    XFile? pickedFile = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+    );
     if (pickedFile != null) {
-      _profileEditViewModel.updateProfileImage(File(pickedFile.path));
+      _profileEditViewModel.saveImage(File(pickedFile.path));
     }
   }
 
@@ -79,14 +82,25 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  GestureDetector(
-                    onTap: _pickImage,
-                    child: CircleAvatar(
-                      radius: 60,
-                      backgroundImage: AssetImage(
-                          _profileEditViewModel.user!.profileImageUuid),
-                    ),
-                  ),
+                  Obx(() {
+                    if (!_profileEditViewModel.isLoadingUserInfo) {
+                      return GestureDetector(
+                        onTap: _pickImage,
+                        child: CircleAvatar(
+                          radius: 60,
+                          backgroundImage: CachedNetworkImageProvider(
+                              _profileEditViewModel.userInfo.profileImageUuid),
+                        ),
+                      );
+                    } else {
+                      //위의 circleavatar와 같은 크기로
+                      return const SizedBox(
+                        width: 120,
+                        height: 120,
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                  }),
                   const SizedBox(width: 16),
                   Expanded(
                     child: Padding(
@@ -97,7 +111,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                           Padding(
                             padding: const EdgeInsets.only(top: 6.0),
                             child: Text(
-                              _profileEditViewModel.user!.name,
+                              Get.arguments['name'],
                               style: const TextStyle(
                                 fontSize: 22,
                                 fontWeight: FontWeight.w800,
@@ -106,17 +120,15 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                           ),
                           Padding(
                             padding: const EdgeInsets.only(top: 4.0),
-                            child:
-                                Text('전공: ${_profileEditViewModel.user!.major}',
-                                    style: const TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w300,
-                                    )),
+                            child: Text('전공: ${Get.arguments['major']}',
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w300,
+                                )),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(top: 4.0),
-                            child: Text(
-                                '학번: ${_profileEditViewModel.user!.studentId.toString()}',
+                            child: Text('학번: ${Get.arguments['id']}',
                                 style: const TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w300,
@@ -176,7 +188,6 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                           onPressed: () {
                             _profileEditViewModel.saveProfile(
                               _descriptionController.text,
-                              _profileEditViewModel.newImage,
                             );
                           },
                           child: const Text('저장하기'),

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -43,7 +44,8 @@ class ProfileUserInfo extends StatelessWidget {
                   children: [
                     CircleAvatar(
                       radius: 60,
-                      backgroundImage: AssetImage(user.profileImageUuid),
+                      backgroundImage:
+                          CachedNetworkImageProvider(user.profileImageUuid),
                     ),
                     const SizedBox(width: 16),
                     Expanded(
@@ -70,7 +72,7 @@ class ProfileUserInfo extends StatelessWidget {
                           ),
                           Padding(
                             padding: const EdgeInsets.only(top: 5),
-                            child: Text('학번: ${user.studentId.toString()}',
+                            child: Text('학번: ${user.id.toString()}',
                                 style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w400,

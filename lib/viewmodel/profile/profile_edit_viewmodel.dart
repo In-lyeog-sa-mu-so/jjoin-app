@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:get/get.dart';
-
+import 'package:jjoin/viewmodel/profile/profile_viewmodel.dart';
 import '../../model/profile/profile_user.dart';
 import '../../repository/profile/profile_repository.dart';
 
@@ -10,53 +10,76 @@ class ProfileEditViewModel extends GetxController {
 
   ProfileEditViewModel({
     required this.profileRepository,
-  }) : assert(profileRepository != null);
+  });
 
-  final Rx<User?> _user = Rx<User?>(null);
-  final RxBool _isLoadingUser = false.obs;
-  User? get user => _user.value;
-  bool get isLoadingUser => _isLoadingUser.value;
+  late final Rx<User> _userInfo;
+  late final RxBool _isLoadingUserInfo;
+  User get userInfo => _userInfo.value;
+  bool get isLoadingUserInfo => _isLoadingUserInfo.value;
 
-  final RxBool _isEditingText = false.obs;
+  late final RxBool _isEditingText;
   bool get isEditingText => _isEditingText.value;
 
-  final Rx<File?> _newImage = Rx<File?>(null);
-  File? get newImage => _newImage.value;
-
-  void updateProfileImage(File? newImage) {
-    _newImage.value = newImage;
-  }
+  late final Rx<File> _newImage;
+  File get newImage => _newImage.value;
+  set newImage(File value) => _newImage.value = value;
 
   void startEditing() {
     _isEditingText.value = true;
   }
 
-  void saveProfile(String introduction, File? newImage) {
-    if (isLoadingUser) return; // Don't proceed if user data is still loading
-    // Logic to handle saving the profile
-    if (introduction != null) {
-      // Update the user's introduction
-      print(introduction);
+  void saveImage(File uploadImage) {
+    _newImage.value = uploadImage;
+  }
+
+  void saveProfile(String introduction) async {
+    bool shouldUpdateImage =
+        _newImage.value != null && _newImage.value.path.isNotEmpty;
+    bool shouldUpdateIntroduction = introduction.isNotEmpty;
+
+    if (shouldUpdateImage || shouldUpdateIntroduction) {
+      bool result = await profileRepository.saveUserProfile(
+        shouldUpdateImage
+            ? _newImage.value
+            : null, // Pass null if no image is to be updated
+        introduction,
+      );
+      if (result) {
+        await fetchUserInfo();
+        Get.find<ProfileViewModel>().fetchUserInfo();
+        // You may want to update the user interface or provide a success message
+      } else {
+        Get.snackbar('Error', '프로필 업데이트 실패');
+      }
+    } else {
+      Get.snackbar('Error', '업데이트할 데이터가 없습니다.');
     }
-    if (newImage != null) {
-      // You'd typically handle file uploading here, then update the user's profile image URL
-      // For example, upload the file and on success update user's profileImageUuid
-      print(newImage.path);
-    }
-    //TODO
-    // profileRepository.saveUserProfile(user!);
-    _isEditingText.value = false;
   }
 
   @override
   void onInit() {
+    _isEditingText = false.obs;
+    _newImage = File('').obs;
+    _isLoadingUserInfo = false.obs;
+
     super.onInit();
-    fetchUser();
+
+    initUserInfo();
   }
 
-  void fetchUser() {
-    _isLoadingUser.value = true;
-    _user.value = profileRepository.getUser();
-    _isLoadingUser.value = false;
+  void initUserInfo() {
+    _isLoadingUserInfo.value = true;
+    profileRepository
+        .readUserInfo()
+        .then((value) => _userInfo = value.obs)
+        .then((_) => _isLoadingUserInfo.value = false);
+  }
+
+  Future<void> fetchUserInfo() async {
+    _isLoadingUserInfo.value = true;
+    var value = await profileRepository.readUserInfo();
+    _userInfo.value = value;
+    update(); // UI를 갱신하기 위해 GetX의 update() 호출
+    _isLoadingUserInfo.value = false;
   }
 }

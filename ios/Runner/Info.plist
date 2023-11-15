@@ -45,6 +45,8 @@
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSPhotoLibraryUsageDescription</key>
+    <string></string>
 	<key>NSCameraUsageDescription</key>
 	<string>카메라 권한이 필요합니다.</string>
 	<key>NSMicrophoneUsageDescription</key>

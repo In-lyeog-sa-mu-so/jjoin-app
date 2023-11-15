@@ -25,11 +25,6 @@ class _ClubApplicationScreenState extends State<ClubApplicationScreen> {
         applicationProvider: Get.put(ApplicationProvider()),
       ),
     ));
-    // for (var question in _applicationViewModel.applicationForm!.questions) {
-    //   _applicationViewModel.controllers[question.questionId] =
-    //       TextEditingController();
-    //   _applicationViewModel.answers[question.questionId] = '';
-    // }
   }
 
   @override

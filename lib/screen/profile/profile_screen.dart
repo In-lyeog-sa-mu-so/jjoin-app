@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jjoin/screen/profile/profile_edit_screen.dart';
 
-import '../../provider/Profile/profile_remote_provider.dart';
 import '../../provider/profile/profile_local_provider.dart';
+import '../../provider/profile/profile_provider.dart';
 import '../../repository/profile/profile_repository.dart';
 import '../../viewmodel/profile/profile_viewmodel.dart';
 import '../../widget/base/default_appbar.dart';
@@ -27,7 +27,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _profileViewModel = Get.put<ProfileViewModel>(ProfileViewModel(
       profileRepository: ProfileRepository(
         profileLocalProvider: Get.put(ProfileLocalProvider()),
-        profileRemoteProvider: Get.put(ProfileRemoteProvider()),
+        profileProvider: Get.put(ProfileProvider()),
       ),
     ));
   }
@@ -44,30 +44,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
       body: Column(
         children: [
-          ProfileUserInfo(user: _profileViewModel.user!),
+          Obx(() => _profileViewModel.isLoadingUserInfo
+              ? const LinearProgressIndicator()
+              : ProfileUserInfo(user: _profileViewModel.userInfo)),
           const SizedBox(height: 15),
           Expanded(
             child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.2),
-                    spreadRadius: 2,
-                    blurRadius: 2,
-                    offset: const Offset(0, 1),
-                  ),
-                ],
-              ),
-              child: ListView(
-                children: [
-                  const SizedBox(height: 5),
-                  ProfileJoinedClub(items: _profileViewModel.joinedClubs),
-                  _buildOptions(context),
-                  SizedBox(height: MediaQuery.of(context).padding.bottom),
-                ],
-              ),
-            ),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.2),
+                      spreadRadius: 2,
+                      blurRadius: 2,
+                      offset: const Offset(0, 1),
+                    ),
+                  ],
+                ),
+                child: Obx(() => _profileViewModel.isLoadingJoinedClubs
+                    ? const Center(child: CircularProgressIndicator())
+                    : ListView(
+                        children: [
+                          const SizedBox(height: 5),
+                          ProfileJoinedClub(
+                              clubs: _profileViewModel.joinedClubs),
+                          _buildOptions(context),
+                          SizedBox(
+                              height: MediaQuery.of(context).padding.bottom),
+                        ],
+                      ))),
           ),
         ],
       ),
@@ -93,7 +98,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: Column(
           children: [
             _buildOptionItem(Icons.person, '프로필 편집', () {
-              Get.to(() => const ProfileEditScreen());
+              Get.to(() => const ProfileEditScreen(), arguments: {
+                "name": _profileViewModel.userInfo.name,
+                "major": _profileViewModel.userInfo.major,
+                "id": _profileViewModel.userInfo.id,
+                "introduction": _profileViewModel.userInfo.introduction,
+                "profileImageUuid": _profileViewModel.userInfo.profileImageUuid,
+              });
             }),
             Obx(() => ListTile(
                   leading: const Icon(Icons.notifications, size: 24),
