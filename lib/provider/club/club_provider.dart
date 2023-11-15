@@ -1,6 +1,7 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:jjoin/model/club/club_schedule.dart';
 
 class ClubProvider extends GetConnect {
   static final String _apiUrl = dotenv.env['JJOIN_API_SERVER_URL']!;
@@ -169,6 +170,65 @@ class ClubProvider extends GetConnect {
       return response.body;
     } else {
       return {};
+    }
+  }
+
+  Future<Map<String, dynamic>> getClubNotices(
+      int clubId, int page, int size) async {
+    Response? response;
+
+    try {
+      response = await get(
+        "$_apiUrl/clubs/$clubId/notices",
+        query: {
+          "page": page,
+          "size": size,
+        }.map((key, value) => MapEntry(key, value.toString())),
+      );
+
+      print(response.body);
+    } catch (e) {
+      // stack trace print
+      print(e);
+      response = null;
+    }
+
+    if (response == null) {
+      print("통신 실패");
+      return {"data": []};
+    }
+
+    if (response.statusCode == 200) {
+      print(response.body);
+      return response.body;
+    } else {
+      return {"data": []};
+    }
+  }
+
+  Future<Map<String, dynamic>> getClubPlans(
+      int clubId, int page, int size) async {
+    Response? response;
+    try {
+      response = await get(
+        "$_apiUrl/clubs/$clubId/schedules",
+        query: {
+          "page": page,
+          "size": size,
+        }.map((key, value) => MapEntry(key, value.toString())),
+      );
+    } catch (e) {
+      response = null;
+    }
+
+    if (response == null) {
+      return {"data": []};
+    }
+
+    if (response.statusCode == 200) {
+      return response.body;
+    } else {
+      return {"data": []};
     }
   }
 }

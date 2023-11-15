@@ -1,6 +1,10 @@
 import 'package:get/get.dart';
 
+import '../../model/base/page_info.dart';
+import '../../model/base/page_list_model.dart';
 import '../../model/club/club_model.dart';
+import '../../model/club/club_notice.dart';
+import '../../model/club/club_schedule.dart';
 import '../../repository/club/club_repository.dart';
 
 class ClubViewModel extends GetxController {
@@ -18,31 +22,31 @@ class ClubViewModel extends GetxController {
   ClubModel get clubModel => _clubModel;
   bool get isLoadingClubInfo => _isLoadingClubInfo.value;
 
-  // /* Club Notices */
-  // late final RxList<ClubNotice> _notices;
-  // late final RxBool _isLoadingNotices;
-  // late PageInfo _noticePageInfo;
-  // List<ClubNotice> get notices => _notices;
-  // bool get isLoadingNotices => _isLoadingNotices.value;
-  //
-  // /* Club Schedules */
-  // late final RxList<ClubSchedule> _schedules;
-  // late final RxBool _isLoadingSchedules;
-  // late PageInfo _schedulePageInfo;
-  // List<ClubSchedule> get schedules => _schedules;
-  // bool get isLoadingSchedules => _isLoadingSchedules.value;
+  /* Club Notices */
+  late final Rx<PageListModel<ClubNotice>> _noticePage;
+  late final RxBool _isLoadingNotices;
+  List<ClubNotice> get notices => _noticePage.value.dataList;
+  PageInfo get noticePageInfo => _noticePage.value.pageInfo;
+  bool get isLoadingNotices => _isLoadingNotices.value;
+
+  /* Club Schedules */
+  late final Rx<PageListModel<ClubSchedule>> _schedulePage;
+  late final RxBool _isLoadingSchedules;
+  List<ClubSchedule> get schedules => _schedulePage.value.dataList;
+  PageInfo get schedulePageInfo => _schedulePage.value.pageInfo;
+  bool get isLoadingSchedules => _isLoadingSchedules.value;
 
   @override
   void onInit() {
     super.onInit();
 
     _isLoadingClubInfo = false.obs;
+    _isLoadingNotices = false.obs;
+    _isLoadingSchedules = false.obs;
+
     initClubInfo();
-    // _isLoadingNotices = false.obs;
-    // _isLoadingSchedules = false.obs;
-    //
-    // fetchSchedules();
-    // fetchNotices();
+    initNotices();
+    initSchedules();
   }
 
   /* init */
@@ -57,19 +61,33 @@ class ClubViewModel extends GetxController {
         .then((value) => _isLoadingClubInfo.value = false);
   }
 
-  // void initSchedules() {
-  //   _isLoadingSchedules.value = true;
-  //   _schedules.value = clubRepository.getClubSchedules(
-  //       clubId, _schedulePageInfo.currentPage, _schedulePageInfo.pageSize);
-  //   _isLoadingSchedules.value = false;
-  // }
-  //
-  // void initNotices() {
-  //   _isLoadingNotices.value = true;
-  //   _notices.value = clubRepository.getClubNotices(
-  //       clubId, _noticePageInfo.currentPage, _noticePageInfo.pageSize);
-  //   _isLoadingNotices.value = false;
-  // }
+  void initSchedules() {
+    _isLoadingSchedules.value = true;
+    clubRepository
+        .readClubSchedules(clubId, 0, 5)
+        .then((value) => {
+              _schedulePage = PageListModel<ClubSchedule>(
+                dataList: value["dataList"],
+                pageInfo: value["pageInfo"],
+              ).obs,
+              print(_schedulePage),
+            })
+        .then((value) => _isLoadingSchedules.value = false);
+  }
+
+  void initNotices() {
+    _isLoadingNotices.value = true;
+    clubRepository
+        .readClubNotices(clubId, 0, 5)
+        .then(
+          (value) => _noticePage = PageListModel<ClubNotice>(
+            dataList: value["dataList"],
+            pageInfo: value["pageInfo"],
+          ).obs,
+        )
+        .then((value) => _isLoadingNotices.value = false);
+    _isLoadingNotices.value = false;
+  }
   //
   // /* fetch */
   // void fetchSchedules() {

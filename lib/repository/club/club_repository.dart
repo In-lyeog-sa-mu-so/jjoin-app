@@ -6,6 +6,7 @@ import 'package:jjoin/model/club/club_plan_detail.dart';
 import 'package:jjoin/model/club/club_recommend.dart';
 import 'package:jjoin/model/club/club_schedule.dart';
 
+import '../../model/base/page_info.dart';
 import '../../model/club/club_home_info.dart';
 import '../../model/club/club_model.dart';
 import '../../provider/club/club_local_provider.dart';
@@ -114,12 +115,63 @@ class ClubRepository {
   }
 
   /* Club */
-  List<ClubNotice> getClubNotices(int clubId, int page, int size) {
-    return clubLocalProvider.getClubDummyNotices(clubId, page, size);
+  Future<Map<String, dynamic>> readClubNotices(
+    int clubId,
+    int page,
+    int size,
+  ) async {
+    Map<String, dynamic> data =
+        await clubProvider.getClubNotices(clubId, page, size);
+
+    var dataList = data["data"]
+        .map<ClubNotice>((json) => ClubNotice.fromJson(json: json))
+        .toList();
+
+    if (dataList.length == 0) {
+      dataList.add(ClubNotice.empty());
+    }
+
+    PageInfo pageInfo;
+    if (data["pageInfo"] != null) {
+      pageInfo = PageInfo.fromJson(json: data["pageInfo"]);
+    } else {
+      pageInfo = PageInfo.empty();
+    }
+
+    return {
+      "dataList": dataList,
+      "pageInfo": pageInfo,
+    };
   }
 
-  List<ClubSchedule> getClubSchedules(int clubId, int page, int size) {
-    return clubLocalProvider.getClubDummySchedules(clubId, page, size);
+  Future<Map<String, dynamic>> readClubSchedules(
+    int clubId,
+    int page,
+    int size,
+  ) async {
+    print("$clubId, $page, $size");
+    Map<String, dynamic> data =
+        await clubProvider.getClubPlans(clubId, page, size);
+
+    var dataList = data["data"]
+        .map<ClubSchedule>((json) => ClubSchedule.fromJson(json: json))
+        .toList();
+
+    if (dataList.length == 0) {
+      dataList.add(ClubSchedule.empty());
+    }
+
+    PageInfo pageInfo;
+    if (data["pageInfo"] != null) {
+      pageInfo = PageInfo.fromJson(json: data["pageInfo"]);
+    } else {
+      pageInfo = PageInfo.empty();
+    }
+
+    return {
+      "dataList": dataList,
+      "pageInfo": pageInfo,
+    };
   }
 
   /* Club Notice Detail */
