@@ -51,7 +51,7 @@ class _ClubPlanScreenState extends State<ClubPlanScreen> {
         ),
       ),
       body: Obx(
-        () => _viewModel.isLoading == true
+        () => _viewModel.isLoading
             ? Center(
                 child: CircularProgressIndicator(
                   color: Colors.grey[300],

@@ -231,4 +231,48 @@ class ClubProvider extends GetConnect {
       return {"data": []};
     }
   }
+
+  Future<Map<String, dynamic>> getClubNoticeDetail(
+      int clubId, int noticeId) async {
+    Response? response;
+    try {
+      response = await get(
+        "$_apiUrl/clubs/$clubId/notices/$noticeId",
+      );
+    } catch (e) {
+      response = null;
+    }
+
+    if (response == null) {
+      return {};
+    }
+
+    if (response.statusCode == 200) {
+      return response.body;
+    } else {
+      return {};
+    }
+  }
+
+  Future<Map<String, dynamic>> getClubPlanDetail(
+      int clubId, int scheduleId) async {
+    Response? response;
+    try {
+      response = await get(
+        "$_apiUrl/clubs/$clubId/schedules/$scheduleId",
+      );
+    } catch (e) {
+      response = null;
+    }
+
+    if (response == null) {
+      return {};
+    }
+
+    if (response.statusCode == 200) {
+      return response.body;
+    } else {
+      return {};
+    }
+  }
 }

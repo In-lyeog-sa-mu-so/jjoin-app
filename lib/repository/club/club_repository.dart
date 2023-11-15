@@ -175,12 +175,19 @@ class ClubRepository {
   }
 
   /* Club Notice Detail */
-  ClubNoticeDetail getClubNoticeDetail(int id) {
-    return clubLocalProvider.getClubDummyNoticeDetail(id);
+  Future<ClubNoticeDetail> readClubNoticeDetail(
+      int clubId, int noticeId) async {
+    Map<String, dynamic> data =
+        await clubProvider.getClubNoticeDetail(clubId, noticeId);
+
+    return ClubNoticeDetail.fromJson(json: data);
   }
 
-  ClubPlanDetail getPlanDetail(int clubId, int scheduleId) {
-    return clubLocalProvider.getClubDummyPlanDetail(clubId, scheduleId);
+  Future<ClubPlanDetail> readPlanDetail(int clubId, int scheduleId) async {
+    Map<String, dynamic> data =
+        await clubProvider.getClubPlanDetail(clubId, scheduleId);
+
+    return ClubPlanDetail.fromJson(json: data);
   }
 
   Future<ClubModel> readClubInfo(int clubId) async {
