@@ -72,7 +72,7 @@ class ProfileUserInfo extends StatelessWidget {
                           ),
                           Padding(
                             padding: const EdgeInsets.only(top: 5),
-                            child: Text('학번: ${user.id.toString()}',
+                            child: Text('학번: ${user.studentId.toString()}',
                                 style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w400,

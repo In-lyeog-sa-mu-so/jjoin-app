@@ -104,6 +104,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 "id": _profileViewModel.userInfo.id,
                 "introduction": _profileViewModel.userInfo.introduction,
                 "profileImageUuid": _profileViewModel.userInfo.profileImageUuid,
+                "studentId": _profileViewModel.userInfo.studentId,
               });
             }),
             Obx(() => ListTile(

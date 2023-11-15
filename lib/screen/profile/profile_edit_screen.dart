@@ -128,7 +128,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                           ),
                           Padding(
                             padding: const EdgeInsets.only(top: 4.0),
-                            child: Text('학번: ${Get.arguments['id']}',
+                            child: Text('학번: ${Get.arguments['studentId']}',
                                 style: const TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w300,

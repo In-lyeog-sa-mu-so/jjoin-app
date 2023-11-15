@@ -4,7 +4,7 @@ class User {
   final String major;
   final String introduction;
   final String profileImageUuid;
-  //final int studentId;
+  final int studentId;
 
   User({
     required this.id,
@@ -12,7 +12,7 @@ class User {
     required this.major,
     required this.introduction,
     required this.profileImageUuid,
-    //required this.studentId,
+    required this.studentId,
   });
 
   factory User.fromJson(
@@ -23,7 +23,7 @@ class User {
       major: json['major'],
       introduction: json['introduction'],
       profileImageUuid: "$imageUrl/${json["profileImageUuid"]}",
-      //studentId: json['studentId'],
+      studentId: json['studentId'],
     );
   }
 
@@ -34,7 +34,7 @@ class User {
       major: "학과",
       introduction: "자기소개",
       profileImageUuid: "",
-      //studentId: 0,
+      studentId: 0,
     );
   }
 
@@ -44,6 +44,7 @@ class User {
     String? major,
     String? introduction,
     String? profileImageUuid,
+    int? studentId,
   }) {
     return User(
       id: id ?? this.id,
@@ -51,6 +52,7 @@ class User {
       major: major ?? this.major,
       introduction: introduction ?? this.introduction,
       profileImageUuid: profileImageUuid ?? this.profileImageUuid,
+      studentId: studentId ?? this.studentId,
     );
   }
 }
