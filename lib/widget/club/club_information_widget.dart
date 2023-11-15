@@ -1,15 +1,17 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
+import '../../model/club/club_model.dart';
 import 'club_svg_info_widget.dart';
 
 class ClubInformation extends StatelessWidget {
+  final ClubModel clubModel;
   final List<String> _tags = [
     "프로젝트",
     "프로젝트",
     "프로젝트",
   ];
-  ClubInformation({super.key});
+  ClubInformation({required this.clubModel, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,11 +24,11 @@ class ClubInformation extends StatelessWidget {
             children: [
               Container(
                 height: 200,
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   // 비율 맞춰서 이미지 넣기
                   image: DecorationImage(
                     image: CachedNetworkImageProvider(
-                        "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg"),
+                        clubModel.backgroundImageUrl),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -37,8 +39,8 @@ class ClubInformation extends StatelessWidget {
                 // 동그란 이미지 넣기
                 child: CircleAvatar(
                   radius: 50,
-                  backgroundImage: CachedNetworkImageProvider(
-                      "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg"),
+                  backgroundImage:
+                      CachedNetworkImageProvider(clubModel.profileImageUrl),
                 ),
               ),
               Positioned(
@@ -46,7 +48,7 @@ class ClubInformation extends StatelessWidget {
                 right: 15,
                 child: Row(
                   children: [
-                    for (var tag in _tags)
+                    for (var tag in clubModel.tags)
                       Container(
                         margin: const EdgeInsets.only(right: 5),
                         padding: const EdgeInsets.symmetric(
@@ -77,7 +79,7 @@ class ClubInformation extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "FC 세미콜론",
+                clubModel.name,
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -88,23 +90,25 @@ class ClubInformation extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ClubSvgInfoWidget(
-                      title: "강우빈", imagePath: "assets/icons/icon_crown.svg"),
+                      title: clubModel.leaderName,
+                      imagePath: "assets/icons/icon_crown.svg"),
                   SizedBox.fromSize(size: const Size(10, 0)),
                   ClubSvgInfoWidget(
-                      title: "38", imagePath: "assets/icons/icon_people.svg"),
+                      title: clubModel.memberCnt.toString(),
+                      imagePath: "assets/icons/icon_people.svg"),
                   SizedBox.fromSize(size: const Size(10, 0)),
                   ClubSvgInfoWidget(
-                      title: "학과",
+                      title: clubModel.part.name,
                       imagePath: "assets/icons/icon_dependency.svg"),
                   SizedBox.fromSize(size: const Size(10, 0)),
-                  Text("개설일: ",
+                  const Text("개설일: ",
                       style: TextStyle(
                         fontSize: 15,
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
                       )),
                   Text(
-                    "2010년 8월",
+                    clubModel.createdDateStr,
                     style: TextStyle(
                       fontSize: 15,
                       color: Colors.black,
@@ -114,38 +118,116 @@ class ClubInformation extends StatelessWidget {
               ),
               SizedBox.fromSize(size: Size(0, 5)),
               Text(
-                "안녕하세요! 동국대학교 컴퓨터 공학과 소모임 FC 세미콜론입니다. 1달에 4-6회씩 축구, 풋살을 하며 학교 정기 대회도 출전할 계획입니다. 많은 관심 부탁드립니다!",
-                style: TextStyle(
+                clubModel.introduction,
+                style: const TextStyle(
                   fontSize: 15,
                   color: Colors.black,
                 ),
               ),
               SizedBox.fromSize(size: const Size(0, 5)),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "최근 모집기간",
-                    style: TextStyle(
-                      fontSize: 15,
-                      color: Colors.green,
-                      fontWeight: FontWeight.bold,
+              // _JoinedText 가운데 정렬
+              Center(
+                child: _JoinedText(
+                  recentJoinedDate: clubModel.recentJoinedDate,
+                  existRecentJoinedDate: clubModel.existRecentJoinedDate,
+                  isRecruiting: clubModel.isRecruiting,
+                ),
+              ),
+              const SizedBox(height: 10),
+              // 지원하기 버튼
+              Theme(
+                data: ThemeData(
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                ),
+                child: InkWell(
+                  onTap: () {},
+                  child: Container(
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: clubModel.isRecruiting
+                          ? Colors.green[300]
+                          : Colors.grey[300],
+                      borderRadius: const BorderRadius.all(Radius.circular(16)),
+                    ),
+                    child: Center(
+                      child: Text(
+                        "지원하기",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: clubModel.isRecruiting
+                              ? Colors.black54
+                              : Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                   ),
-                  Text(
-                    "  2021년 3월 1일 ~ 2021년 3월 31일",
-                    style: TextStyle(
-                      fontSize: 15,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  )
-                ],
+                ),
               ),
             ],
           ),
         ),
       ],
     );
+  }
+}
+
+class _JoinedText extends StatelessWidget {
+  final String recentJoinedDate;
+  final bool existRecentJoinedDate;
+  final bool isRecruiting;
+  const _JoinedText({
+    required this.recentJoinedDate,
+    required this.existRecentJoinedDate,
+    required this.isRecruiting,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    if (!existRecentJoinedDate) {
+      return const Text(
+        "아직 모집을 시작하지 않았어요ㅠㅠ",
+        style: TextStyle(
+          fontSize: 15,
+          color: Colors.black38,
+          fontWeight: FontWeight.bold,
+        ),
+      );
+    } else {
+      if (isRecruiting) {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              "모집 중  ",
+              style: TextStyle(
+                fontSize: 15,
+                color: Colors.green,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(
+              "  $recentJoinedDate",
+              style: const TextStyle(
+                fontSize: 15,
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        );
+      } else {
+        return const Text(
+          "모집이 마감되었어요ㅠㅠ",
+          style: TextStyle(
+            fontSize: 15,
+            color: Colors.red,
+            fontWeight: FontWeight.bold,
+          ),
+        );
+      }
+    }
   }
 }

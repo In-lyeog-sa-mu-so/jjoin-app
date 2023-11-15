@@ -1,15 +1,18 @@
 import 'package:get/get.dart';
+import 'package:jjoin/viewmodel/calendar/calendar_viewmodel.dart';
+import 'package:jjoin/viewmodel/club/club_viewmodel.dart';
 
 import '../../model/club/club_plan_detail.dart';
 import '../../repository/club/club_repository.dart';
+import '../home/home_viewmodel.dart';
 
 class ClubPlanDetailViewModel extends GetxController {
   final int clubId;
   final int scheduleId;
   final ClubRepository clubRepository;
 
+  late final RxBool _isLoading;
   late final Rx<ClubPlanDetail> _planDetail;
-  final RxBool _isLoading = false.obs;
   ClubPlanDetail get planDetail => _planDetail.value;
   bool get isLoading => _isLoading.value;
 
@@ -17,31 +20,28 @@ class ClubPlanDetailViewModel extends GetxController {
     required this.clubId,
     required this.scheduleId,
     required this.clubRepository,
-  })  : assert(scheduleId != null),
-        assert(clubRepository != null);
+  });
 
   @override
   void onInit() {
     super.onInit();
 
+    _isLoading = false.obs;
     _initPlanDetail();
   }
 
   void _initPlanDetail() {
     _isLoading.value = true;
-    _planDetail = clubRepository.getPlanDetail(clubId, scheduleId).obs;
-    _isLoading.value = false;
+    clubRepository.readPlanDetail(clubId, scheduleId).then((value) {
+      _planDetail = value.obs;
+    }).whenComplete(() {
+      _isLoading.value = false;
+    });
   }
 
-  void fetchPlanDetail() {
-    _isLoading.value = true;
-    _planDetail.value = clubRepository.getPlanDetail(clubId, scheduleId);
-    _isLoading.value = false;
-  }
-
-  bool updateSchedule(int id, bool isAgree) {
+  Future<bool> updateSchedule(int id, bool isAgree) async {
     bool? beforeIsAgree = _planDetail.value.isAgree;
-    bool isSuccess = true;
+    bool isSuccess = await clubRepository.updateSchedule(id, isAgree);
 
     if (isSuccess) {
       if (beforeIsAgree == null) {
@@ -69,6 +69,11 @@ class ClubPlanDetailViewModel extends GetxController {
           );
         }
       }
+
+      Get.find<HomeViewModel>().updateScheduleByUpdatingPlan(id, isAgree);
+      Get.find<CalendarViewModel>()
+          .updateScheduleByUpdatingSchedule(id, isAgree);
+      Get.find<ClubViewModel>().updateScheduleByUpdate(id, isAgree);
       return true;
     } else {
       return false;
