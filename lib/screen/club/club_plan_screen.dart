@@ -51,7 +51,7 @@ class _ClubPlanScreenState extends State<ClubPlanScreen> {
         ),
       ),
       body: Obx(
-        () => _viewModel.isLoading == true
+        () => _viewModel.isLoading
             ? Center(
                 child: CircularProgressIndicator(
                   color: Colors.grey[300],
@@ -192,8 +192,26 @@ class _ClubPlanScreenState extends State<ClubPlanScreen> {
                             ),
                             child: InkWell(
                               onTap: () {
-                                _viewModel.updateSchedule(
-                                    _viewModel.planDetail.id, true);
+                                _viewModel
+                                    .updateSchedule(
+                                        _viewModel.planDetail.id, true)
+                                    .then(
+                                      (isSuccess) => {
+                                        if (!isSuccess)
+                                          {
+                                            Get.snackbar(
+                                              "통신 오류",
+                                              "동아리 일정 수락에 실패했습니다.",
+                                              duration: const Duration(
+                                                  seconds: 1,
+                                                  milliseconds: 500),
+                                              snackPosition: SnackPosition.TOP,
+                                              margin: const EdgeInsets.only(
+                                                  top: 30, left: 20, right: 20),
+                                            )
+                                          }
+                                      },
+                                    );
                               },
                               child: Container(
                                 height: 70,
@@ -234,17 +252,35 @@ class _ClubPlanScreenState extends State<ClubPlanScreen> {
                             ),
                             child: InkWell(
                               onTap: () {
-                                _viewModel.updateSchedule(
-                                    _viewModel.planDetail.id, false);
+                                _viewModel
+                                    .updateSchedule(
+                                        _viewModel.planDetail.id, false)
+                                    .then(
+                                      (isSuccess) => {
+                                        if (!isSuccess)
+                                          {
+                                            Get.snackbar(
+                                              "통신 오류",
+                                              "동아리 일정 수락에 실패했습니다.",
+                                              duration: const Duration(
+                                                  seconds: 1,
+                                                  milliseconds: 500),
+                                              snackPosition: SnackPosition.TOP,
+                                              margin: const EdgeInsets.only(
+                                                  top: 30, left: 20, right: 20),
+                                            )
+                                          }
+                                      },
+                                    );
                               },
                               child: Container(
                                 height: 70,
                                 decoration: BoxDecoration(
                                   color: _viewModel.planDetail.isAgree ==
                                               null ||
-                                          _viewModel.planDetail.isAgree == false
-                                      ? Colors.red
-                                      : Colors.red[100],
+                                          _viewModel.planDetail.isAgree == true
+                                      ? Colors.red[100]
+                                      : Colors.red,
                                   borderRadius: const BorderRadius.all(
                                       Radius.circular(16)),
                                 ),

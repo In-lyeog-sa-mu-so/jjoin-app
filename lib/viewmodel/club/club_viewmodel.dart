@@ -1,6 +1,9 @@
 import 'package:get/get.dart';
-import 'package:jjoin/model/club/club_notice.dart';
 
+import '../../model/base/page_info.dart';
+import '../../model/base/page_list_model.dart';
+import '../../model/club/club_model.dart';
+import '../../model/club/club_notice.dart';
 import '../../model/club/club_schedule.dart';
 import '../../repository/club/club_repository.dart';
 
@@ -11,60 +14,86 @@ class ClubViewModel extends GetxController {
   ClubViewModel({
     required this.clubId,
     required this.clubRepository,
-  }) : assert(clubRepository != null);
+  });
+
+  /* Club Information */
+  late final ClubModel _clubModel;
+  late final RxBool _isLoadingClubInfo;
+  ClubModel get clubModel => _clubModel;
+  bool get isLoadingClubInfo => _isLoadingClubInfo.value;
 
   /* Club Notices */
-  final RxList<ClubNotice> _notices = RxList();
-  final RxBool _isLoadingNotices = false.obs;
-  List<ClubNotice> get notices => _notices;
+  late final Rx<PageListModel<ClubNotice>> _noticePage;
+  late final RxBool _isLoadingNotices;
+  List<ClubNotice> get notices => _noticePage.value.dataList;
+  PageInfo get noticePageInfo => _noticePage.value.pageInfo;
   bool get isLoadingNotices => _isLoadingNotices.value;
-  int noticePage = 0;
-  int noticeSize = 5;
 
   /* Club Schedules */
-  final RxList<ClubSchedule> _schedules = RxList();
-  final RxBool _isLoadingSchedules = false.obs;
-  List<ClubSchedule> get schedules => _schedules;
+  late final Rx<PageListModel<ClubSchedule>> _schedulePage;
+  late final RxBool _isLoadingSchedules;
+  List<ClubSchedule> get schedules => _schedulePage.value.dataList;
+  PageInfo get schedulePageInfo => _schedulePage.value.pageInfo;
   bool get isLoadingSchedules => _isLoadingSchedules.value;
-  int schedulePage = 0;
-  int scheduleSize = 5;
 
   @override
   void onInit() {
     super.onInit();
 
-    fetchSchedules();
-    fetchNotices();
+    _isLoadingClubInfo = false.obs;
+    _isLoadingNotices = false.obs;
+    _isLoadingSchedules = false.obs;
+
+    initClubInfo();
+    initNotices();
+    initSchedules();
   }
 
-  void fetchSchedules() {
+  /* init */
+  void initClubInfo() {
+    _isLoadingClubInfo.value = true;
+    clubRepository
+        .readClubInfo(clubId)
+        .then((value) => {
+              _clubModel = value,
+              print(_clubModel),
+            })
+        .then((value) => _isLoadingClubInfo.value = false);
+  }
+
+  void initSchedules() {
     _isLoadingSchedules.value = true;
-    _schedules.value =
-        clubRepository.getClubSchedules(clubId, schedulePage, scheduleSize);
-    _isLoadingSchedules.value = false;
+    clubRepository
+        .readClubSchedules(clubId, 0, 5)
+        .then((value) => {
+              _schedulePage = PageListModel<ClubSchedule>(
+                dataList: value["dataList"],
+                pageInfo: value["pageInfo"],
+              ).obs,
+              print(_schedulePage),
+            })
+        .then((value) => _isLoadingSchedules.value = false);
   }
 
-  void fetchNotices() {
+  void initNotices() {
     _isLoadingNotices.value = true;
-    _notices.value =
-        clubRepository.getClubNotices(clubId, noticePage, noticeSize);
+    clubRepository
+        .readClubNotices(clubId, 0, 5)
+        .then(
+          (value) => _noticePage = PageListModel<ClubNotice>(
+            dataList: value["dataList"],
+            pageInfo: value["pageInfo"],
+          ).obs,
+        )
+        .then((value) => _isLoadingNotices.value = false);
     _isLoadingNotices.value = false;
   }
 
-  bool updateSchedule(int id, bool isAgree) {
-    bool isSuccess = false;
-    clubRepository.updateSchedule(id, isAgree).then((value) => {
-          if (value)
-            {
-              _schedules.removeWhere((element) => element.id == id),
-              isSuccess = true
-            }
-          else
-            {
-              isSuccess = false,
-            }
-        });
-
-    return isSuccess;
+  void updateScheduleByUpdate(int id, bool isAgree) {
+    _schedulePage.value.dataList.forEach((element) {
+      if (element.id == id) {
+        element.isParticipate = isAgree;
+      }
+    });
   }
 }

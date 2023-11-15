@@ -54,4 +54,19 @@ class ClubPlanDetail {
       numberOfDisagree: numberOfDisagree,
     );
   }
+
+  factory ClubPlanDetail.fromJson({required Map<String, dynamic> json}) {
+    return ClubPlanDetail(
+      id: json["id"],
+      title: json["title"],
+      content: json["content"],
+      startDate: DateTime.parse(json["startDate"]).toLocal(),
+      endDate: DateTime.parse(json["endDate"]).toLocal(),
+      createdDate: DateTime.parse(json["createdDate"]).toLocal(),
+      updatedDate: DateTime.parse(json["updatedDate"]).toLocal(),
+      isAgree: json["isAgreed"],
+      numberOfAgree: json["numberOfAgree"],
+      numberOfDisagree: json["numberOfDisagree"],
+    );
+  }
 }

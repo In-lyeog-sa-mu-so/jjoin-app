@@ -13,7 +13,7 @@ class ClubNoticeDetailViewModel extends GetxController {
     required this.clubRepository,
   }) : assert(clubRepository != null);
 
-  final RxBool _isLoading = false.obs;
+  late final RxBool _isLoading;
   late final Rx<ClubNoticeDetail> _noticeDetail;
   bool get isLoading => _isLoading.value;
   ClubNoticeDetail get noticeDetail => _noticeDetail.value;
@@ -21,12 +21,16 @@ class ClubNoticeDetailViewModel extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchNoticeDetail(noticeId);
+    _isLoading = false.obs;
+    fetchNoticeDetail(clubId, noticeId);
   }
 
-  void fetchNoticeDetail(int id) {
+  void fetchNoticeDetail(int clubId, int id) {
     _isLoading.value = true;
-    _noticeDetail = clubRepository.getClubNoticeDetail(id).obs;
-    _isLoading.value = false;
+    clubRepository.readClubNoticeDetail(clubId, id).then((value) {
+      _noticeDetail = value.obs;
+    }).whenComplete(() {
+      _isLoading.value = false;
+    });
   }
 }
