@@ -7,6 +7,7 @@ import 'package:jjoin/model/club/club_recommend.dart';
 import 'package:jjoin/model/club/club_schedule.dart';
 
 import '../../model/club/club_home_info.dart';
+import '../../model/club/club_model.dart';
 import '../../provider/club/club_local_provider.dart';
 import '../../provider/club/club_provider.dart';
 import '../../utilities/date_time_util.dart';
@@ -128,5 +129,15 @@ class ClubRepository {
 
   ClubPlanDetail getPlanDetail(int clubId, int scheduleId) {
     return clubLocalProvider.getClubDummyPlanDetail(clubId, scheduleId);
+  }
+
+  Future<ClubModel> readClubInfo(int clubId) async {
+    Map<String, dynamic> data = await clubProvider.getClubInfo(clubId);
+
+    if (data["id"] == null) {
+      return ClubModel.empty();
+    }
+
+    return ClubModel.fromJson(json: data, imageUrl: _imageUrl);
   }
 }

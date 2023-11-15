@@ -150,4 +150,25 @@ class ClubProvider extends GetConnect {
       return {"data": []};
     }
   }
+
+  Future<Map<String, dynamic>> getClubInfo(int clubId) async {
+    Response? response;
+    try {
+      response = await get(
+        "$_apiUrl/clubs/$clubId",
+      );
+    } catch (e) {
+      response = null;
+    }
+
+    if (response == null) {
+      print("통신 실패");
+      return {};
+    }
+    if (response.statusCode == 200) {
+      return response.body;
+    } else {
+      return {};
+    }
+  }
 }
