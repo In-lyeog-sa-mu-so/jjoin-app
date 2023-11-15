@@ -88,36 +88,12 @@ class ClubViewModel extends GetxController {
         .then((value) => _isLoadingNotices.value = false);
     _isLoadingNotices.value = false;
   }
-  //
-  // /* fetch */
-  // void fetchSchedules() {
-  //   _isLoadingSchedules.value = true;
-  //   _schedules.value = clubRepository.getClubSchedules(
-  //       clubId, _schedulePageInfo.currentPage, _schedulePageInfo.pageSize);
-  //   _isLoadingSchedules.value = false;
-  // }
-  //
-  // void fetchNotices() {
-  //   _isLoadingNotices.value = true;
-  //   _notices.value = clubRepository.getClubNotices(
-  //       clubId, _noticePageInfo.currentPage, _noticePageInfo.pageSize);
-  //   _isLoadingNotices.value = false;
-  // }
-  //
-  // bool updateSchedule(int id, bool isAgree) {
-  //   bool isSuccess = false;
-  //   clubRepository.updateSchedule(id, isAgree).then((value) => {
-  //         if (value)
-  //           {
-  //             _schedules.removeWhere((element) => element.id == id),
-  //             isSuccess = true
-  //           }
-  //         else
-  //           {
-  //             isSuccess = false,
-  //           }
-  //       });
-  //
-  //   return isSuccess;
-  // }
+
+  void updateScheduleByUpdate(int id, bool isAgree) {
+    _schedulePage.value.dataList.forEach((element) {
+      if (element.id == id) {
+        element.isParticipate = isAgree;
+      }
+    });
+  }
 }

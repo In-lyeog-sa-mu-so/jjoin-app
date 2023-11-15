@@ -133,6 +133,38 @@ class ClubInformation extends StatelessWidget {
                   isRecruiting: clubModel.isRecruiting,
                 ),
               ),
+              const SizedBox(height: 10),
+              // 지원하기 버튼
+              Theme(
+                data: ThemeData(
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                ),
+                child: InkWell(
+                  onTap: () {},
+                  child: Container(
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: clubModel.isRecruiting
+                          ? Colors.green[300]
+                          : Colors.grey[300],
+                      borderRadius: const BorderRadius.all(Radius.circular(16)),
+                    ),
+                    child: Center(
+                      child: Text(
+                        "지원하기",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: clubModel.isRecruiting
+                              ? Colors.black54
+                              : Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),

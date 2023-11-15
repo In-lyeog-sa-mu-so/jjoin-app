@@ -1,7 +1,10 @@
 import 'package:get/get.dart';
+import 'package:jjoin/viewmodel/calendar/calendar_viewmodel.dart';
+import 'package:jjoin/viewmodel/club/club_viewmodel.dart';
 
 import '../../model/club/club_plan_detail.dart';
 import '../../repository/club/club_repository.dart';
+import '../home/home_viewmodel.dart';
 
 class ClubPlanDetailViewModel extends GetxController {
   final int clubId;
@@ -36,9 +39,9 @@ class ClubPlanDetailViewModel extends GetxController {
     });
   }
 
-  bool updateSchedule(int id, bool isAgree) {
+  Future<bool> updateSchedule(int id, bool isAgree) async {
     bool? beforeIsAgree = _planDetail.value.isAgree;
-    bool isSuccess = true;
+    bool isSuccess = await clubRepository.updateSchedule(id, isAgree);
 
     if (isSuccess) {
       if (beforeIsAgree == null) {
@@ -66,6 +69,11 @@ class ClubPlanDetailViewModel extends GetxController {
           );
         }
       }
+
+      Get.find<HomeViewModel>().updateScheduleByUpdatingPlan(id, isAgree);
+      Get.find<CalendarViewModel>()
+          .updateScheduleByUpdatingSchedule(id, isAgree);
+      Get.find<ClubViewModel>().updateScheduleByUpdate(id, isAgree);
       return true;
     } else {
       return false;

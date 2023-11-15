@@ -64,7 +64,7 @@ class ClubPlanDetail {
       endDate: DateTime.parse(json["endDate"]).toLocal(),
       createdDate: DateTime.parse(json["createdDate"]).toLocal(),
       updatedDate: DateTime.parse(json["updatedDate"]).toLocal(),
-      isAgree: json["isAgree"],
+      isAgree: json["isAgreed"],
       numberOfAgree: json["numberOfAgree"],
       numberOfDisagree: json["numberOfDisagree"],
     );

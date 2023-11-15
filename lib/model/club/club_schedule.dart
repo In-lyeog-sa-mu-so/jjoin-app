@@ -8,7 +8,7 @@ class ClubSchedule {
   final DateTime endDate;
   final String title;
   final String content;
-  final bool? isParticipate;
+  bool? isParticipate;
 
   ClubSchedule({
     required this.id,

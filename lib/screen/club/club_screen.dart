@@ -65,8 +65,8 @@ class _ClubScreenState extends State<ClubScreen>
       body: Column(
         children: [
           Obx(() => _clubViewModel.isLoadingClubInfo
-              ? Expanded(
-                  child: const Center(
+              ? const Expanded(
+                  child: Center(
                     child: CircularProgressIndicator(),
                   ),
                 )
