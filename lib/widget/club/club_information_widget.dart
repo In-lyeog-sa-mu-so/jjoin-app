@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:jjoin/screen/application/club_application_screen.dart';
 
 import '../../model/club/club_model.dart';
 import 'club_svg_info_widget.dart';
@@ -141,7 +143,15 @@ class ClubInformation extends StatelessWidget {
                   highlightColor: Colors.transparent,
                 ),
                 child: InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    // 지원하기 버튼 클릭 시
+                    if (clubModel.isRecruiting) {
+                      Get.to(() => const ClubApplicationScreen(),
+                          arguments: clubModel.id);
+                    } else {
+                      Get.snackbar("알림", "모집이 마감되었습니다.");
+                    }
+                  },
                   child: Container(
                     height: 50,
                     decoration: BoxDecoration(
