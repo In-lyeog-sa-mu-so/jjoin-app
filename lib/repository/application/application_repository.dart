@@ -1,14 +1,32 @@
-import 'package:jjoin/provider/Application/application_provider.dart';
-
-import '../../model/Application/application_form.dart';
+import '../../model/application/application_form.dart';
+import '../../provider/application/application_local_provider.dart';
+import '../../provider/application/application_provider.dart';
 
 class ApplicationRepository {
+  final ApplicationLocalProvider applicationLocalProvider;
   final ApplicationProvider applicationProvider;
 
-  ApplicationRepository({required this.applicationProvider})
-      : assert(applicationProvider != null);
+  ApplicationRepository({
+    required this.applicationLocalProvider,
+    required this.applicationProvider,
+  });
 
   ApplicationForm getApplicationForm() {
-    return applicationProvider.getDummyApplicationForm();
+    return applicationLocalProvider.getDummyApplicationForm();
+  }
+
+  Future<ApplicationForm> readApplicationForm(int clubId) async {
+    Map<String, dynamic> data =
+        await applicationProvider.getApplicationForm(clubId);
+    if (data.isEmpty) {
+      return ApplicationForm.empty();
+    } else {
+      print("dasdasdata $data");
+      return ApplicationForm.fromJson(data);
+    }
+  }
+
+  Future<void> postApplicationForm(int clubId, dynamic data) async {
+    await applicationProvider.postApplication(clubId, data);
   }
 }

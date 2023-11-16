@@ -1,15 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../model/Application/application_form.dart';
+import '../../model/application/application_form.dart';
 
 class ApplicationTopBar extends StatelessWidget {
+  final ApplicationForm applicationForm;
+
   const ApplicationTopBar({
     super.key,
     required this.applicationForm,
   });
-
-  final ApplicationForm applicationForm;
 
   @override
   Widget build(BuildContext context) {

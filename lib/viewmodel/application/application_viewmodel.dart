@@ -1,19 +1,21 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jjoin/repository/Application/application_repository.dart';
-
-import '../../model/Application/application_form.dart';
+import '../../model/application/application_form.dart';
+import '../../repository/application/application_repository.dart';
 
 class ApplicationViewModel extends GetxController {
+  final int clubId;
   final ApplicationRepository applicationRepository;
 
-  ApplicationViewModel({required this.applicationRepository})
-      : assert(applicationRepository != null);
+  ApplicationViewModel(
+      {required this.clubId, required this.applicationRepository});
 
   // If ApplicationForm can be null initially
-  final Rx<ApplicationForm?> _applicationForm = Rx<ApplicationForm?>(null);
+  late final Rx<ApplicationForm> _applicationForm;
   final RxBool _isLoadingApplicationForm = false.obs;
-  ApplicationForm? get applicationForm => _applicationForm.value;
+  ApplicationForm get applicationForm => _applicationForm.value;
   bool get isLoadingApplicationForm => _isLoadingApplicationForm.value;
 
   final RxMap<int, TextEditingController> _controllers = RxMap();
@@ -22,11 +24,11 @@ class ApplicationViewModel extends GetxController {
   final RxMap<int, String> _answers = RxMap();
   Map<int, String> get answers => _answers;
 
-  void initFormControllersAndAnswers(ApplicationForm? form) {
+  void initFormControllersAndAnswers(ApplicationForm form) {
     if (form != null) {
       for (var question in form.questions) {
-        _controllers[question.questionId] = TextEditingController();
-        _answers[question.questionId] = '';
+        _controllers[question.id] = TextEditingController();
+        _answers[question.id] = '';
       }
     }
   }
@@ -38,15 +40,25 @@ class ApplicationViewModel extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchApplicationForm();
-    // After fetching the form, initialize the controllers and answers
-    initFormControllersAndAnswers(_applicationForm.value);
+    initApplicationForm()
+        .then((_) => initFormControllersAndAnswers(_applicationForm.value));
+  }
+
+  Future<void> initApplicationForm() async {
+    _isLoadingApplicationForm.value = true;
+    applicationRepository
+        .readApplicationForm(clubId)
+        .then((value) => _applicationForm = value.obs)
+        .then((_) => _isLoadingApplicationForm.value = false);
+    print(_applicationForm.value);
   }
 
   void fetchApplicationForm() {
     _isLoadingApplicationForm.value = true;
-    _applicationForm.value = applicationRepository.getApplicationForm();
-    _isLoadingApplicationForm.value = false;
+    applicationRepository
+        .readApplicationForm(clubId)
+        .then((value) => _applicationForm.value = value)
+        .then((_) => _isLoadingApplicationForm.value = false);
   }
 
   bool checkAnswer() {
@@ -59,9 +71,19 @@ class ApplicationViewModel extends GetxController {
   }
 
   void submitApplicationForm() async {
-    // Map the controllers to answers before submission
     controllers.forEach((questionId, controller) {
       answers[questionId] = controller.text.trim();
     });
+
+    Map<String, dynamic> submissionData = {
+      "data": answers.entries
+          .map((entry) =>
+              {"questionId": entry.key, "answerContent": entry.value})
+          .toList()
+    };
+
+    String jsonSubmissionData = jsonEncode(submissionData);
+
+    applicationRepository.postApplicationForm(clubId, jsonSubmissionData);
   }
 }

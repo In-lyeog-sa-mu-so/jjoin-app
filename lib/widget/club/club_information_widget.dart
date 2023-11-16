@@ -145,12 +145,12 @@ class ClubInformation extends StatelessWidget {
                 child: InkWell(
                   onTap: () {
                     // 지원하기 버튼 클릭 시
-                    if (clubModel.isRecruiting) {
-                      Get.to(() => const ClubApplicationScreen(),
-                          arguments: clubModel.id);
-                    } else {
-                      Get.snackbar("알림", "모집이 마감되었습니다.");
-                    }
+                    Get.to(
+                      () => const ClubApplicationScreen(),
+                      arguments: {
+                        "clubId": clubModel.id,
+                      },
+                    );
                   },
                   child: Container(
                     height: 50,
