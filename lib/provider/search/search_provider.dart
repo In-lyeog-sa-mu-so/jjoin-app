@@ -42,20 +42,23 @@ class SearchProvider extends GetConnect {
       response = await get(
         "$_apiUrl/search",
         query: {
-          "query": searchQuery,
-          "tags": tags,
+          "keyword": searchQuery,
+          if (tags.isNotEmpty) "tags": tags else "tags": [""],
           "page": "0",
-          "size": "5",
+          "size": "10",
         },
       );
     } catch (e) {
-      print('Error searching clubs: $e');
       return {"clubs": []};
     }
 
-    if (response != null && response.statusCode == 200) {
-      var jsonData = json.decode(response.body);
-      return jsonData is Map<String, dynamic> ? jsonData : {"clubs": []};
+    if (response.statusCode == 200) {
+      var jsonData = json.decode(response.bodyString ?? '');
+      if (jsonData is Map<String, dynamic> && jsonData["clubs"] != null) {
+        return jsonData;
+      } else {
+        return {"clubs": []};
+      }
     } else {
       return {"clubs": []};
     }
@@ -70,7 +73,7 @@ class SearchProvider extends GetConnect {
           "keyword": "",
           "tags": [""],
           "page": "0",
-          "size": "5",
+          "size": "10",
         },
       );
     } catch (e) {

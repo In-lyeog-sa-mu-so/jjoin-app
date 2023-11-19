@@ -62,13 +62,23 @@ class SearchViewModel extends GetxController {
   void sendSearchRequest() async {
     _isLoadingSearchClubs.value = true;
     try {
-      var response = await searchRepository.readSearchClubsByQuery(
-        searchQuery,
-        selectedTags.toList(), // 선택된 태그 목록을 리스트로 변환
-      );
-      _clubs.value = response; // 결과를 _clubs에 저장
+      List<SearchClub> response;
+      if (selectedTags.isEmpty && searchQuery.isEmpty) {
+        response = await searchRepository.readAllClubs();
+        print("all");
+        print(response);
+      } else {
+        response = await searchRepository.readSearchClubsByQuery(
+          searchQuery,
+          selectedTags.toList(),
+        );
+        print("search");
+        print(response[0].clubName);
+      }
+
+      _clubs.value = response;
     } catch (e) {
-      // 에러 처리
+      print('Error fetching search results: $e');
     } finally {
       _isLoadingSearchClubs.value = false;
     }

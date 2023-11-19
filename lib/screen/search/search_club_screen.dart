@@ -52,7 +52,7 @@ class _SearchClubScreenState extends State<SearchClubScreen> {
             scrollDirection: Axis.horizontal,
             child: Obx(
               () => _searchViewModel.isLoadingTags
-                  ? Center(
+                  ? const Center(
                       child: CircularProgressIndicator(),
                     )
                   : Padding(
