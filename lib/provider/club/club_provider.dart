@@ -43,7 +43,7 @@ class ClubProvider extends GetConnect {
     } catch (e) {
       response = null;
     }
-
+    //print(response!.body);
     // 통신 실패
     if (response == null) {
       return {"data": []};
@@ -186,7 +186,7 @@ class ClubProvider extends GetConnect {
         }.map((key, value) => MapEntry(key, value.toString())),
       );
 
-      print(response.body);
+      //print(response.body);
     } catch (e) {
       // stack trace print
       print(e);

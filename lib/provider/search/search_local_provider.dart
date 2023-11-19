@@ -8,40 +8,28 @@ class SearchLocalProvider extends GetConnect {
   List<Tag> getDummyTags() {
     List<Tag> tags = [
       Tag(
-        tagId: 1,
-        tagName: "개발",
+        id: 1,
+        name: "개발",
       ),
       Tag(
-        tagId: 2,
-        tagName: "학술",
+        id: 2,
+        name: "학술",
       ),
       Tag(
-        tagId: 3,
-        tagName: "밴드",
+        id: 3,
+        name: "밴드",
       ),
       Tag(
-        tagId: 4,
-        tagName: "음악",
+        id: 4,
+        name: "음악",
       ),
       Tag(
-        tagId: 5,
-        tagName: "봉사",
+        id: 5,
+        name: "봉사",
       ),
       Tag(
-        tagId: 6,
-        tagName: "취미",
-      ),
-      Tag(
-        tagId: 7,
-        tagName: "종교",
-      ),
-      Tag(
-        tagId: 8,
-        tagName: "스포츠",
-      ),
-      Tag(
-        tagId: 9,
-        tagName: "연합",
+        id: 6,
+        name: "취미",
       ),
     ];
     return tags;
@@ -54,7 +42,7 @@ class SearchLocalProvider extends GetConnect {
         clubName: "음샘",
         introduction: "밴드 음악을 하고 있는 중앙동아리 음샘입니다.",
         userNumber: 20,
-        part: EClubPart.CENTRAL,
+        dependent: EClubPart.CENTRAL,
         profileImageUuid: "", // 실제 이미지 경로나 Base64 인코딩된 데이터로 가정
         isFinished: false,
         startDate: DateTime.parse("2023-08-01"),
@@ -66,7 +54,7 @@ class SearchLocalProvider extends GetConnect {
         clubName: "세미콜론",
         introduction: "동국대학교 컴공 학생회의 축구 소모임 세미콜론입니다ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ",
         userNumber: 30,
-        part: EClubPart.DEPARTMENT,
+        dependent: EClubPart.DEPARTMENT,
         profileImageUuid: "", // 실제 이미지 경로나 Base64 인코딩된 데이터로 가정
         isFinished: true,
         startDate: DateTime.parse("2023-11-01"),
@@ -78,7 +66,7 @@ class SearchLocalProvider extends GetConnect {
         clubName: "GDSC",
         introduction: "동국대학교 구글 개발자 학생 동아리 GDSC입니다.",
         userNumber: 30,
-        part: EClubPart.UNION,
+        dependent: EClubPart.UNION,
         profileImageUuid: "", // 실제 이미지 경로나 Base64 인코딩된 데이터로 가정
         isFinished: true,
         startDate: DateTime.parse("2023-11-01"),
@@ -90,7 +78,7 @@ class SearchLocalProvider extends GetConnect {
         clubName: "멋쟁이 사자처럼",
         introduction: "동국대학교 개발 연합 동아리 멋사 .",
         userNumber: 30,
-        part: EClubPart.UNION,
+        dependent: EClubPart.UNION,
         profileImageUuid: "", // 실제 이미지 경로나 Base64 인코딩된 데이터로 가정
         isFinished: true,
         startDate: DateTime.parse("2023-11-01"),

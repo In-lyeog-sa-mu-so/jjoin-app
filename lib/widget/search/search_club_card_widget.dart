@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -51,9 +52,12 @@ class ClubCard extends StatelessWidget {
               children: <Widget>[
                 CircleAvatar(
                   radius: 40,
+                  backgroundColor: club.profileImageUuid.isNotEmpty
+                      ? Colors.transparent
+                      : Colors.blue[300],
                   backgroundImage: club.profileImageUuid.isNotEmpty
-                      ? AssetImage(club.profileImageUuid)
-                      : const AssetImage('assets/images/dgu_image.png'),
+                      ? CachedNetworkImageProvider(club.profileImageUuid)
+                      : null,
                 ),
                 const SizedBox(width: 10),
                 Expanded(
@@ -61,7 +65,7 @@ class ClubCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        '${club.part.nameStr} 동아리',
+                        '${club.dependent.nameStr} 동아리',
                         style: const TextStyle(fontSize: 16.0),
                       ),
                       SizedBox(height: 4),

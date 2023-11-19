@@ -18,10 +18,10 @@ class ApplicationRepository {
   Future<ApplicationForm> readApplicationForm(int clubId) async {
     Map<String, dynamic> data =
         await applicationProvider.getApplicationForm(clubId);
+    print("asdasd $data");
     if (data.isEmpty) {
       return ApplicationForm.empty();
     } else {
-      print("dasdasdata $data");
       return ApplicationForm.fromJson(data);
     }
   }

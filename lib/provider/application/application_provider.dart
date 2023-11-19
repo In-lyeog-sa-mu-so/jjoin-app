@@ -12,6 +12,7 @@ class ApplicationProvider extends GetConnect {
         "$_apiUrl/clubs/$clubId/applications",
       );
     } catch (e) {
+      print("시발");
       response = null;
     }
     print("provider: $clubId");
