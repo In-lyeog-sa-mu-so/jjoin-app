@@ -16,16 +16,16 @@ enum EClubPart implements Comparable<EClubPart> {
 
   factory EClubPart.fromString(String part) {
     switch (part) {
-      case "NONE":
+      case "없음":
         return EClubPart.NONE;
-      case "MAJOR":
+      case "학과":
         return EClubPart.DEPARTMENT;
-      case "UNION":
+      case "연합":
         return EClubPart.UNION;
-      case "CENTER":
+      case "중앙":
         return EClubPart.CENTRAL;
       default:
-        return EClubPart.NONE; // 기본값을 NONE으로 변경했습니다.
+        return EClubPart.DEPARTMENT;
     }
   }
 }
