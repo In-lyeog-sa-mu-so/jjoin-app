@@ -58,7 +58,7 @@ class ProfileProvider extends GetConnect {
 
     final FormData formData = FormData({
       "userProfileImageFile": MultipartFile(uploadImage,
-          filename: "profile.$extractType",
+          filename: "profile.png",
           contentType:
               'image/$extractType'), // Use the correct filename and contentType as per the image file
       "data": MultipartFile(utf8.encode(jsonIntroduction),

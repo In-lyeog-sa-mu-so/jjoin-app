@@ -15,7 +15,7 @@ class ClubCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isRecruiting = club.isFinished;
+    final bool isRecruiting = !club.isFinished;
     String recruitingText = isRecruiting
         ? '모집 중 (${DateFormat('MM.dd').format(club.startDate)}~${DateFormat('MM.dd').format(club.endDate)})'
         : '모집 마감';
@@ -74,7 +74,7 @@ class ClubCard extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 16.0,
                           fontWeight: FontWeight.bold,
-                          color: isRecruiting ? Colors.green : Colors.red,
+                          color: club.isFinished ? Colors.red : Colors.green,
                         ),
                       ),
                       const SizedBox(height: 4),
