@@ -14,7 +14,6 @@ class SearchProvider extends GetConnect {
         query: {"page": "0", "size": "5"},
       );
     } catch (e) {
-      print('Error fetching tags: $e');
       return {"data": []}; // 에러 발생 시 빈 데이터를 반환
     }
 
@@ -27,7 +26,6 @@ class SearchProvider extends GetConnect {
           return {"data": []}; // JSON 응답이 Map이 아닌 경우 빈 데이터를 반환
         }
       } catch (e) {
-        print('Error parsing tags response: $e');
         return {"data": []}; // JSON 파싱 에러 시 빈 데이터를 반환
       }
     } else {
@@ -79,6 +77,7 @@ class SearchProvider extends GetConnect {
     } catch (e) {
       return {"clubs": []};
     }
+    print(response!.body);
 
     if (response.statusCode == 200) {
       var jsonData = json.decode(response.bodyString ?? '');

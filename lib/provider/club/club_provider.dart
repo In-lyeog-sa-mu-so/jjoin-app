@@ -1,7 +1,6 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:jjoin/model/club/club_schedule.dart';
 
 class ClubProvider extends GetConnect {
   static final String _apiUrl = dotenv.env['JJOIN_API_SERVER_URL']!;

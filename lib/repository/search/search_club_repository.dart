@@ -16,7 +16,6 @@ class SearchRepository {
 
   Future<List<Tag>> readAllTags() async {
     Map<String, dynamic> data = await searchProvider.getAllTags();
-    print(data);
     List<Tag> result =
         data["data"].map<Tag>((json) => Tag.fromJson(json)).toList();
     if (result.isEmpty) {
@@ -41,7 +40,6 @@ class SearchRepository {
 
   Future<List<SearchClub>> readAllClubs() async {
     Map<String, dynamic> data = await searchProvider.getAllClubs();
-    print(data);
     var result = data["clubs"]
         .map<SearchClub>(
             (json) => SearchClub.fromJson(json: json, imageUrl: _imageUrl))
