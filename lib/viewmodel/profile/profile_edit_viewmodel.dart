@@ -44,6 +44,7 @@ class ProfileEditViewModel extends GetxController {
             : null, // Pass null if no image is to be updated
         introduction,
       );
+      print(_newImage.value);
       if (result) {
         await fetchUserInfo();
         Get.find<ProfileViewModel>().fetchUserInfo();
