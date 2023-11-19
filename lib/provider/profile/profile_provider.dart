@@ -21,7 +21,6 @@ class ProfileProvider extends GetConnect {
     }
     // 통신 성공
     if (response.statusCode == 200) {
-      print(response.body);
       return response.body;
     } else {
       return {"data": []};
@@ -44,7 +43,7 @@ class ProfileProvider extends GetConnect {
     }
     // 통신 성공
     if (response.statusCode == 200) {
-      print(response.body);
+      //print(response.body);
       return response.body;
     } else {
       return {"data": []};
@@ -75,19 +74,19 @@ class ProfileProvider extends GetConnect {
       );
     } catch (e) {
       if (response != null) {
-        print(response.statusCode);
-        print(response.body);
+        //print(response.statusCode);
+        //print(response.body);
       }
       return false;
     }
 
 // Response handling
     if (response.statusCode == 200) {
-      print("Request successful.");
+      //print("Request successful.");
       // You can return an empty map or a success message as per your application's needs
       return true;
     } else {
-      print("Request failed with status code: ${response.statusCode}");
+      //print("Request failed with status code: ${response.statusCode}");
       return false;
     }
   }

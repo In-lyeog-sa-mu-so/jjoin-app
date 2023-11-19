@@ -87,7 +87,11 @@ class _ClubApplicationScreenState extends State<ClubApplicationScreen> {
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                   ),
-                  onPressed: _applicationViewModel.submitApplicationForm,
+                  onPressed: () {
+                    _applicationViewModel.submitApplicationForm;
+                    Get.back();
+                    Get.snackbar('가입 신청서 제출', '제출이 완료되었습니다.');
+                  },
                   child: const Text('제출하기',
                       style: TextStyle(
                         color: Colors.white,

@@ -50,7 +50,6 @@ class ApplicationViewModel extends GetxController {
         .readApplicationForm(clubId)
         .then((value) => _applicationForm = value.obs)
         .then((_) => _isLoadingApplicationForm.value = false);
-    print(_applicationForm.value);
   }
 
   void fetchApplicationForm() {

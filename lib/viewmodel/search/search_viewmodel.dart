@@ -10,13 +10,13 @@ class SearchViewModel extends GetxController {
   SearchViewModel({required this.searchRepository})
       : assert(searchRepository != null);
 
-  final RxList<SearchClub> _clubs = RxList();
-  final RxBool _isLoadingSearchClubs = false.obs;
+  late final RxList<SearchClub> _clubs;
+  late final RxBool _isLoadingSearchClubs;
   List<SearchClub> get clubs => _clubs;
   bool get isLoadingSearchClubs => _isLoadingSearchClubs.value;
 
-  final RxList<Tag> _tags = RxList();
-  final RxBool _isLoadingTags = false.obs;
+  late final RxList<Tag> _tags;
+  late final RxBool _isLoadingTags;
   List<Tag> get tags => _tags;
   bool get isLoadingTags => _isLoadingTags.value;
 
@@ -26,37 +26,67 @@ class SearchViewModel extends GetxController {
 
   @override
   void onInit() {
+    _isLoadingSearchClubs = false.obs;
+    _isLoadingTags = false.obs;
+
     super.onInit();
 
-    fetchSearchClubs();
+    initTags();
+    initSearchClubs();
+  }
 
-    fetchTags();
+  void initSearchClubs() {
+    _isLoadingSearchClubs.value = true;
+    searchRepository
+        .readAllClubs()
+        .then((value) => _clubs = value.obs)
+        .then((value) => _isLoadingSearchClubs.value = false);
+  }
+
+  void initTags() {
+    _isLoadingTags.value = true;
+    searchRepository
+        .readAllTags()
+        .then((value) => _tags = value.obs)
+        .then((_) => _isLoadingTags.value = false);
   }
 
   void fetchSearchClubs() async {
     _isLoadingSearchClubs.value = true;
+    searchRepository
+        .readSearchClubsByQuery(searchQuery, selectedTags.toList())
+        .then((value) => _clubs.addAll(value))
+        .then((_) => _isLoadingSearchClubs.value = false);
+  }
+
+  void sendSearchRequest() async {
+    _isLoadingSearchClubs.value = true;
     try {
-      var result = await searchRepository.getSearchClubs();
-      _clubs.assignAll(result); // Make sure to use assignAll
+      List<SearchClub> response;
+      if (selectedTags.isEmpty && searchQuery.isEmpty) {
+        response = await searchRepository.readAllClubs();
+        print("all");
+        print(response);
+      } else {
+        response = await searchRepository.readSearchClubsByQuery(
+          searchQuery,
+          selectedTags.toList(),
+        );
+        print("search");
+        print(response[0].clubName);
+      }
+
+      _clubs.value = response;
     } catch (e) {
-      // Handle errors appropriately
-      print("Error fetching clubs: $e");
+      print('Error fetching search results: $e');
     } finally {
       _isLoadingSearchClubs.value = false;
     }
   }
 
-  void fetchTags() {
-    _isLoadingTags.value = true;
-    _tags.value = searchRepository.getTags();
-    _isLoadingTags.value = false;
-  }
-
-  // RxList to hold the selected tags
   final RxList<String> _selectedTags = RxList<String>();
   RxList<String> get selectedTags => _selectedTags;
 
-  // Method to update selected tags
   void toggleTagSelection(String tagName) {
     if (_selectedTags.contains(tagName)) {
       _selectedTags.remove(tagName);

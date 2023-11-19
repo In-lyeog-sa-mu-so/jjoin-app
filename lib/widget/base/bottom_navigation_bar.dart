@@ -34,22 +34,34 @@ class CustomBottomNavigationBar
             items: <BottomNavigationBarItem>[
               BottomNavigationBarItem(
                   icon: SvgPicture.asset(
-                    'assets/icons/icon_profile_24.svg',
+                    'assets/icons/icon_home.svg',
+                    color: Colors.grey,
+                    width: 36,
+                    height: 37,
                   ),
                   label: "홈"),
               BottomNavigationBarItem(
                   icon: SvgPicture.asset(
-                    'assets/icons/icon_profile_24.svg',
+                    'assets/icons/icon_calendar.svg',
+                    color: Colors.grey,
+                    width: 36,
+                    height: 37,
                   ),
                   label: "캘린더"),
               BottomNavigationBarItem(
                   icon: SvgPicture.asset(
-                    'assets/icons/icon_profile_24.svg',
+                    'assets/icons/icon_search.svg',
+                    color: Colors.grey,
+                    width: 30,
+                    height: 37,
                   ),
                   label: "동아리찾기"),
               BottomNavigationBarItem(
                   icon: SvgPicture.asset(
-                    'assets/icons/icon_profile_24.svg',
+                    'assets/icons/icon_myPage.svg',
+                    color: Colors.grey,
+                    width: 36,
+                    height: 37,
                   ),
                   label: "마이페이지"),
             ],

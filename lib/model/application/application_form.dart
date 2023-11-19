@@ -34,7 +34,7 @@ class ApplicationForm {
       clubName: json['clubName'],
       startDate: DateTime.parse(json['startDate']).toLocal(),
       endDate: DateTime.parse(json['endDate']).toLocal(),
-      questions: (json['applicationQuestionDtos'] as List)
+      questions: (json['applicationQuestionResponseDtos'] as List)
               ?.map<Questions>((json) => Questions.fromJson(json))
               ?.toList() ??
           [],

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../provider/search/search_local_provider.dart';
-import '../../provider/search/search_remote_provider.dart';
+import '../../provider/search/search_provider.dart';
 import '../../repository/search/search_club_repository.dart';
 import '../../viewmodel/search/search_viewmodel.dart';
 import '../../widget/base/default_appbar.dart';
@@ -25,7 +25,7 @@ class _SearchClubScreenState extends State<SearchClubScreen> {
     _searchViewModel = Get.put<SearchViewModel>(SearchViewModel(
       searchRepository: SearchRepository(
         searchLocalProvider: Get.put(SearchLocalProvider()),
-        searchRemoteProvider: Get.put(SearchRemoteProvider()),
+        searchProvider: Get.put(SearchProvider()),
       ),
     ));
   }
@@ -45,53 +45,47 @@ class _SearchClubScreenState extends State<SearchClubScreen> {
               _searchViewModel.searchQuery = value;
             },
             onSearchPressed: () {
-              //_searchViewModel.sendSearchRequest();
+              _searchViewModel.sendSearchRequest();
             },
           ),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
-            child: Row(
-              children: [
-                Obx(
-                  () => Padding(
-                    padding: const EdgeInsets.only(left: 6.0),
-                    child: Wrap(
-                      spacing: 8.0,
-                      runSpacing: 8.0,
-                      children: _searchViewModel.tags
-                          .map(
-                            (tag) => FilterChip(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
+            child: Obx(
+              () => _searchViewModel.isLoadingTags
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : Padding(
+                      padding: const EdgeInsets.only(left: 6.0),
+                      child: Wrap(
+                        spacing: 8.0,
+                        runSpacing: 8.0,
+                        children: _searchViewModel.tags
+                            .map(
+                              (tag) => FilterChip(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                side: BorderSide(
+                                    color: Colors.grey.withOpacity(0.03),
+                                    width: 0),
+                                showCheckmark: false,
+                                label: Text(tag.name,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w400)),
+                                selected: _searchViewModel.selectedTags
+                                    .contains(tag.name),
+                                selectedColor:
+                                    Color(0xFF56D57F).withOpacity(0.5),
+                                backgroundColor: Colors.grey.withOpacity(0.2),
+                                onSelected: (bool selected) {
+                                  _searchViewModel.toggleTagSelection(tag.name);
+                                },
                               ),
-                              side: BorderSide(
-                                  color: Colors.grey.withOpacity(0.03),
-                                  width: 0),
-                              showCheckmark: false,
-                              label: Text(tag.tagName,
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w400)),
-                              selected: _searchViewModel.selectedTags
-                                  .contains(tag.tagName),
-                              selectedColor: Color(0xFF56D57F).withOpacity(0.5),
-                              backgroundColor: Colors.grey.withOpacity(0.2),
-                              onSelected: (bool selected) {
-                                _searchViewModel
-                                    .toggleTagSelection(tag.tagName);
-                              },
-                            ),
-                          )
-                          .toList(),
+                            )
+                            .toList(),
+                      ),
                     ),
-                  ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.refresh_outlined),
-                  onPressed: () {
-                    _searchViewModel.clearSelectedTags();
-                  },
-                ),
-              ],
             ),
           ),
           Expanded(
@@ -101,8 +95,9 @@ class _SearchClubScreenState extends State<SearchClubScreen> {
               }
               if (_searchViewModel.clubs.isEmpty) {
                 return Center(child: Text('No clubs found.'));
+              } else {
+                return ClubCardListWidget(clubs: _searchViewModel.clubs);
               }
-              return ClubCardListWidget(clubs: _searchViewModel.clubs);
             }),
           ),
         ],

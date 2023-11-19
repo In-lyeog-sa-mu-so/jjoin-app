@@ -1,5 +1,4 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:jjoin/provider/profile/profile_local_provider.dart';
 import 'package:jjoin/provider/profile/profile_provider.dart';
 

@@ -1,7 +1,6 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:jjoin/model/club/club_schedule.dart';
 
 class ClubProvider extends GetConnect {
   static final String _apiUrl = dotenv.env['JJOIN_API_SERVER_URL']!;
@@ -43,7 +42,7 @@ class ClubProvider extends GetConnect {
     } catch (e) {
       response = null;
     }
-
+    //print(response!.body);
     // 통신 실패
     if (response == null) {
       return {"data": []};
@@ -186,7 +185,7 @@ class ClubProvider extends GetConnect {
         }.map((key, value) => MapEntry(key, value.toString())),
       );
 
-      print(response.body);
+      //print(response.body);
     } catch (e) {
       // stack trace print
       print(e);
