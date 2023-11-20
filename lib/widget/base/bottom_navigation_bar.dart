@@ -19,7 +19,7 @@ class CustomBottomNavigationBar
             onTap: controller.changeIndex,
 
             // 선택에 따라 icon·label 색상 변경
-            selectedItemColor: Colors.blue,
+            selectedItemColor: Colors.green,
             unselectedItemColor: Colors.grey,
 
             // 선택에 따라 label text style 변경
@@ -35,7 +35,12 @@ class CustomBottomNavigationBar
               BottomNavigationBarItem(
                   icon: SvgPicture.asset(
                     'assets/icons/icon_home.svg',
-                    color: Colors.grey,
+                    colorFilter: controller.selectedIndex.value == 0
+                        ? const ColorFilter.mode(Colors.green, BlendMode.srcIn)
+                        : const ColorFilter.mode(
+                            Colors.grey,
+                            BlendMode.srcIn,
+                          ),
                     width: 36,
                     height: 37,
                   ),
@@ -43,7 +48,12 @@ class CustomBottomNavigationBar
               BottomNavigationBarItem(
                   icon: SvgPicture.asset(
                     'assets/icons/icon_calendar.svg',
-                    color: Colors.grey,
+                    colorFilter: controller.selectedIndex.value == 1
+                        ? const ColorFilter.mode(Colors.green, BlendMode.srcIn)
+                        : const ColorFilter.mode(
+                            Colors.grey,
+                            BlendMode.srcIn,
+                          ),
                     width: 36,
                     height: 37,
                   ),
@@ -51,7 +61,12 @@ class CustomBottomNavigationBar
               BottomNavigationBarItem(
                   icon: SvgPicture.asset(
                     'assets/icons/icon_search.svg',
-                    color: Colors.grey,
+                    colorFilter: controller.selectedIndex.value == 2
+                        ? const ColorFilter.mode(Colors.green, BlendMode.srcIn)
+                        : const ColorFilter.mode(
+                            Colors.grey,
+                            BlendMode.srcIn,
+                          ),
                     width: 30,
                     height: 37,
                   ),
@@ -59,7 +74,12 @@ class CustomBottomNavigationBar
               BottomNavigationBarItem(
                   icon: SvgPicture.asset(
                     'assets/icons/icon_myPage.svg',
-                    color: Colors.grey,
+                    colorFilter: controller.selectedIndex.value == 3
+                        ? const ColorFilter.mode(Colors.green, BlendMode.srcIn)
+                        : const ColorFilter.mode(
+                            Colors.grey,
+                            BlendMode.srcIn,
+                          ),
                     width: 36,
                     height: 37,
                   ),
